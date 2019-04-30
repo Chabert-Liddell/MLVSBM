@@ -1,6 +1,10 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-[![Travis build status](https://travis-ci.org/Chabert-Liddell/MLVSBM.svg?branch=master)](https://travis-ci.org/Chabert-Liddell/MLVSBM) \# MLVSBM
+MLVSBM
+======
+
+<!-- badges: start -->
+[![Travis build status](https://travis-ci.org/Chabert-Liddell/MLVSBM.svg?branch=master)](https://travis-ci.org/Chabert-Liddell/MLVSBM) [![Codecov test coverage](https://codecov.io/gh/Chabert-Liddell/MLVSBM/branch/master/graph/badge.svg)](https://codecov.io/gh/Chabert-Liddell/MLVSBM?branch=master) <!-- badges: end -->
 
 The goal of MLVSBM is to ...
 
