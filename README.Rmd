@@ -19,10 +19,10 @@ The goal of MLVSBM is to ...
 
 ## Installation
 
-You can install the released version of MLVSBM from [CRAN](https://CRAN.R-project.org) with:
+You can install the released version of MLVSBM from [github](https://github.com) with:
 
 ``` r
-install.packages("MLVSBM")
+devtools::install_github("Chabert-Liddell/MLVSBM")
 ```
 
 ## Example
