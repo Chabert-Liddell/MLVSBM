@@ -4,37 +4,35 @@
 \alias{mlvsbm_simulate_network}
 \title{Create a simulated multilevel network (MLVSBM object)}
 \usage{
-mlvsbm_simulate_network(n_I, n_O, Q_I, Q_O, pi_O, gamma, alpha_I, alpha_O,
-  directed_I, directed_O, affiliation = "uniform",
-  no_empty_org = FALSE)
+mlvsbm_simulate_network(n, Q, pi, gamma, alpha, directed,
+  affiliation = "uniform", distribution = list("bernouilli",
+  "bernouiili"), no_empty_org = FALSE)
 }
 \arguments{
-\item{n_I}{A positive integer, the number of individuals}
+\item{n}{A list of 2 positive integers,
+the number of individuals and organisations}
 
-\item{n_O}{A positive integer, the number of organisations}
+\item{Q}{A list of 2 positive integers,
+the number of clusters of individuals and organisations}
 
-\item{Q_I}{A positive integer, the number of clusters of individuals}
-
-\item{Q_O}{A positive intger, the number of clusters of organisations}
-
-\item{pi_O}{A probability vetor of length Q_O,
+\item{pi}{A vector of probabilities of length Q_O,
 the mixture parameter for the organisations}
 
 \item{gamma}{A Q_IxQ_O matrix with each column suming to one,
 the mixture parameters for the individuals}
 
-\item{alpha_I}{A Q_IxQ_I matrix giving the connectivity probabilities
-of the individuals}
-
-\item{alpha_O}{A Q_OxQ_O matrix giving the connectivity probabilities
+\item{alpha}{A list of 2 matrices, a Q_IxQ_I matrix giving the connectivity probabilities
+of the individuals and a Q_OxQ_O matrix giving the connectivity probabilities
 of the organisations}
 
-\item{directed_I}{A boolean, is level I a directed network?}
-
-\item{directed_O}{A boolean, is level O a directed network?}
+\item{directed}{A list of 2 booleans. Is the individual level a directed network ?
+Is the organisational level a directed network ?}
 
 \item{affiliation}{The distribution under which the affiliation matrix is
 simulated in c("uniform", "preferential")}
+
+\item{distribution}{list for the distribution of X,
+only "bernouilli" is implemented}
 
 \item{no_empty_org}{A boolean with FALSE as default, should
 every organisation have at least one affiliated individuals?

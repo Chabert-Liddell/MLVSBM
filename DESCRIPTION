@@ -5,7 +5,7 @@ Version: 0.0.0.9000
 Authors@R:
     person(given = "Saint-Clair",
            family = "Chabert-Liddell",
-           role = c("author", "cre"),
+           role = c("aut", "cre"),
            email = "saint-clair.chabert-liddell@agroparistech.fr")
 Maintainer: Saint-Clair Chabert-Liddell <saint-clair.chabert-liddell@agroparistech.frt>
 Description: Simulate, infer, partition as described in the following paper
@@ -16,3 +16,5 @@ LazyData: true
 URL: https://github.com/Chabert-Liddell/MLVSBM
 BugReports: https://github.com/Chabert-Liddell/MLVSBM/issues
 RoxygenNote: 6.1.1
+Imports: 
+    R6

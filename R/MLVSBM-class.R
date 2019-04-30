@@ -1,5 +1,9 @@
-#' @import R6
+#' An R6Class for multilevel object
+#' @importFrom R6 R6Class
+#'
 #' @export
+
+
 MLVSBM <-
   R6::R6Class(
     "MLVSBM",

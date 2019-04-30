@@ -2,17 +2,20 @@
 
 #' Create a MLVSBM object from observed data
 #'
-#' @param X_I A matrix square binary adjacency, the individual level
-#' @param X_O A matrix square binary adjacency, the organisational level
 #' @param A A matrix the affiliation matrix with individuals in rows and
 #' organisations in columns
+#' @param X A list of 2 squares binary matrices,
+#' the first one being the individual or lower level
+#' the second one being the organisational or upper level
+#' @param distribution A list for the distribution of X,
+#' only "bernouilli" is implemented
 #'
 #' @return An unfitted MLVSBM object corresponding to the multilevel network
 #' @export
 #'
 #' @examples
 mlvsbm_create_network <-
-  function(X_I, X_O, A) {
+  function(X, A, distribution = list("bernouilli", "bernouilli")) {
     if (! is.matrix(A)) {
       cat(paste0("A must be a binary matrix!!!"))
     }
@@ -20,112 +23,125 @@ mlvsbm_create_network <-
          any(A != 0 & A != 1)) {
       cat(paste0("All rows of A must have exactly one 1!!!"))
     }
-    if (! is.matrix(X_I) |
-        any(X_I != 0 & X_I != 1) |
-        ncol(X_I) != nrow(X_I)) {
-      cat(paste0("X_I must be a square binary matrix!!!"))
+    if (! is.matrix(X[[1]]) |
+        any(X[[1]] != 0 & X[[1]] != 1) |
+        ncol(X[[1]]) != nrow(X[[1]])) {
+      cat(paste0("X[[1]] must be a square binary matrix!!!"))
     }
-    if (! is.matrix(X_O) |
-        any(X_O != 0 & X_I != 1)|
-        ncol(X_O) != nrow(X_O)) {
-      cat(paste0("X_O must be a square binary matrix!!!"))
+    if (! is.matrix(X[[2]]) |
+        any(X[[2]] != 0 & X[[1]] != 1)|
+        ncol(X[[2]]) != nrow(X[[2]])) {
+      cat(paste0("X[[2]] must be a square binary matrix!!!"))
     }
-    if (ncol(X_I) != nrow(A) |
-        ncol(X_O) != ncol(A)) {
-      cat(paste0("A, X_I and X_O's dimensions are not compatible!!!"))
+    if (ncol(X[[1]]) != nrow(A) |
+        ncol(X[[2]]) != ncol(A)) {
+      cat(paste0("A, X[[1]] and X[[2]]'s dimensions are not compatible!!!"))
     }
     new_mlvsbm <-
       MLVSBM$new(
-        n = list("I" = nrow(A),
-                 "O" = ncol(A)),
-        X = list("I" = X_I,
-                 "O" = X_O),
+        n = list(I = nrow(A),
+                 O = ncol(A)),
+        X = list(I = X[[1]],
+                 O = X[[2]]),
         A = A,
-        directed = list("I" = ! isSymmetric(X_I),
-                        "O" = ! isSymmetric(X_O))
-                            )
-    new_mlvsbm$min_clusters <- list("I" = 1, "O" = 1)
-    new_mlvsbm$max_clusters <- list("I" = floor(sqrt(nrow(A))),
-                                    "O" = floor(sqrt(ncol(A))))
+        directed = list(I = ! isSymmetric(X[[1]]),
+                        O = ! isSymmetric(X[[2]])),
+        distribution = list(I = distribution[[1]],
+                            O = distribution[[2]])
+        )
+    new_mlvsbm$min_clusters <- list(I = 1, O = 1)
+    new_mlvsbm$max_clusters <- list(I = floor(sqrt(nrow(A))),
+                                    O = floor(sqrt(ncol(A))))
     return (new_mlvsbm)
   }
 
 #' Create a simulated multilevel network (MLVSBM object)
 #'
-#' @param n_I A positive integer, the number of individuals
-#' @param n_O A positive integer, the number of organisations
-#' @param Q_I A positive integer, the number of clusters of individuals
-#' @param Q_O A positive intger, the number of clusters of organisations
-#' @param pi_O A probability vetor of length Q_O,
+#' @param n A list of 2 positive integers,
+#' the number of individuals and organisations
+#' @param Q A list of 2 positive integers,
+#' the number of clusters of individuals and organisations
+#' @param pi A vector of probabilities of length Q_O,
 #' the mixture parameter for the organisations
+#' @param alpha A list of 2 matrices, a Q_IxQ_I matrix giving the connectivity probabilities
+#' of the individuals and a Q_OxQ_O matrix giving the connectivity probabilities
+#' of the organisations
+#' @param directed A list of 2 booleans. Is the individual level a directed network ?
+#' Is the organisational level a directed network ?
 #' @param gamma A Q_IxQ_O matrix with each column suming to one,
 #' the mixture parameters for the individuals
-#' @param alpha_I A Q_IxQ_I matrix giving the connectivity probabilities
-#' of the individuals
-#' @param alpha_O A Q_OxQ_O matrix giving the connectivity probabilities
-#' of the organisations
-#' @param directed_I A boolean, is level I a directed network?
-#' @param directed_O A boolean, is level O a directed network?
 #' @param affiliation The distribution under which the affiliation matrix is
 #' simulated in c("uniform", "preferential")
 #' @param no_empty_org A boolean with FALSE as default, should
 #' every organisation have at least one affiliated individuals?
 #' Needs to have n_I >= n_O
+#' @param distribution  list for the distribution of X,
+#' only "bernouilli" is implemented
+#'
 #' @return An MLVSBM object, a simulated multilevel network with levels,
 #' affiliations and memberships
 #' @export
 #'
 #' @examples
 mlvsbm_simulate_network <-
-  function (n_I, n_O, Q_I, Q_O, pi_O, gamma, alpha_I, alpha_O,
-            directed_I, directed_O, affiliation = "uniform",
+  function (n, Q, pi, gamma, alpha,
+            directed, affiliation = "uniform",
+            distribution = list("bernouilli", "bernouiili"),
             no_empty_org = FALSE) {
-    if (n_I < 1 | n_O < 1 | n_I%%1 != 0 | n_O %% 1 != 0) {
-      cat(paste0("n_I and n_O must be positive integers!!!"))
+    if (n[[1]] < 1 | n[[2]] < 1 | n[[1]]%%1 != 0 | n[[2]] %% 1 != 0) {
+      cat(paste0("n[[1]] and n[[2]] must be positive integers!!!"))
     }
-    if (! is.matrix(gamma) | ! is.matrix(alpha_I) | ! is.matrix(alpha_O)) {
-      cat(paste0("gamma, alpha_I and alpha_O must be matrices!!!"))
+    if (! is.matrix(gamma) | ! is.matrix(alpha[[1]]) | ! is.matrix(alpha[[2]])) {
+      cat(paste0("gamma, alpha[[1]] and alpha[[2]] must be matrices!!!"))
     }
-    if (any(pi_O > 1) | any(pi_O < 0) | sum(pi_O) != 1) {
-      cat(paste0("pi_O is a probability vector,
+    if (any(pi > 1) | any(pi < 0) | sum(pi) != 1) {
+      cat(paste0("pi is a probability vector,
                  its coefficients must sum to one!!!"))
     }
-    if ( Q_O != length(pi_O) |
-         Q_O != ncol(gamma) |
-         Q_O != nrow(alpha_O) |
-         Q_O != ncol(alpha_O) |
-         Q_I != nrow(alpha_I) |
-         Q_I != ncol(alpha_I) |
-         Q_I != nrow(gamma)) {
+    if ( Q[[2]] != length(pi) |
+         Q[[2]] != ncol(gamma) |
+         Q[[2]] != nrow(alpha[[2]]) |
+         Q[[2]] != ncol(alpha[[2]]) |
+         Q[[1]] != nrow(alpha[[1]]) |
+         Q[[1]] != ncol(alpha[[1]]) |
+         Q[[1]] != nrow(gamma)) {
       cat(paste0("Number of clusters and parameters dimension are
                  not compatible!!!"))
     }
     if (any(gamma > 1) | any(gamma < 0) | any(colSums(gamma) != 1)) {
       cat(paste0("Any column of gamma must be a probability vector!!!"))
     }
-    if (any(alpha_I > 1) | any(alpha_I < 0)) {
-      cat(paste0("Any coefficient of alpha_I must be between 0 and 1!!!"))
+    if (any(alpha[[1]] > 1) | any(alpha[[1]] < 0)) {
+      cat(paste0("Any coefficient of alpha[[1]] must be between 0 and 1!!!"))
     }
-    if (any(alpha_O > 1) | any(alpha_O < 0)) {
-      cat(paste0("Any coefficient of alpha_I must be between 0 and 1!!!"))
+    if (any(alpha[[2]] > 1) | any(alpha[[2]] < 0)) {
+      cat(paste0("Any coefficient of alpha[[1]] must be between 0 and 1!!!"))
     }
-    if (directed_I & !isSymmetric(alpha_I)) {
-      cat(paste0("alpha_I is not symmetric but level is directed!!!"))
+    if (directed[[1]] & !isSymmetric(alpha[[1]])) {
+      cat(paste0("alpha[[1]] is not symmetric but level is directed!!!"))
     }
-    if (directed_O & !isSymmetric(alpha_O)) {
-      cat(paste0("alpha_O is not symmetric but level is directed!!!"))
+    if (directed[[2]] & !isSymmetric(alpha[[2]])) {
+      cat(paste0("alpha[[2]] is not symmetric but level is directed!!!"))
     }
-    new_mlvsbm <- MLVSBM$new(n = list("I" = n_I, "O" = n_O),
-                             directed = list("I" = directed_I, "O" = directed_O),
-                             sim_param = list(alpha = list("I" = alpha_I,
-                                                           "O" = alpha_O),
-                                              gamma = gamma,
-                                              pi = list("O" = pi_O),
-                                              Q = list("I" = Q_I, "O" = Q_O)))
-    new_mlvsbm$min_clusters <- list("I" = 1, "O" = 1)
-    new_mlvsbm$max_clusters <- list("I" = floor(sqrt(n_I)),
-                                    "O" = floor(sqrt(n_O)))
-    new_mlvsbm$simulate(affiliation = affiliation,
-                        no_empty_org = no_empty_org)
+    new_mlvsbm <-
+      MLVSBM$new(n = list(I = n[[1]],
+                          O = n[[2]]),
+                 directed = list(I = directed[[1]],
+                                 O = directed[[2]]),
+                 sim_param = list(alpha = list(I = alpha[[1]],
+                                               O = alpha[[2]]),
+                                  gamma = gamma,
+                                  pi = list(O = pi),
+                                  Q = list(I = Q[[1]],
+                                           O = Q[[2]]),
+                                  affiliation = affiliation,
+                                  no_empty_org = no_empty_org),
+                 distribution = list(I = distribution[[1]],
+                                     O = distribution[[2]]))
+    new_mlvsbm$min_clusters <- list(I = 1,
+                                    O = 1)
+    new_mlvsbm$max_clusters <- list(I = floor(sqrt(n[[1]])),
+                                    O = floor(sqrt(n[[2]])))
+    new_mlvsbm$simulate()
     return(new_mlvsbm)
   }

@@ -4,15 +4,19 @@
 \alias{mlvsbm_create_network}
 \title{Create a MLVSBM object from observed data}
 \usage{
-mlvsbm_create_network(X_I, X_O, A)
+mlvsbm_create_network(X, A, distribution = list("bernouilli",
+  "bernouilli"))
 }
 \arguments{
-\item{X_I}{A matrix square binary adjacency, the individual level}
-
-\item{X_O}{A matrix square binary adjacency, the organisational level}
+\item{X}{A list of 2 squares binary matrices,
+the first one being the individual or lower level
+the second one being the organisational or upper level}
 
 \item{A}{A matrix the affiliation matrix with individuals in rows and
 organisations in columns}
+
+\item{distribution}{A list for the distribution of X,
+only "bernouilli" is implemented}
 }
 \value{
 An unfitted MLVSBM object corresponding to the multilevel network
