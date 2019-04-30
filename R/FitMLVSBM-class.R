@@ -146,143 +146,131 @@ FitMLVSBM$set(
 #-------------------------------------------------------------------------------
 # Likelihood computation
 #-------------------------------------------------------------------------------
-SBMModelStoc$set(
+FitMLVSBM$set(
   "active",
   "likelihood",
   function(value) {
     likelihood <- list()
-    facteur <-  if (private$directed$I) 1 else .5
+    factor <-  if (private$directed$I) 1 else .5
     likelihood$I <-
-      facteur * (
+      factor * (
         sum((private$M$I * private$X$I) *
-              quad_form(log(private$param$alpha$I), private$var_param$sigma)) +
+              quad_form(log(private$param$alpha$I), private$var_param$tau$I)) +
           sum((private$M$I * (1 - private$X$I)) *
-                quad_form(log(1 - private$param$alpha), private$var_param$sigma))
-        )
+                quad_form(log(1 - private$param$alpha), private$var_param$tau$I))
+        ) +
+      sum(private$A * private$var_param$tau$I %*%
+            tcrossprod(log(private$param$gamma), private$var_param$tau$O))
+    factor = if (private$directed$O) 1 else .5
+    likelihood$O <-
+      factor * (
+        sum((private$M$O * private$X$O) *
+              quad_form(log(private$param$alpha$O),
+                        private$var_param$tau$O)) +
+          sum((private$M$O * (1 - private$X$O)) *
+                quad_form(log(1 - private$param$alpha$O),
+                          private$var_param$tau$O))) +
+      sum(private$var_param$tau%*%log(private$param$rho))
+    }
+  )
+
+FitMLVSBM$set("active", "complete_likelihood",
+             function(value) self$likelihood$I + self$likelihood$O
 )
-}
-)
-SBMModelStoc$set("active", "XLlikelihood",
-                 function(value){
-                   facteur = if (private$Ldirected) 1 else .5
-                   facteur * (
-                     sum((private$M$O * private$X$O) *
-                           quad_form(log(private$param$alpha$O), private$var_param$tau)) +
-                       sum((private$M$O * (1 - private$X$O)) *
-                             quad_form(log(1 - private$param$alpha$O), private$var_param$tau)))
-                 }
-)
-SBMModelStoc$set("active", "ZRlikelihood",
-                 function(value){
-                   sum(private$A * private$var_param$sigma %*%
-                         tcrossprod(log(private$param$gamma), private$var_param$tau))
-                 }
-)
-SBMModelStoc$set("active", "ZLlikelihood",
-                 function(value){
-                   sum(private$var_param$tau%*%log(private$param$rho))
-                 }
-)
-SBMModelStoc$set("active", "XRLlikelihood", function(value){
-  0
-  ## For comparaison with model one
-  #sum(private$A %*% log(colMeans(private$A)))
-})
 
 
+##------------------------------------------------------------------------------
+## Parameters update
+##------------------------------------------------------------------------------
+FitMLVSBM$set(
+  "public",
+  "update_alpha_I",
+  function(safeguard = 2*.Machine$double.eps) {
+    ## alpha
+    if(private$Q$I == 1) {
+      private$param$alpha$I <-
+        as.matrix( sum(private$M$I * private$X$I)/ sum(private$M$I))
+      } else {
+        alpha <-
+          crossprod(private$var_param$tau$I,
+                    (private$M$I*private$X$I) %*% private$var_param$tau$I) /
+          crossprod(private$var_param$tau$I,
+                    private$M$I %*% private$var_param$tau$I)
+        private$param$alpha$I <- alpha
+      }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#-------------------------------------------------------------------------------
-# Parameters update
-#-------------------------------------------------------------------------------
-SBMModel$set("public", "update_alpha",
-             function(safeguard = 2*.Machine$double.eps){
-               ## alpha
-               if(private$Q == 1){
-                 private$param$alpha <- as.matrix( sum(private$M$I * private$X$I)/
-                                                     sum(private$M$I))
-               }else{
-                 alpha <- crossprod(private$var_param$tau$I,
-                                    (private$M$I*private$X$I) %*% private$var_param$tau$I) /
-                   crossprod(private$var_param$tau$I, private$M$I %*% private$var_param$tau$I)
-                 #      alpha[alpha < safeguard] <- safeguard
-                 #      alpha[alpha > 1-safeguard] <- 1-safeguard
-                 private$param$alpha <- alpha
+    return (private$param$alpha$I)
+    }
+  )
+FitMLVSBM$set(
+  "public",
+  "update_alpha_O",
+  function(safeguard = 2*.Machine$double.eps) {
+    if(private$Q$O == 1) {
+      private$param$alpha$O <-
+        as.matrix( sum(private$X$O) / sum(private$M$O))
+      } else {
+        alpha <-
+          crossprod(private$var_param$tau$O,
+                    (private$M$O * private$X$O) %*% private$var_param$tau$O) /
+          crossprod(private$var_param$tau$O,
+                    private$M$O %*% private$var_param$tau$O)
+        private$param$alpha$O <- alpha
                }
-               return(private$param$alpha)
-             })
-SBMModel$set("public", "update_beta",
-             function(safeguard = 2*.Machine$double.eps){
-               ## beta
-               if(private$S == 1){
-                 private$param$alpha$O <-
-                   as.matrix(sum(private$X$O)/sum(private$M$O))
-               }else{
-                 beta <- crossprod(private$var_param$tau$O,
-                                   (private$M$O * private$X$O) %*% private$var_param$tau$O) /
-                   crossprod(private$var_param$tau$O,  private$M$O %*% private$var_param$tau$O)
-                 beta[beta < safeguard] <- safeguard
-                 beta[beta > 1-safeguard] <- 1-safeguard
-                 private$param$alpha$O <- beta
-               }
-               return(private$param$alpha$O)
-             })
-SBMModel$set("public", "update_rho",
-             function(safeguard = 1e-2){
-               ## rho
-               if (private$S == 1) {
-                 private$param$rho = 1
-               } else {
-                 rho <- colMeans(private$var_param$tau$O)
-                 rho[rho < safeguard] <- safeguard
-                 private$param$rho <- rho/sum(rho)
-               }
-               return(private$param$rho)
-             })
-SBMModel$set("active", "likelihood",
-             function(value) {
-               self$XRlikelihood + self$XLlikelihood + self$Alikelihood +
-                 self$ZRlikelihood + self$ZLlikelihood
-             }
-)
+    return (private$param$alpha$O)
+    }
+  )
+FitMLVSBM$set(
+  "public",
+  "update_pi_O",
+  function(safeguard = 1e-2) {
+    ## rho
+    if (private$Q$O == 1) {
+      private$param$pi$O = 1
+      } else {
+        pi <- colMeans(private$var_param$tau$O)
+        pi[pi < safeguard] <- safeguard
+        private$param$pi$O <- pi/sum(pi)
+        }
+    return(private$param$pi$O)
+    }
+  )
+FitMLVSBM$set(
+  "public",
+  "update_gamma",
+  function(safeguard = 1e-6){
+    ## gamma
+    if (private$name == "classic") {
+      if (private$Q$I == 1) {
+        private$param$gamma <-
+          matrix(rep(1, private$Q$O), nrow = 1, ncol = private$Q$O)
+        } else {
+          gamma <-
+            crossprod(private$var_param$tau$I,
+                      private$A) %*% private$var_param$tau
+          gamma <-
+            t(t(gamma)/colSums(private$A %*% private$var_param$tau))
+          gamma[gamma < safeguard] <- safeguard
+          private$param$gamma <- t(t(gamma)/colSums(gamma))
+          }
+      return(private$param$gamma)
+      }
+    if (private$name == "independent") {
+      if (private$Q$I == 1) {
+        private$param$gamma <-
+          matrix(1, nrow = 1, ncol = private$Q$O)
+        } else {
+          gamma <- matrix(colMeans(private$var_param$tau$I),
+                          nrow = private$Q$I,
+                          ncol = private$Q$O)
+                       gamma[gamma < safeguard] <- safeguard
+                       private$param$gamma <- t(t(gamma)/colSums(gamma))
+                     }
+                     return(private$param$gamma)
+                   }
+                 })
+
+
 #-------------------------------------------------------------------------------
 #  Inference
 #-------------------------------------------------------------------------------
@@ -335,51 +323,6 @@ SBMModel$set("public", "clear",
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-#-------------------------------------------------------------------------------
-# Parameters update for M step
-#-------------------------------------------------------------------------------
-SBMModelStoc$set("public", "update_gamma",
-                 function(safeguard = 1e-6){
-                   ## gamma
-                   if (private$name == "classic") {
-                     if (private$Q == 1) {
-                       private$param$gamma <-
-                         matrix(rep(1, private$S), nrow = 1, ncol = private$S)
-                     } else {
-                       gamma <-
-                         crossprod(private$var_param$sigma, private$A) %*%
-                         private$var_param$tau
-                       gamma <-
-                         t(t(gamma)/colSums(private$A %*% private$var_param$tau))
-                       gamma[gamma < safeguard] <- safeguard
-                       private$param$gamma <- t(t(gamma)/colSums(gamma))
-                     }
-                     return(private$param$gamma)
-                   }
-                   if (private$name == "independent") {
-                     if (private$Q == 1) {
-                       private$param$gamma <-
-                         matrix(rep(1, private$S), nrow = 1, ncol = private$S)
-                     } else {
-                       gamma <- matrix(colMeans(private$var_param$sigma), private$Q, private$S)
-                       gamma[gamma < safeguard] <- safeguard
-                       private$param$gamma <- t(t(gamma)/colSums(gamma))
-                     }
-                     return(private$param$gamma)
-                   }
-                 })
-
 #-------------------------------------------------------------------------------
 # Varational EM algorithm
 #-------------------------------------------------------------------------------
@@ -396,7 +339,7 @@ SBMModelStoc$set("public", "VEStep",
                    condition = TRUE
                    it        = 0
                    tau_old   = private$var_param$tau
-                   sigma_old = private$var_param$sigma
+                   sigma_old = private$var_param$tau$I
                    while(condition){
                      ## sigma
                      sigma =
@@ -437,7 +380,7 @@ SBMModelStoc$set("public", "VEStep",
                      sigma_old <- sigma
                    }
                    private$var_param$tau = tau
-                   private$var_param$sigma = sigma
+                   private$var_param$tau$I = sigma
                  })
 
 SBMModelStoc$set("public", "doVEM",
@@ -484,7 +427,7 @@ SBMModelStoc$set("public", "permute_empty_class",
                    if(length(unique(self$Z$R)) < private$Q){
                      perm = c(unique(self$Z$R),
                               setdiff( 1:private$Q, self$Z$R))
-                     private$var_param$sigma     = private$var_param$sigma[, perm]
+                     private$var_param$tau$I     = private$var_param$tau$I[, perm]
                      private$param$alpha         = private$param$alpha[perm, perm]
                      private$param$gamma         = matrix(private$param$gamma[perm,], private$Q, private$S)
                    }
