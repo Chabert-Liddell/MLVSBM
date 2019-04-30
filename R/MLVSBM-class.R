@@ -1,5 +1,5 @@
 #' An R6Class for multilevel object
-#' @importFrom R6 R6Class
+#' @import R6
 #'
 #' @export
 
@@ -9,36 +9,45 @@ MLVSBM <-
     "MLVSBM",
     ## fields for internal use (refering to mathematical notations)
     private = list(
-      n          = NULL, # Number of node
-      sim_param  = NULL, # parameters used for simulation
-      X          = NULL, # List of adjacency matrices
-      A          = NULL, # Affiliation matrix
-      Z          = NULL, # List of latent variables vectors
-      fitted     = NULL, # List of fitted model for this network
-      ICLtab     = NULL, #
-      tmp_fitted = NULL, # List of all fitted model
-      min_Q      = NULL, # List of minimum clusters for inference
-      max_Q      = NULL, # List of maximum clusters for inference
-      directed   = NULL, # Are levels directed
-      M          = NULL  # list of NA masks for CV and missig data for X
+      n            = NULL, # Number of nodes
+      sim_param    = NULL, # parameters used for simulation
+      X            = NULL, # List of adjacency matrices
+      A            = NULL, # Affiliation matrix
+      Z            = NULL, # List of latent variables vectors
+      fitted       = NULL, # List of fitted model for this network
+      ICLtab       = NULL, #
+      tmp_fitted   = NULL, # List of all fitted model
+      min_Q        = NULL, # List of minimum clusters for inference
+      max_Q        = NULL, # List of maximum clusters for inference
+      directed     = NULL, # Are levels directed
+      M            = NULL,  # list of NA masks for CV and missig data for X
+      distribution = NULL
       ),
     public = list(
       ## constructor
       initialize = function(n = NULL, X = NULL, A = NULL,
-                            Z = NULL, directed = NULL, sim_param = NULL) {
-        n         = n
-        X         = X
-        Z         = Z
-        A         = A
-        directed  = directed
-        sim_param = sim_param
+                            Z = NULL, directed = NULL, sim_param = NULL,
+                            distribution = NULL) {
+        private$n            = n
+        private$X            = X
+        private$Z            = Z
+        private$A            = A
+        private$directed     = directed
+        private$sim_param    = sim_param
+        private$distribution = distribution
+        private$min_Q        = list(I = 1,
+                                    O = 1)
+        private$max_Q        = list(I = floor(sqrt(n[[1]])),
+                                    O = floor(sqrt(n[[2]])))
+        private$fitted               = list()
+        private$tmp_fitted           = list()
       }
       ),
     active = list(
       ## active binding to access fields outside the class
       nb_nodes              = function(value) private$n,
       simulation_parameters = function(value) sim_param,
-      affiliation_matrox    = function(value) {
+      affiliation_matrix    = function(value) {
         if (missing(value)) private$A else private$A = value},
       adjacency_matrix      = function(value) {
         if (missing(value)) private$X else private$X = value},

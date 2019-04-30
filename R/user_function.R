@@ -8,14 +8,14 @@
 #' the first one being the individual or lower level
 #' the second one being the organisational or upper level
 #' @param distribution A list for the distribution of X,
-#' only "bernouilli" is implemented
+#' only "bernoulli" is implemented
 #'
 #' @return An unfitted MLVSBM object corresponding to the multilevel network
 #' @export
 #'
 #' @examples
 mlvsbm_create_network <-
-  function(X, A, distribution = list("bernouilli", "bernouilli")) {
+  function(X, A, distribution = list("bernoulli", "bernoulli")) {
     if (! is.matrix(A)) {
       cat(paste0("A must be a binary matrix!!!"))
     }
@@ -76,7 +76,7 @@ mlvsbm_create_network <-
 #' every organisation have at least one affiliated individuals?
 #' Needs to have n_I >= n_O
 #' @param distribution  list for the distribution of X,
-#' only "bernouilli" is implemented
+#' only "bernoulli" is implemented
 #'
 #' @return An MLVSBM object, a simulated multilevel network with levels,
 #' affiliations and memberships
@@ -86,7 +86,7 @@ mlvsbm_create_network <-
 mlvsbm_simulate_network <-
   function (n, Q, pi, gamma, alpha,
             directed, affiliation = "uniform",
-            distribution = list("bernouilli", "bernouiili"),
+            distribution = list("bernoulli", "bernoulli"),
             no_empty_org = FALSE) {
     if (n[[1]] < 1 | n[[2]] < 1 | n[[1]]%%1 != 0 | n[[2]] %% 1 != 0) {
       cat(paste0("n[[1]] and n[[2]] must be positive integers!!!"))
@@ -138,10 +138,6 @@ mlvsbm_simulate_network <-
                                   no_empty_org = no_empty_org),
                  distribution = list(I = distribution[[1]],
                                      O = distribution[[2]]))
-    new_mlvsbm$min_clusters <- list(I = 1,
-                                    O = 1)
-    new_mlvsbm$max_clusters <- list(I = floor(sqrt(n[[1]])),
-                                    O = floor(sqrt(n[[2]])))
     new_mlvsbm$simulate()
     return(new_mlvsbm)
   }

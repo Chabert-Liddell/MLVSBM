@@ -5,8 +5,8 @@
 \title{Create a simulated multilevel network (MLVSBM object)}
 \usage{
 mlvsbm_simulate_network(n, Q, pi, gamma, alpha, directed,
-  affiliation = "uniform", distribution = list("bernouilli",
-  "bernouiili"), no_empty_org = FALSE)
+  affiliation = "uniform", distribution = list("bernoulli",
+  "bernoulli"), no_empty_org = FALSE)
 }
 \arguments{
 \item{n}{A list of 2 positive integers,
@@ -32,7 +32,7 @@ Is the organisational level a directed network ?}
 simulated in c("uniform", "preferential")}
 
 \item{distribution}{list for the distribution of X,
-only "bernouilli" is implemented}
+only "bernoulli" is implemented}
 
 \item{no_empty_org}{A boolean with FALSE as default, should
 every organisation have at least one affiliated individuals?

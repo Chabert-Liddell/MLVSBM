@@ -8,14 +8,14 @@ MLVSBM$set(
                                         no_empty_org = no_empty_org)
     private$Z    <-  list(I = NULL, O = NULL)
     private$Z$O  <-  sample(
-      x = seq(self$sim_param$Q$O),
+      x = seq(private$sim_param$Q$O),
       size = private$n$O,
       replace = TRUE,
       prob = private$sim_param$pi$O) # Variables latentes L
     private$Z$I  <-  numeric(private$n$I)
     ind          <- private$A %*% private$Z$O
     for (i in seq(private$n$I)) {
-      private$Z$I[i] <- sample(seq(self$truenRClusters),
+      private$Z$I[i] <- sample(seq(private$sim_param$Q$I),
                                size = 1,
                                prob = private$sim_param$gamma[, ind[i, ]])
     }
