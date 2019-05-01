@@ -129,3 +129,22 @@ xlogx      <- function(x) ifelse(x < 2*.Machine$double.eps, 0, x*log(x))
 quad_form  <- function(X, tau) tau %*% tcrossprod(X, tau)
 logistic   <- function(x) 1/(1 + exp(-x))
 logit      <- function(x) log(x/(1 - x))
+
+ARI <- function (x, y)
+{
+  x <- as.vector(x)
+  y <- as.vector(y)
+  if (length(x) != length(y))
+    stop("arguments must be vectors of the same length")
+  tab <- table(x, y)
+  if (all(dim(tab) == c(1, 1)))
+    return(1)
+  a <- sum(choose(tab, 2))
+  b <- sum(choose(rowSums(tab), 2)) - a
+  c <- sum(choose(colSums(tab), 2)) - a
+  d <- choose(sum(tab), 2) - a - b - c
+  ARI <-
+    (a - (a + b) * (a + c)/(a + b + c + d))/
+    ((a + b + a + c)/2 - (a + b) * (a + c)/(a + b + c + d))
+  return(ARI)
+}

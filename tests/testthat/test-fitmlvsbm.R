@@ -26,8 +26,8 @@ fit_spec <- FitMLVSBM$new(Q = my_mlvsbm$simulation_parameters$Q,
 fit_spec$do_vem(init = "spectral")
 test_that("spec_hierarchical", {
   expect_equal(
-    c(aricode::ARI(fit_hier$Z$I, fit_spec$Z$I),
-      aricode::ARI(fit_hier$Z$O, fit_spec$Z$O)),
+    c(MLVSBM:::ARI(fit_hier$Z$I, fit_spec$Z$I),
+      MLVSBM:::ARI(fit_hier$Z$O, fit_spec$Z$O)),
     c(1, 1))
 })
 set.seed(1)
@@ -50,7 +50,7 @@ fit_mlvsbm <- FitMLVSBM$new(Q = my_mlvsbm$simulation_parameters$Q,
 fit_mlvsbm$do_vem(init = "spectral")
 test_that("easy_fit", {
   expect_equal(
-    c(aricode::ARI(fit_mlvsbm$Z$I, my_mlvsbm$memberships$I),
-      aricode::ARI(fit_mlvsbm$Z$O, my_mlvsbm$memberships$O)),
+    c(MLVSBM:::ARI(fit_mlvsbm$Z$I, my_mlvsbm$memberships$I),
+      MLVSBM:::ARI(fit_mlvsbm$Z$O, my_mlvsbm$memberships$O)),
     c(1, 1))
 })
