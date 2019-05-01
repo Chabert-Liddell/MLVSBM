@@ -1,36 +1,37 @@
-#-------------------------------------------------------------------------------
-# Class declaration
-#-------------------------------------------------------------------------------
-
+#' An R6 Class ocject, a fitted multilevel network once $dovem() is done
+#'
 #' @import R6
 #' @export
 FitMLVSBM <-
   R6::R6Class(
     "FitMLVSBM",
     private = list(
-      n         = NULL, # number of nodes in I and O
-      Q         = NULL, # Number of clusters in I and O
-      param     = NULL, # List of fitted parameters of the model
-      var_param = NULL, # List of variational parameters of the fitted model
-      A         = NULL, # Affiliation Matrix
-      X         = NULL, # List of adjacency Matrices
-      directed  = NULL,  # is XI directed ? Is XO directed ?
-      M         = NULL,  # List of mask matrix
-      distribution = NULL # List of the distribution of X
+      n            = NULL, # number of nodes in I and O
+      Q            = NULL, # Number of clusters in I and O
+      param        = NULL, # List of fitted parameters of the model
+      tau          = NULL, # List of variational parameters of the fitted model
+      A            = NULL, # Affiliation Matrix
+      X            = NULL, # List of adjacency Matrices
+      directed_    = NULL,  # is XI directed ? Is XO directed ?
+      M            = NULL,  # List of mask matrix
+      distribution_ = NULL, # List of the distribution of X
+      independent_ = NULL
     ),
     public = list(
       ## constructor
       initialize = function(Q = list(I = 1, O = 1),
                             A = NA, X = NA,
-                            M = NA,
+                            M = list(I = NA, O = NA),
                             directed = NA,
-                            distribution = list("bernoulli", "bernoulli")) {
+                            distribution = list("bernoulli", "bernoulli"),
+                            independent = FALSE) {
         private$A     = A
         private$X     = X
         private$n     = list(I = nrow(A), O = ncol(A))
         private$Q     = Q
-        private$directed = directed
-        distribution = distribution
+        private$directed_ = directed
+        private$distribution_ = distribution
+        private$independent_    = independent
         if (is.na(M$I)) {
           private$M$I <- diag(-1, private$n$I)
         } else {
@@ -67,26 +68,29 @@ FitMLVSBM <-
         else private$param <- value
         },
       membership = function(value) {
-        if(missing(value)) return(private$var_param)
-        else private$var_param <- value
+        if(missing(value)) return(private$tau)
+        else private$tau <- value
         },
+      independent    = function(value) private$independent_,
+      distribution   = function(value) private$distribution_,
+      directed       = function(value) private$directed_,
       ## other functions
       entropy     = function(value) {
-        - sum(private$var_param$tau$O * log(private$var_param$tau$O)) -
-          sum(private$var_param$tau$I * log(private$var_param$tau$I))
+        - sum(private$tau$O * log(private$tau$O)) -
+          sum(private$tau$I * log(private$tau$I))
       },
       bound      = function(value) self$complete_likelihood + self$entropy,
       df_mixture = function(value) list(I = private$Q$I -1,
                                         O = private$Q$O -1),
       df_connect = function(value) {
-        list(I = if (private$directed$I) private$Q$I**2
+        list(I = if (private$directed_$I) private$Q$I**2
              else choose(private$Q$I + 1, 2),
-             O = if (private$directed$O) private$Q$O**2
+             O = if (private$directed_$O) private$Q$O**2
              else choose(private$Q$O + 1, 2))
       },
       connect    = function(value) {
-        list(I = dplyr::if_else(private$directed$I, 1, .5) * sum(private$M$I),
-             O = dplyr::if_else(private$directed$O, 1, .5) * sum(private$M$O))
+        list(I = dplyr::if_else(private$directed_$I, 1, .5) * sum(private$M$I),
+             O = dplyr::if_else(private$directed_$O, 1, .5) * sum(private$M$O))
       },
       ICL        = function(value) {
         self$complete_likelihood + self$entropy - self$full_penalty
@@ -99,19 +103,19 @@ FitMLVSBM <-
         if (private$Q$I == 1) {
           Z$I = rep(1, private$n$I)
         } else {
-          Z$R = apply(private$var_param$tau$I, 1, which.max)
+          Z$I = apply(private$tau$I, 1, which.max)
         }
         if (private$Q$O == 1) {
-          Z$L = rep(1, private$n$O)
+          Z$O = rep(1, private$n$O)
         } else {
-          Z$L = apply(private$var_param$tau$O, 1, which.max)
+          Z$O = apply(private$tau$O, 1, which.max)
         }
         return(Z)
-      }
+      },
       X_hat = function(value) {
         list(
-          I = quad_form(private$param$alpha$I, private$var_param$tau$I),
-          O = quad_form(private$param$alpha$O, private$var_param$tau$O)
+          I = quad_form(private$param$alpha$I, private$tau$I),
+          O = quad_form(private$param$alpha$O, private$tau$O)
           )
         },
       map = function(value) {
@@ -139,6 +143,7 @@ FitMLVSBM$set(
     .5 * self$df_connect$I * log(self$connect$I)
   penalty$O <- .5 * self$df_mixture$O * log(private$n$O) +
     .5 * self$df_connect$O * log(self$connect$O)
+  return(penalty)
   }
   )
 
@@ -151,27 +156,28 @@ FitMLVSBM$set(
   "likelihood",
   function(value) {
     likelihood <- list()
-    factor <-  if (private$directed$I) 1 else .5
+    factor <-  if (private$directed_$I) 1 else .5
     likelihood$I <-
       factor * (
         sum((private$M$I * private$X$I) *
-              quad_form(log(private$param$alpha$I), private$var_param$tau$I)) +
+              quad_form(log(private$param$alpha$I), private$tau$I)) +
           sum((private$M$I * (1 - private$X$I)) *
-                quad_form(log(1 - private$param$alpha), private$var_param$tau$I))
+                quad_form(log(1 - private$param$alpha$I), private$tau$I))
         ) +
-      sum(private$A * private$var_param$tau$I %*%
-            tcrossprod(log(private$param$gamma), private$var_param$tau$O))
-    factor = if (private$directed$O) 1 else .5
+      sum(private$A * private$tau$I %*%
+            tcrossprod(log(private$param$gamma), private$tau$O))
+    factor = if (private$directed_$O) 1 else .5
     likelihood$O <-
       factor * (
         sum((private$M$O * private$X$O) *
               quad_form(log(private$param$alpha$O),
-                        private$var_param$tau$O)) +
+                        private$tau$O)) +
           sum((private$M$O * (1 - private$X$O)) *
                 quad_form(log(1 - private$param$alpha$O),
-                          private$var_param$tau$O))) +
-      sum(private$var_param$tau%*%log(private$param$rho))
-    }
+                          private$tau$O))) +
+      sum(private$tau$O%*%log(private$param$pi$O))
+    return(likelihood)
+  }
   )
 
 FitMLVSBM$set("active", "complete_likelihood",
@@ -184,7 +190,7 @@ FitMLVSBM$set("active", "complete_likelihood",
 ##------------------------------------------------------------------------------
 FitMLVSBM$set(
   "public",
-  "update_alpha_I",
+  "update_alpha",
   function(safeguard = 2*.Machine$double.eps) {
     ## alpha
     if(private$Q$I == 1) {
@@ -192,43 +198,35 @@ FitMLVSBM$set(
         as.matrix( sum(private$M$I * private$X$I)/ sum(private$M$I))
       } else {
         alpha <-
-          crossprod(private$var_param$tau$I,
-                    (private$M$I*private$X$I) %*% private$var_param$tau$I) /
-          crossprod(private$var_param$tau$I,
-                    private$M$I %*% private$var_param$tau$I)
+          crossprod(private$tau$I,
+                    (private$M$I*private$X$I) %*% private$tau$I) /
+          crossprod(private$tau$I,
+                    private$M$I %*% private$tau$I)
         private$param$alpha$I <- alpha
       }
-
-    return (private$param$alpha$I)
-    }
-  )
-FitMLVSBM$set(
-  "public",
-  "update_alpha_O",
-  function(safeguard = 2*.Machine$double.eps) {
     if(private$Q$O == 1) {
       private$param$alpha$O <-
         as.matrix( sum(private$X$O) / sum(private$M$O))
       } else {
         alpha <-
-          crossprod(private$var_param$tau$O,
-                    (private$M$O * private$X$O) %*% private$var_param$tau$O) /
-          crossprod(private$var_param$tau$O,
-                    private$M$O %*% private$var_param$tau$O)
+          crossprod(private$tau$O,
+                    (private$M$O * private$X$O) %*% private$tau$O) /
+          crossprod(private$tau$O,
+                    private$M$O %*% private$tau$O)
         private$param$alpha$O <- alpha
                }
-    return (private$param$alpha$O)
+    return (private$param$alpha)
     }
   )
 FitMLVSBM$set(
   "public",
-  "update_pi_O",
+  "update_pi",
   function(safeguard = 1e-2) {
     ## rho
     if (private$Q$O == 1) {
       private$param$pi$O = 1
       } else {
-        pi <- colMeans(private$var_param$tau$O)
+        pi <- colMeans(private$tau$O)
         pi[pi < safeguard] <- safeguard
         private$param$pi$O <- pi/sum(pi)
         }
@@ -240,204 +238,213 @@ FitMLVSBM$set(
   "update_gamma",
   function(safeguard = 1e-6){
     ## gamma
-    if (private$name == "classic") {
+    if (private$independent_ == FALSE) {
       if (private$Q$I == 1) {
         private$param$gamma <-
-          matrix(rep(1, private$Q$O), nrow = 1, ncol = private$Q$O)
+          matrix(1, nrow = 1, ncol = private$Q$O)
         } else {
           gamma <-
-            crossprod(private$var_param$tau$I,
-                      private$A) %*% private$var_param$tau
+            crossprod(private$tau$I,
+                      private$A) %*% private$tau$O
           gamma <-
-            t(t(gamma)/colSums(private$A %*% private$var_param$tau))
+            t(t(gamma)/colSums(private$A %*% private$tau$O))
           gamma[gamma < safeguard] <- safeguard
           private$param$gamma <- t(t(gamma)/colSums(gamma))
           }
       return(private$param$gamma)
       }
-    if (private$name == "independent") {
+    if (private$independent_ == TRUE) {
       if (private$Q$I == 1) {
         private$param$gamma <-
           matrix(1, nrow = 1, ncol = private$Q$O)
         } else {
-          gamma <- matrix(colMeans(private$var_param$tau$I),
+          gamma <- matrix(colMeans(private$tau$I),
                           nrow = private$Q$I,
                           ncol = private$Q$O)
-                       gamma[gamma < safeguard] <- safeguard
-                       private$param$gamma <- t(t(gamma)/colSums(gamma))
-                     }
-                     return(private$param$gamma)
-                   }
-                 })
-
-
+          gamma[gamma < safeguard] <- safeguard
+          private$param$gamma <- t(t(gamma)/colSums(gamma))
+          }
+      return(private$param$gamma)
+      }
+    }
+  )
 #-------------------------------------------------------------------------------
 #  Inference
 #-------------------------------------------------------------------------------
-SBMModel$set(
+FitMLVSBM$set(
   "public",
-  "initClustering",
+  "init_clustering",
   function(safeguard = 2*.Machine$double.eps,
            method = "hierarchical",
            Z = NULL) {
-    if (private$Q == 1) {
-      private$var_param$tau$I <-
-        as.matrix(rep(1, private$n$I), nrow = private$n$I, ncol = 1)
+    if (private$Q$I == 1) {
+      private$tau$I <-
+        matrix(1, nrow = private$n$I, ncol = 1)
     } else {
-      RinitClust <-
+      init_clust <-
         switch(method,
-               "spectral"     = spcClust(private$X$I, private$Q),
-               "hierarchical" = hierarClust(private$X$I, private$Q),
-               "merge_split"  = Z$R)
-      private$var_param$tau$I <-
-        1 * sapply(1:private$Q, function(x) RinitClust %in% x)
-      private$var_param$tau$I[private$var_param$tau$I < safeguard] <-
-        safeguard
-      private$var_param$tau$I <-
-        private$var_param$tau$I / rowSums(private$var_param$tau$I)
+               "spectral"     = spcClust(private$X$I, private$Q$I),
+               "hierarchical" = hierarClust(private$X$I, private$Q$I),
+               "merge_split"  = Z$I)
+      private$tau$I <-
+        1 * sapply(X = seq(private$Q$I), FUN = function(x) init_clust %in% x)
+      private$tau$I[private$tau$I < safeguard] <- safeguard
+      private$tau$I <-
+        private$tau$I / rowSums(private$tau$I)
     }
-    if(private$S == 1){
-      private$var_param$tau$O <-
-        as.matrix(rep(1, private$n$O), nrow = private$n$O, ncol = 1)
+    if(private$Q$O == 1){
+      private$tau$O <-
+        as.matrix(1, nrow = private$n$O, ncol = 1)
     }else{
-      LinitClust <-
+      init_clust <-
         switch(method,
-               "spectral"     = spcClust(private$X$O, private$S),
-               "hierarchical" = hierarClust(private$X$O, private$S),
+               "spectral"     = spcClust(private$X$O, private$Q$O),
+               "hierarchical" = hierarClust(private$X$O, private$Q$O),
                "merge_split"  = Z$L)
-      private$var_param$tau$O = 1 * sapply(1:private$S, function(x) LinitClust %in% x)
-      private$var_param$tau$O[private$var_param$tau$O < safeguard] = safeguard
-      private$var_param$tau$O = private$var_param$tau$O/rowSums(private$var_param$tau$O)
+      private$tau$O <-
+        1 * sapply(X = seq(private$Q$O), FUN = function(x) init_clust %in% x)
+      private$tau$O[private$tau$O < safeguard] <-  safeguard
+      private$tau$O <-
+        private$tau$O/rowSums(private$tau$O)
     }
-  })
-
-
-
-SBMModel$set("public", "clear",
-             function(){
-               private$param = NULL
-               private$var_param = NULL
-             })
-
-
-
-
-
+  }
+  )
+FitMLVSBM$set(
+  "public",
+  "clear",
+  function(){
+    private$param = NULL
+    private$tau = NULL
+    }
+  )
 #-------------------------------------------------------------------------------
 # Varational EM algorithm
 #-------------------------------------------------------------------------------
-SBMModelStoc$set("public", "MStep",
-                 function(safeguard = 1e-6){
-                   self$update_alpha(safeguard = safeguard)
-                   self$update_beta(safeguard = safeguard)
-                   self$update_rho(safeguard = safeguard)
-                   if (private$name != "deterministic") self$update_gamma(safeguard = safeguard)
-                 })
+FitMLVSBM$set(
+  "public",
+  "m_step",
+  function(safeguard = 1e-6){
+    self$update_alpha(safeguard = safeguard)
+    self$update_pi(safeguard = safeguard)
+    self$update_gamma(safeguard = safeguard)
+    }
+  )
+FitMLVSBM$set(
+  "public",
+  "ve_step",
+  function(threshold = 1e-6, fixPointIter = 100, safeguard = 1e-6){
+    condition <- TRUE
+    it        <- 0
+    tau_old   <- private$tau
+    tau       <- private$tau
+    while (condition) {
+      ## sigma
+      tau$I <-
+        (private$M$I * private$X$I) %*%
+        tcrossprod(tau_old$I, log(private$param$alpha$I)) +
+        (private$M$I * (1 - private$X$I)) %*%
+        tcrossprod(tau_old$I, log(1 - private$param$alpha$I)) +
+        private$A %*% tcrossprod(tau_old$O, log(private$param$gamma))
+      if (private$Q$I == 1) {
+        tau$I  <-
+          as.matrix(exp( apply(X = tau$I,
+                               MARGIN = 1,
+                               FUN = function(x) x - max(x))),
+                    nrow = private$n$I, ncol = 1 )
+        } else {
+          tau$I <- exp( t(apply(X = tau$I,
+                                MARGIN = 1,
+                                FUN = function(x) x - max(x))) )
+          }
+      tau$I[tau$I < safeguard] <-  safeguard
+      tau$I <- tau$I/rowSums(tau$I)
+      ## tau
+      tau$O <-
+        matrix(log(private$param$pi$O), private$n$O, private$Q$O, byrow = TRUE) +
+        (private$M$O * private$X$O) %*%
+        tcrossprod(tau_old$O, log(private$param$alpha$O)) +
+        (private$M$O * (1 - private$X$O)) %*%
+        tcrossprod(tau_old$O,  log(1 - private$param$alpha$O)) +
+        crossprod(private$A, tau_old$I) %*% log(private$param$gamma)
+      if (private$Q$O == 1) {
+        tau$O <- as.matrix(exp(apply(X = tau$O,
+                                     MARGIN = 1,
+                                     FUN = function(x) x - max(x))),
+                           nrow = private$n$O, ncol = 1 )
+        } else {
+          tau$O  <- exp(t(apply(X = tau$O,
+                                MARGIN = 1,
+                                FUN = function(x) x - max(x))) )
+          }
+      tau$O[tau$O < safeguard] = safeguard
+      tau$O  <-  tau$O/rowSums(tau$O)
+      it  <-  it + 1
+      condition  <-  (max(dist_param(tau$O, tau_old$O),
+                          dist_param(tau$I, tau_old$I)) > threshold &&
+                        it <= fixPointIter)
+      tau_old   <- tau
+      }
+    private$tau <-  tau
+    }
+  )
+FitMLVSBM$set(
+  "public",
+  "do_vem",
+  function(init = "hierarchical", threshold = 1e-6,
+           maxIter = 1000, fixPointIter = 100,
+           safeguard = 1e-6, Z = NULL, bound = NA) {
+    self$init_clustering(method = init, safeguard = safeguard, Z = Z)
+    self$m_step(safeguard = safeguard)
+    self$vbound <-  c(self$vbound, self$bound)
+    condition   <-  TRUE
+    it          <-  0
+    if (private$Q$I != 1 | private$Q$O != 1) {
+      while (condition) {
+        param_old <- private$param
+        tau_old   <- private$tau
+        bound_old <- self$vbound[length(self$vbound)]
+        self$ve_step(safeguard = safeguard)
+        self$m_step(safeguard = safeguard)
+        if (bound_old > self$bound) {
+          private$tau <- tau_old
+          private$param     <- param_old
+          condition         <- FALSE
+          } else {
+            it          <-  it + 1
+            self$vbound <-  c(self$vbound, self$bound)
+            cat(it, " : ", self$bound, "\r" )
+            condition <-
+              (max(c(dist_param(private$param$alpha$I, param_old$alpha$I),
+                     dist_param(private$param$alpha$O, param_old$alpha$O),
+                     dist_param(private$param$gamma, param_old$gamma)))
+               > threshold &
+                 it <= maxIter)
+          }
+        }
+      self$permute_empty_class()
+      }
+    }
+  )
 
-SBMModelStoc$set("public", "VEStep",
-                 function(threshold = 1e-6, fixPointIter = 100, safeguard = 1e-6){
-                   condition = TRUE
-                   it        = 0
-                   tau_old   = private$var_param$tau
-                   sigma_old = private$var_param$tau$I
-                   while(condition){
-                     ## sigma
-                     sigma =
-                       (private$M$I * private$X$I) %*%
-                       tcrossprod(sigma_old, log(private$param$alpha)) +
-                       (private$M$I * (1 - private$X$I)) %*%
-                       tcrossprod(sigma_old, log(1 - private$param$alpha)) +
-                       private$A %*% tcrossprod(tau_old, log(private$param$gamma))
-                     if(private$Q == 1){
-                       sigma = as.matrix(exp( apply(sigma, 1, x <- function(x) x - max(x))), ncol = 1 )
-                     }else{
-                       sigma = exp( t(apply(sigma, 1, x <- function(x) x - max(x))) )
-                     }
-                     sigma[sigma < safeguard] = safeguard
-                     sigma = sigma/rowSums(sigma)
-                     ## tau
-                     tau =
-                       matrix(log(private$param$rho), private$m, private$S, byrow = TRUE) +
-                       (private$M$O * private$X$O) %*%
-                       tcrossprod(tau_old, log(private$param$alpha$O)) +
-                       (private$M$O * (1 - private$X$O)) %*%
-                       tcrossprod(tau_old,  log(1 - private$param$alpha$O)) +
-                       crossprod(private$A, sigma_old) %*% log(private$param$gamma)
-                     if(private$S == 1){
-                       tau = as.matrix(exp(apply(tau, 1, x <- function(x) x - max(x))), ncol = 1 )
-                     }else{
-                       tau = exp(t(apply(tau, 1, x <- function(x) x - max(x))) )
-                     }
-                     tau[tau < safeguard] = safeguard
-                     tau = tau/rowSums(tau)
-                     it = it + 1
-                     # condition = (max(abs(tau - tau_old)) > threshold &&
-                     #                 it <= fixPointIter)
-                     condition = (max(dist_param(tau, tau_old),
-                                      dist_param(sigma, sigma_old)) > threshold &&
-                                    it <= fixPointIter)
-                     tau_old   <- tau
-                     sigma_old <- sigma
-                   }
-                   private$var_param$tau = tau
-                   private$var_param$tau$I = sigma
-                 })
-
-SBMModelStoc$set("public", "doVEM",
-                 function(init = "hierarchical", threshold = 1e-6, maxIter = 1000,
-                          fixPointIter = 100, safeguard = 1e-6, Z = NULL,
-                          bound = NA){
-                   self$initClustering(method = init, safeguard = safeguard, Z = Z)
-                   self$MStep(safeguard = safeguard)
-                   self$vbound <-  c(self$vbound, self$bound)
-                   condition   <-  TRUE
-                   it          <-  0
-                   if (private$Q != 1 | private$S!= 1) {
-                     while (condition) {
-                       param_old <- private$param
-                       var_param_old   <- private$var_param
-                       bound_old <- self$vbound[length(self$vbound)]
-                       self$VEStep(safeguard = safeguard)
-                       self$MStep(safeguard = safeguard)
-                       if (bound_old > self$bound) {
-                         private$var_param <- var_param_old
-                         private$param     <- param_old
-                         condition         <- FALSE
-                       } else {
-                         it          <-  it + 1
-                         self$vbound <-  c(self$vbound, self$bound)
-                         cat(it, " : ", self$bound, "\r" )
-                         # condition = (max(c(max(abs(private$param$alpha - alpha_old)),
-                         #                     max(abs(private$param$alpha$O  - beta_old)),
-                         #                     max(abs(private$param$gamma  - gamma_old)))) > threshold &&
-                         #                 it <= maxIter)
-                         condition <- (max(c(dist_param(private$param$alpha, param_old$alpha),
-                                             dist_param(private$param$alpha$O, param_old$alpha$O),
-                                             dist_param(private$param$gamma, param_old$gamma)))
-                                       > threshold &&
-                                         it <= maxIter)
-                       }
-                     }
-                     self$permute_empty_class()
-                   }
-                 })
-
-SBMModelStoc$set("public", "permute_empty_class",
-                 function(){
-                   if(length(unique(self$Z$R)) < private$Q){
-                     perm = c(unique(self$Z$R),
-                              setdiff( 1:private$Q, self$Z$R))
-                     private$var_param$tau$I     = private$var_param$tau$I[, perm]
-                     private$param$alpha         = private$param$alpha[perm, perm]
-                     private$param$gamma         = matrix(private$param$gamma[perm,], private$Q, private$S)
-                   }
-                   if(length(unique(self$Z$L)) < private$S){
-                     perm = c(unique(self$Z$L),
-                              setdiff( 1:private$S, self$Z$L))
-                     private$var_param$tau  = private$var_param$tau[, perm]
-                     private$param$beta     = private$param$beta[perm, perm]
-                     private$param$rho      = private$param$rho[perm]
-                     private$param$gamma    = matrix(private$param$gamma[,perm], private$Q, private$S)
-                   }
-                 }
-)
+FitMLVSBM$set(
+  "public",
+  "permute_empty_class",
+  function() {
+    if (length(unique(self$Z$I)) < private$Q$I) {
+      perm  <-  c(unique(self$Z$I), setdiff(seq(private$Q$I), self$Z$I))
+      private$tau$I <-  private$tau$I[, perm]
+      private$param$alpha$I <-  private$param$alpha$I[perm, perm]
+      private$param$gamma <- matrix(data = private$param$gamma[perm,],
+                                    nrow = private$Q, ncol = private$S)
+      }
+    if (length(unique(self$Z$O)) < private$Q$O) {
+      perm <-  c(unique(self$Z$O),
+               setdiff( seq(private$Q$O), self$Z$O))
+      private$tau$O <-  private$tau$O[, perm]
+      private$param$alpha$O   <-  private$param$alpha$O[perm, perm]
+      private$param$pi$O      <-  private$param$pi$O[perm]
+      private$param$gamma     <-  matrix(data = private$param$gamma[,perm],
+                                         nrow = private$Q$I, ncol = private$Q$O)
+      }
+    }
+  )

@@ -23,13 +23,13 @@ MLVSBM$set(
     private$X$I = simulate_adjacency(Z = private$Z$I,
                                      n = private$n$I,
                                      alpha = private$sim_param$alpha$I,
-                                     directed = private$directed$I,
-                                     distribution = private$distribution$I)
+                                     directed = private$directed_$I,
+                                     distribution = private$distribution_$I)
     private$X$O = simulate_adjacency(Z = private$Z$O,
                                      n = private$n$O,
                                      alpha = private$sim_param$alpha$O,
-                                     directed = private$directed$O,
-                                     distribution = private$distribution$O)
+                                     directed = private$directed_$O,
+                                     distribution = private$distribution_$O)
     })
 
 #' Simulation an adjacency matrix

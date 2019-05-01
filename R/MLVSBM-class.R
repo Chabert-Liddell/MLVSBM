@@ -19,22 +19,22 @@ MLVSBM <-
       tmp_fitted   = NULL, # List of all fitted model
       min_Q        = NULL, # List of minimum clusters for inference
       max_Q        = NULL, # List of maximum clusters for inference
-      directed     = NULL, # Are levels directed
+      directed_     = NULL, # Are levels directed
       M            = NULL,  # list of NA masks for CV and missig data for X
-      distribution = NULL
+      distribution_ = NULL
       ),
     public = list(
       ## constructor
       initialize = function(n = NULL, X = NULL, A = NULL,
                             Z = NULL, directed = NULL, sim_param = NULL,
-                            distribution = NULL) {
+                            distribution = list("bernoulli", "bernoulli")) {
         private$n            = n
         private$X            = X
         private$Z            = Z
         private$A            = A
-        private$directed     = directed
+        private$directed_     = directed
         private$sim_param    = sim_param
-        private$distribution = distribution
+        private$distribution_ = distribution
         private$min_Q        = list(I = 1,
                                     O = 1)
         private$max_Q        = list(I = floor(sqrt(n[[1]])),
@@ -46,20 +46,24 @@ MLVSBM <-
     active = list(
       ## active binding to access fields outside the class
       nb_nodes              = function(value) private$n,
-      simulation_parameters = function(value) sim_param,
-      affiliation_matrix    = function(value) {
-        if (missing(value)) private$A else private$A = value},
-      adjacency_matrix      = function(value) {
-        if (missing(value)) private$X else private$X = value},
-      memberships           = function(value) {
-        if (missing(value)) private$Z else private$Z = value},
+      simulation_parameters = function(value) private$sim_param,
+      affiliation_matrix    = function(value)
+        if (missing(value)) private$A else private$A = value,
+      adjacency_matrix      = function(value)
+        if (missing(value)) private$X else private$X = value,
+      memberships           = function(value)
+        if (missing(value)) private$Z else private$Z = value,
       fittedmodels          = function(value) private$fitted,
       ICL                   = function(value) private$ICLtab,
       tmp_fittedmodels      = function(value) private$tmp_fitted,
       max_clusters          = function(value)
         if (missing(value))  private$max_Q else private$max_Q = value,
       min_clusters          = function(value)
-        if (missing(value))  private$min_Q else private$min_Q = value
+        if (missing(value))  private$min_Q else private$min_Q = value,
+      directed              = function(value)
+        if (missing(value)) private$directed_ else private$directed_ = value,
+      distribution          = function(value)
+        if (missing(value)) private$distribution_ else private$distribution_ = value
       )
     )
 
