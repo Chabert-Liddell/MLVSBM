@@ -392,7 +392,7 @@ FitMLVSBM$set(
   "do_vem",
   function(init = "hierarchical", threshold = 1e-6,
            maxIter = 1000, fixPointIter = 100,
-           safeguard = 1e-6, Z = NULL, bound = NA) {
+           safeguard = 1e-6, Z = NULL) {
     self$init_clustering(method = init, safeguard = safeguard, Z = Z)
     self$m_step(safeguard = safeguard)
     self$vbound <-  c(self$vbound, self$bound)

@@ -21,7 +21,9 @@ MLVSBM <-
       max_Q        = NULL, # List of maximum clusters for inference
       directed_     = NULL, # Are levels directed
       M            = NULL,  # list of NA masks for CV and missig data for X
-      distribution_ = NULL
+      distribution_ = NULL,
+      fitted_sbm    = NULL,
+      ICLtab_sbm    = NULL
       ),
     public = list(
       ## constructor
@@ -41,6 +43,10 @@ MLVSBM <-
                                     O = floor(sqrt(n[[2]])))
         private$fitted               = list()
         private$tmp_fitted           = list()
+        private$fitted_sbm           = list("lower" = list(),
+                                            "upper" = list())
+        private$ICLtab_sbm   = list("lower" = list(),
+                                    "upper" = list())
       }
       ),
     active = list(
@@ -55,7 +61,9 @@ MLVSBM <-
         if (missing(value)) private$Z else private$Z = value,
       fittedmodels          = function(value) private$fitted,
       ICL                   = function(value) private$ICLtab,
+      ICL_sbm               = function(value) private$ICLtab_sbm,
       tmp_fittedmodels      = function(value) private$tmp_fitted,
+      fittedmodels_sbm      = function(value) private$fitted_sbm,
       max_clusters          = function(value)
         if (missing(value))  private$max_Q else private$max_Q = value,
       min_clusters          = function(value)
