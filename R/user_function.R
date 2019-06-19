@@ -141,3 +141,22 @@ mlvsbm_simulate_network <-
     new_mlvsbm$simulate()
     return(new_mlvsbm)
   }
+
+mlvsbm_estimate_network <-
+  function(mlv) {
+    lower_fit <- mlv$estimate_level(level = "lower")
+    upper_fit <- mlv$estimate_level(level = "upper")
+    fit <- mlv$estimate_all_bm(
+      Q = list("I" = which.max(lower_fit$ICL),
+               "O" = which.max(upper_fit$ICL)),
+      Z = list("I" = lower_fit$models[[which.max(lower_fit$ICL)]]$Z,
+               "O" = upper_fit$models[[which.max(upper_fit$ICL)]]$Z))
+    print(paste0("ICL for independent levels : ", max(lower_fit$ICL) + max(upper_fit$ICL)))
+    print(paste0("ICL for interdependent levels : ", fit$ICL))
+    if (max(lower_fit$ICL) + max(upper_fit$ICL) <= fit$ICL) {
+      print("=====Interdepence is detected between the two level=====")
+    } else {
+      print("=====The levels of this network are independent!=====")
+    }
+    return(fit)
+}

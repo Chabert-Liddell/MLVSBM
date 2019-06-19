@@ -294,13 +294,13 @@ FitMLVSBM$set(
     }
     if(private$Q$O == 1){
       private$tau$O <-
-        as.matrix(1, nrow = private$n$O, ncol = 1)
-    }else{
+        matrix(1, nrow = private$n$O, ncol = 1)
+    } else {
       init_clust <-
         switch(method,
                "spectral"     = spcClust(private$X$O, private$Q$O),
                "hierarchical" = hierarClust(private$X$O, private$Q$O),
-               "merge_split"  = Z$L)
+               "merge_split"  = Z$O)
       private$tau$O <-
         1 * sapply(X = seq(private$Q$O), FUN = function(x) init_clust %in% x)
       private$tau$O[private$tau$O < safeguard] <-  safeguard
@@ -435,7 +435,7 @@ FitMLVSBM$set(
       private$tau$I <-  private$tau$I[, perm]
       private$param$alpha$I <-  private$param$alpha$I[perm, perm]
       private$param$gamma <- matrix(data = private$param$gamma[perm,],
-                                    nrow = private$Q, ncol = private$S)
+                                    nrow = private$Q$I, ncol = private$Q$O)
       }
     if (length(unique(self$Z$O)) < private$Q$O) {
       perm <-  c(unique(self$Z$O),
