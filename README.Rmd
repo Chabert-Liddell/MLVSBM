@@ -31,24 +31,40 @@ devtools::install_github("Chabert-Liddell/MLVSBM")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+This is a how to simulate a multilevel SBM network:
 
-```{r example}
-## basic example code
+```{r simulate}
+set.seed(1)
+my_mlvsbm <- MLVSBM::mlvsbm_simulate_network(
+  n = list(100, 50),
+  Q = list(2, 2),
+  pi = c(.5, .5),
+  gamma = matrix(c(.8, .2, .1, .9), ncol = 2),
+  alpha = list(matrix(c(.25, .1, .1, .25), nrow = 2, ncol = 2),
+               matrix(c(.7, .4, .4, .1), nrow = 2, ncol = 2)),
+  directed = list(FALSE, FALSE),
+  affiliation = "preferential",
+  no_empty_org = FALSE)
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
-
-```{r cars}
-summary(cars)
+This is how to create a network from data:
+```{r create}
+lower_level <- my_mlvsbm$adjacency_matrix$I
+upper_level <- my_mlvsbm$adjacency_matrix$O
+affiliation <- my_mlvsbm$affiliation_matrix
+my_mlvsbm2 <- MLVSBM::mlvsbm_create_network(X = list(lower_level, upper_level),
+                                            A = affiliation)
 ```
 
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date.
+And this is how to infer it:
+```{r infer}
+fit <- MLVSBM:::mlvsbm_estimate_network(my_mlvsbm)
+```
 
-You can also embed plots, for example:
+
 
 ```{r pressure, echo = FALSE}
 plot(pressure)
 ```
 
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub!
+

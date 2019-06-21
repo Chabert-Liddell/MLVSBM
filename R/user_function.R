@@ -29,7 +29,7 @@ mlvsbm_create_network <-
       cat(paste0("X[[1]] must be a square binary matrix!!!"))
     }
     if (! is.matrix(X[[2]]) |
-        any(X[[2]] != 0 & X[[1]] != 1)|
+        any(X[[2]] != 0 & X[[2]] != 1)|
         ncol(X[[2]]) != nrow(X[[2]])) {
       cat(paste0("X[[2]] must be a square binary matrix!!!"))
     }
@@ -142,8 +142,20 @@ mlvsbm_simulate_network <-
     return(new_mlvsbm)
   }
 
+#' Infer a multilevel network (MLVSBM object), the original object is modified
+#'
+#' @param mlv A MLVSBM object, the network to be inferred
+#'
+#' @return A FitMLVSBM object, the best inference of the network
+#' @export
+#'
+#' @examples
 mlvsbm_estimate_network <-
   function(mlv) {
+    if (! "MLVSBM" %in% class(mlv)) {
+      stop("Error: Object mlv must be of class MLVSBM,
+            please use the function mlvsbm_create_network to create one")
+    }
     lower_fit <- mlv$estimate_level(level = "lower")
     upper_fit <- mlv$estimate_level(level = "upper")
     fit <- mlv$estimate_all_bm(
@@ -155,8 +167,8 @@ mlvsbm_estimate_network <-
     print(paste0("ICL for interdependent levels : ", fit$ICL))
     if (max(lower_fit$ICL) + max(upper_fit$ICL) <= fit$ICL) {
       print("=====Interdepence is detected between the two level=====")
-    } else {
-      print("=====The levels of this network are independent!=====")
-    }
+      } else {
+        print("=====The levels of this network are independent!=====")
+        }
     return(fit)
 }
