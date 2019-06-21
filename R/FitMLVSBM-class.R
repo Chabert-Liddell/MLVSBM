@@ -412,7 +412,7 @@ FitMLVSBM$set(
           } else {
             it          <-  it + 1
             self$vbound <-  c(self$vbound, self$bound)
-            cat(it, " : ", self$bound, "\r" )
+#            cat(it, " : ", self$bound, "\r" )
             condition <-
               (max(c(dist_param(private$param$alpha$I, param_old$alpha$I),
                      dist_param(private$param$alpha$O, param_old$alpha$O),

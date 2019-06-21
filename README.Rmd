@@ -40,7 +40,7 @@ my_mlvsbm <- MLVSBM::mlvsbm_simulate_network(
   Q = list(2, 2),
   pi = c(.5, .5),
   gamma = matrix(c(.8, .2, .1, .9), ncol = 2),
-  alpha = list(matrix(c(.25, .1, .1, .25), nrow = 2, ncol = 2),
+  alpha = list(matrix(c(.2, .1, .1, .2), nrow = 2, ncol = 2),
                matrix(c(.7, .4, .4, .1), nrow = 2, ncol = 2)),
   directed = list(FALSE, FALSE),
   affiliation = "preferential",
@@ -61,10 +61,47 @@ And this is how to infer it:
 fit <- MLVSBM:::mlvsbm_estimate_network(my_mlvsbm)
 ```
 
+```{r echo=FALSE, include=FALSE}
+library(tidyverse)
+library(blockmodels)
+library(tidygraph)
+library(ggforce)
+library(ggraph)
+library(cowplot)
+```
 
 
-```{r pressure, echo = FALSE}
-plot(pressure)
+```{r pressure, echo = FALSE, warning=FALSE,  dpi = 200}
+
+
+
+ggdraw()+
+  draw_plot(
+    t(fit$X_hat$I * lower_level) %>% 
+      as_tbl_graph() %>% 
+      mutate(group = fit$Z$I) %>% 
+      ggraph('matrix', sort.by = group)+
+      geom_edge_point(aes(color = weight))+
+      scale_edge_color_gradient(name = 'Prob', low = "#deebf7", high = "#08519c") +
+      geom_hline(yintercept = cumsum(table(fit$Z$I))[-fit$nb_clusters$I]+.5) +
+      geom_vline(xintercept = cumsum(table(fit$Z$I))[-fit$nb_clusters$I]+.5) +
+      scale_y_reverse() +
+      coord_fixed() +
+      theme_graph() , 0, 0, .5, 1
+  ) +
+  draw_plot(
+    t(fit$X_hat$O * upper_level) %>% 
+      as_tbl_graph() %>% 
+      ggraph('matrix', sort.by = fit$Z$O) +
+      geom_edge_point(aes(color = weight)) +
+      geom_hline(yintercept = cumsum(table(fit$Z$O))[-fit$nb_clusters$O]+.5) +
+      geom_vline(xintercept = cumsum(table(fit$Z$O))[-fit$nb_clusters$O]+.5) +
+      scale_edge_colour_gradient(name = 'Prob',low = "#fcbba1", high = "#67000d") +
+      scale_y_reverse() +
+      coord_fixed() + 
+      theme_graph(), x = 0.5, y = 0, width = .5, height = 1  
+    ) +
+  draw_plot_label(label = c("Lower level", "Upper level"), x = c(0, .5), y = c(.9, .9))
 ```
 
 
