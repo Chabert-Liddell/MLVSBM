@@ -234,7 +234,7 @@ FitSBM$set(
           } else {
             it          <-  it + 1
             self$vbound <-  c(self$vbound, self$bound)
-            cat(it, " : ", self$bound, "\r" )
+#            cat(it, " : ", self$bound, "\r" )
             condition <- dist_param(private$alpha, alpha_old) >
               (threshold && it <= maxIter)
           }
