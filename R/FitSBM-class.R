@@ -1,4 +1,5 @@
-
+#' An R6 Class ocject, a fitted level of a multilelvel network once $do_vem() is done
+#'
 #' @import R6
 #' @export
 
