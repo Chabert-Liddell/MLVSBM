@@ -21,4 +21,17 @@ navbar:
 reference:
 - title: All functions
   desc: ~
-  contents: '`simulate_adjacency`'
+  contents:
+  - '`FitMLVSBM`'
+  - '`FitSBM`'
+  - '`MLVSBM`'
+  - '`build_fold_matrix`'
+  - '`hierarClust`'
+  - '`merge_clust`'
+  - '`mlvsbm_create_network`'
+  - '`mlvsbm_estimate_network`'
+  - '`mlvsbm_simulate_network`'
+  - '`simulate_adjacency`'
+  - '`simulate_affiliation`'
+  - '`spcClust`'
+  - '`split_clust`'
