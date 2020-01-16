@@ -583,8 +583,8 @@ MLVSBM$set(
                   condition = FALSE
                   # }
                 }
-      print(paste0("======= # R clusters : ", best_model$nb_clusters$I,
-                   " , # L clusters ", best_model$nb_clusters$O,
+      print(paste0("======= # Individual clusters : ", best_model$nb_clusters$I,
+                   " , # Organisation clusters ", best_model$nb_clusters$O,
                    ",  ICL : ", best_model$ICL, "========"))
     }
   return(best_model)

@@ -25,7 +25,7 @@ The goal of MLVSBM is to ...
 
 You can install the released version of MLVSBM from [github](https://github.com) with:
 
-``` r
+```{r}
 devtools::install_github("Chabert-Liddell/MLVSBM")
 ```
 
@@ -36,15 +36,17 @@ This is a how to simulate a multilevel SBM network:
 ```{r simulate}
 set.seed(1)
 my_mlvsbm <- MLVSBM::mlvsbm_simulate_network(
-  n = list(100, 50),
-  Q = list(2, 2),
-  pi = c(.5, .5),
-  gamma = matrix(c(.8, .2, .1, .9), ncol = 2),
-  alpha = list(matrix(c(.2, .1, .1, .2), nrow = 2, ncol = 2),
-               matrix(c(.7, .4, .4, .1), nrow = 2, ncol = 2)),
-  directed = list(FALSE, FALSE),
-  affiliation = "preferential",
-  no_empty_org = FALSE)
+  n = list(I = 100, O = 50), # Number of nodes for the lower level and the upper level
+  Q = list(I = 2, O = 2), # Number of blocks for the lower level and the upper level
+  pi = c(.7, .3), # Block proportion for the upper level, must sum to one
+  gamma = matrix(c(.8, .1,  # Block proportion for the lower level,
+                   .2, .9), # each column must sum to one
+                 nrow = 2, ncol = 2, byrow = TRUE),  
+  alpha = list(I = matrix(c(.1, .3, .3, .7), nrow = 2, ncol = 2), # Connection matrix
+               O = matrix(c(.3, .1, .1, .3), nrow = 2, ncol = 2)),# between blocks
+  directed = list(FALSE, FALSE), # Are the upper and lower level directed or not ?
+  affiliation = "preferential", # How the affiliation matrix is generated
+  no_empty_org = FALSE) # May the affiliation matrix have column suming to 0
 ```
 
 This is how to create a network from data:
@@ -52,7 +54,7 @@ This is how to create a network from data:
 lower_level <- my_mlvsbm$adjacency_matrix$I
 upper_level <- my_mlvsbm$adjacency_matrix$O
 affiliation <- my_mlvsbm$affiliation_matrix
-my_mlvsbm2 <- MLVSBM::mlvsbm_create_network(X = list(lower_level, upper_level),
+my_mlvsbm2 <- MLVSBM::mlvsbm_create_network(X = list(I = lower_level, O = upper_level),
                                             A = affiliation)
 ```
 
@@ -61,7 +63,12 @@ And this is how to infer it:
 fit <- MLVSBM:::mlvsbm_estimate_network(my_mlvsbm)
 ```
 
-```{r echo=FALSE, include=FALSE}
+
+## Ploting the results
+
+Some examples to plot synthetic view of the network
+
+```{r include=FALSE}
 library(tidyverse)
 library(blockmodels)
 library(tidygraph)
@@ -70,11 +77,9 @@ library(ggraph)
 library(cowplot)
 ```
 
+Plotting adjacency matrices reordered by block with the link probability of each observed link.
 
-```{r pressure, echo = FALSE, warning=FALSE,  dpi = 200}
-
-
-
+```{r pressure, warning=FALSE,  dpi = 300}
 ggdraw()+
   draw_plot(
     t(fit$X_hat$I * lower_level) %>% 
@@ -104,4 +109,101 @@ ggdraw()+
   draw_plot_label(label = c("Lower level", "Upper level"), x = c(0, .5), y = c(.9, .9))
 ```
 
+To plot a synthetic view of the interaction between block and between the two levels :
 
+```{r union_multilevel, eval = FALSE,  echo=FALSE, out.width="60%", fig.align='center'}
+
+
+ind_edges <- data.frame(from = rep(seq(fit$nb_clusters$I), fit$nb_clusters$I),
+                        to = rep(seq(fit$nb_clusters$I), each = fit$nb_clusters$I),
+                        weigth = as.vector(fit$parameters$alpha$I))
+tidy_clust_ind  <- tidygraph::as_tbl_graph(ind_edges) %>% 
+  mutate(A = fit$parameters$gamma[,1]) %>% 
+  mutate(B = fit$parameters$gamma[,2]) 
+org_edges <- data.frame(from = rep(seq(fit$nb_clusters$O), fit$nb_clusters$O),
+                        to = rep(seq(fit$nb_clusters$O), each = fit$nb_clusters$O),
+                        weigth = as.vector(fit$parameters$alpha$O))
+tidy_clust_org  <- tidygraph::as_tbl_graph(org_edges)
+
+ind_layout <- create_layout(tidy_clust_ind, layout = "circle")
+df_pie <- tibble::tibble(group = rep(seq(fit$nb_clusters$I), fit$nb_clusters$O),
+                 x = rep(ind_layout$x, fit$nb_clusters$O),
+                 y = rep(ind_layout$y, fit$nb_clusters$O),
+                 amount = as.vector(table(list(fit$Z$I, 
+                                               fit$affiliation_matrix %*% fit$Z$O))),
+                 size = rep(as.integer(table(fit$Z$I)), fit$nb_clusters$O),
+                 affiliation = rep(seq(fit$nb_clusters$O), each=fit$nb_clusters$I))
+weight_ind <- as.vector(fit$parameters$alpha$I)
+weight_org <- as.vector(fit$parameters$alpha$O)
+
+p_clustind <- ggraph(ind_layout, width = weight, alpha = weight) +
+  ggforce::geom_arc_bar(
+    aes(x0 = x, y0 = y, r0 = 0.7*max(size)/length(fit$Z$I),r = 0.8*max(size)/length(fit$Z$I),
+        fill = as.factor(affiliation), 
+        amount = amount), stat = "pie", data = df_pie)+
+  geom_edge_loop(aes(width = ( weight_ind > 0.05) * weight_ind, 
+                     alpha = ( weight_ind >0.05) * weight_ind))+
+  geom_edge_fan(aes(
+    start_cap = circle(radius = df_pie$size[node1.name]/length(fit$Z$I)*25, "mm"),
+    end_cap = circle(radius = df_pie$size[node2.name]/length(fit$Z$I)*25, "mm"),
+    alpha = ..index.., 
+    width = (weight_ind>0.05)*weight_ind), 
+    spread = 2)+
+  geom_node_point(aes(stroke = .35*as.integer(table(fit$Z$I)), 
+                      colour = as.factor(seq(fit$nb_clusters$I)))) +
+  geom_node_text(aes(label = name)) +
+  theme_graph(foreground = NA)+
+  coord_equal()+
+  scale_fill_brewer(palette = "YlOrRd", 
+                    name = "Organisation", direction = -1) +
+  scale_colour_brewer(palette = "Paired", name = "Individual") +
+  scale_size_continuous(range = range(df_pie$size)/fit$nb_clusters$I)+
+  scale_edge_alpha(range = c(0,1), guide = "none")+
+  scale_edge_width(range = c(0, 3), guide = "none")+
+  guides(size=FALSE, colour=FALSE, width=FALSE, fill = FALSE)
+
+
+p_clustorg <- ggraph(tidy_clust_org, layout = "circle") +
+    geom_node_circle(aes(r = as.integer(table(fit$Z$O))/length(fit$Z$O),
+                     fill = as.factor(seq(fit$nb_clusters$O))))+
+  geom_edge_link(aes(
+    alpha = (weight_org>0.05)*weight_org, 
+    width = (weight_org>0.05)*weight_org)) +
+  geom_edge_loop(aes(width = (weight_org>0.05)*weight_org, 
+                     alpha = (weight_org>0.05)*weight_org))+
+  geom_node_text(aes(label = name)) +
+  theme_graph(foreground = NA)+
+  coord_equal()+
+  scale_fill_brewer(palette = "YlOrRd", name = "Organisation", direction = -1) +
+  scale_colour_brewer(palette = "Paired", name = "Individual") +
+  scale_edge_alpha(range = c(0,1), guide = "none")+
+  scale_edge_width(range = c(1, 2), guide = "none")+
+  guides(size=FALSE, colour=FALSE, width=FALSE, fill = FALSE)
+
+
+ggdraw() +
+  draw_plot(plot = p_clustind, x = 0, y = 0, width = .5, height = 1)+
+  draw_plot(plot = p_clustorg, x = .5, y = 0, width = .5, height = 1)+
+  draw_plot_label(label = c("Individuals", "Organisations"), x = c(0, 0.5))
+```
+
+## Some useful output
+Output of the algorithm are stocked in the MLVSBM and FitMLVSBM objects.
+The MLVSBM objects stock information of the observed or simulated network and a
+list of all the fitted SBM and MLVSBM models.
+```{r output_MLVSBM}
+my_mlvsbm$ICL # A data frame of the inferred models 
+my_fit <- my_mlvsbm$fittedmodels[[which.max(my_mlvsbm$ICL$ICL)]] # The fitted model with index  the highest ICL
+my_mlvsbm$ICL_sbm # The ICL of the SBM
+my_sbm_lower <- my_mlvsbm$fittedmodels_sbm$lower[[3]] # A fitted SBM for the lower level with 3 blocks
+my_sbm_upper <- my_mlvsbm$fittedmodels_sbm$upper[[2]] # A fitted SBM for the upper level with 2 blocks
+```
+
+You can also get the parameters and the clustering of the fitted model as follows
+```{r output_Fit}
+fit$parameters # The connectivity and membership parameters of the model
+fit$Z # The membership of each nodes
+fit$vbound # A vector of the varational bound of the VEM algorithm
+tau <- fit$membership # The variational parameters of the model
+pred <- fit$X_hat # The link prediction for each level
+```
