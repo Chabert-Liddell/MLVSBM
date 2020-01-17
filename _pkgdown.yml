@@ -12,7 +12,7 @@ navbar:
     - text: "Reference"
       href: "reference/index.html"
     - text: "Changelog"
-      href: news/index.html
+      href: "news/index.html"
   right:
     - icon: fa-github
       href: https://github.com/Chabert-Liddell
