@@ -3,7 +3,7 @@ templates:
     bootswatch: readable
 
 navbar:
-  title: "Nineja"
+  title: "MLVSBM"
   type: inverse
   left:
     - icon: fa-home
