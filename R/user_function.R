@@ -166,7 +166,7 @@ mlvsbm_estimate_network <-
     print(paste0("ICL for independent levels : ", max(lower_fit$ICL) + max(upper_fit$ICL)))
     print(paste0("ICL for interdependent levels : ", fit$ICL))
     if (max(lower_fit$ICL) + max(upper_fit$ICL) <= fit$ICL) {
-      print("=====Interdepence is detected between the two level=====")
+      print("=====Interdependence is detected between the two level=====")
       } else {
         print("=====The levels of this network are independent!=====")
         }
