@@ -117,6 +117,12 @@ MLVSBM$set(
            Q = NULL, Q_min = 1,
            Q_max = 10,
            fit = NULL) {
+    os <- Sys.info()["sysname"]
+    if (os != 'Windows') {
+      nb_cores <-  max(parallel::detectCores(all.tests = FALSE, logical = TRUE) %/% 2, 1)
+    } else {
+      nb_cores <-  1
+    }
     models <- list()
     if (Q > Q_min) {
       Z <- merge_clust(fit$Z, fit$nb_clusters)
@@ -147,7 +153,7 @@ MLVSBM$set(
                             Q = fit$nb_clusters + 1,
                             Z = Z[[i]],
                             init = "merge_split")
-        })
+        }, mc.cores = nb_cores)
       fits <-
         fits[which(sapply( fits, function(x) ! is.null(x)))]
       fits <-
@@ -167,6 +173,12 @@ MLVSBM$set(
   "estimate_sbm_from_neighbours",
   function(level = "lower",
            Q = NULL, fits = NULL) {
+    os <- Sys.info()["sysname"]
+    if (os != 'Windows') {
+      nb_cores <-  max(parallel::detectCores(all.tests = FALSE, logical = TRUE) %/% 2, 1)
+    } else {
+      nb_cores <-  1
+    }
     if (is.null(fits)) return(NULL)
     new_fits <- list()
     for (fit in fits) {
@@ -191,7 +203,7 @@ MLVSBM$set(
                               Q = Q,
                               Z = Z[[i]],
                               init = "merge_split")
-          })
+          }, mc.cores = nb_cores)
         new_fits <- c(new_fits, fit_tmp)
       }
     }
@@ -418,8 +430,10 @@ MLVSBM$set(
            independent = FALSE) {
     os <- Sys.info()["sysname"]
     if (os != 'Windows') {
-      nb_cores = parallel::detectCores(all.tests = FALSE, logical = TRUE) %/% 2
-      }
+      nb_cores <-  max(parallel::detectCores(all.tests = FALSE, logical = TRUE) %/% 2, 1)
+    } else {
+        nb_cores <-  1
+        }
     if (is.null(Z$I[[1]]) | is.null(Z$O[[1]])) return(NULL)
     nb_models = list("I" = length(Z$I), "O" = length(Z$O))
     models  <-  parallel::mclapply(
@@ -538,8 +552,10 @@ MLVSBM$set(
   function (Q = NULL, Z = NULL, independent = FALSE, clear = TRUE) {
     os <- Sys.info()["sysname"]
     if (os != 'Windows') {
-      nb_cores = parallel::detectCores(all.tests = FALSE, logical = TRUE) %/% 2
-      }
+      nb_cores <-  max(parallel::detectCores(all.tests = FALSE, logical = TRUE) %/% 2, 1)
+    } else {
+      nb_cores <-  1
+    }
     if (clear) self$clearmodels()
     best_model  <-  self$mcestimate(Q = Q, Z = Z, independent = independent)
     print(paste0("======= # Individual clusters : ", best_model$nb_clusters$I,
