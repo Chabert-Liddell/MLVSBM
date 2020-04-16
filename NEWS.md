@@ -1,3 +1,6 @@
+# MLVSBM 0.1.1
+* Fixed bug with `parallel` for Windows
+
 # MLVSBM 0.1
 * Finished user functions
 * Tutorial
