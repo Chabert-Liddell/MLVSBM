@@ -4,9 +4,17 @@
 \alias{mlvsbm_simulate_network}
 \title{Create a simulated multilevel network (MLVSBM object)}
 \usage{
-mlvsbm_simulate_network(n, Q, pi, gamma, alpha, directed,
-  affiliation = "uniform", distribution = list("bernoulli",
-  "bernoulli"), no_empty_org = FALSE)
+mlvsbm_simulate_network(
+  n,
+  Q,
+  pi,
+  gamma,
+  alpha,
+  directed,
+  affiliation = "uniform",
+  distribution = list("bernoulli", "bernoulli"),
+  no_empty_org = FALSE
+)
 }
 \arguments{
 \item{n}{A list of 2 positive integers,

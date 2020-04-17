@@ -1,5 +1,11 @@
 MLVSBM$set(
   "public", "simulate",
+#' Simulate a multilevel network from a MLVSBM object
+#'
+#' The function does not return anything, but update the MLVSBM object
+#' @param affiliation One of c( uniform ,  preferential ), the way the
+#' affiliation are generated
+#' @param no_empty_org A boolean, may column of afiiliation sum to 0
   function(affiliation = "uniform", no_empty_org = FALSE) {
     if (is.null(private$A))
       private$A <- simulate_affiliation(private$n$I,
@@ -37,15 +43,12 @@ MLVSBM$set(
 #' @importFrom stats rbinom
 #'
 #' @param Z A vector of integer of size n, the label
-#' @param n An intger, the number of rows or columbns of the matrix
+#' @param n An integer, the number of rows or columbns of the matrix
 #' @param alpha A max(Z)xmax(Z) matrix, the connectivity parameters
 #' @param directed A boolean, Is the network directed or not ?
 #' @param distribution The distribution of the indices: only "bernouilli"
 #'
 #' @return A nxn adjacency matrix
-#' @export
-#'
-#' @examples
 simulate_adjacency <- function(Z, n, alpha, directed, distribution) {
   X = matrix(0, n, n)
   for (i in 1:(n-1)){
@@ -72,9 +75,6 @@ simulate_adjacency <- function(Z, n, alpha, directed, distribution) {
 #' @param no_empty_org A Boolean. Force all column to have at least a 1. Need n>m
 #'
 #' @return A nxm affiliation matrix, with a unique 1 on each rows
-#' @export
-#'
-#' @examples
 simulate_affiliation <-
   function(n, m, affiliation = "uniform", no_empty_org = FALSE) {
   A <- matrix(0, n, m)

@@ -4,8 +4,7 @@
 \alias{mlvsbm_create_network}
 \title{Create a MLVSBM object from observed data}
 \usage{
-mlvsbm_create_network(X, A, distribution = list("bernoulli",
-  "bernoulli"))
+mlvsbm_create_network(X, A, distribution = list("bernoulli", "bernoulli"))
 }
 \arguments{
 \item{X}{A list of 2 squares binary matrices,

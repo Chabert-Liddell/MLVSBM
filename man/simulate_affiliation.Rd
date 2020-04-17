@@ -4,8 +4,7 @@
 \alias{simulate_affiliation}
 \title{Simulate of matrix of affiliation}
 \usage{
-simulate_affiliation(n, m, affiliation = "uniform",
-  no_empty_org = FALSE)
+simulate_affiliation(n, m, affiliation = "uniform", no_empty_org = FALSE)
 }
 \arguments{
 \item{n}{An integer, the number of individuals}

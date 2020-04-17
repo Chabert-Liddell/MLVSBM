@@ -130,6 +130,15 @@ quad_form  <- function(X, tau) tau %*% tcrossprod(X, tau)
 logistic   <- function(x) 1/(1 + exp(-x))
 logit      <- function(x) log(x/(1 - x))
 
+#' Compare to clustering with the Adjusted Rand Index
+#'
+#' @param x A vector of integers, the clusters labels
+#' @param y A vector of integers of the same length as x, the clusters labels
+#'
+#' @return A number between 0 (random clustering) and 1 (identical clustering)
+#' @export
+#'
+#' @examples ARI(x = c(1, 2, 1), y = c(2, 2, 1))
 ARI <- function (x, y)
 {
   x <- as.vector(x)

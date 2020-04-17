@@ -4,6 +4,14 @@
 MLVSBM$set(
   "public",
   "estimate_level",
+#' Fit a SBM on a given level of a MLVSBM object
+#'
+#' @param level One of c( upper ,  lower )
+#' @param Q_min An integer, the minimum number of clusters
+#' @param Q_max An integer, the maximun number of clusters
+#'
+#' @return A list of inferred models
+#' @export
   function(level = "lower",
            Q_min = 1,
            Q_max = 10,
@@ -465,6 +473,14 @@ MLVSBM$set(
 MLVSBM$set(
   "public",
   "estimate_one",
+#' Infer a MLVSBM for a given model size
+#'
+#' @param Q A list of integers, the model size
+#' @param Z A list of vectors, the initial clustering (default to NULL)
+#' @param independent A boolean, shall the levels be inferred independently
+#'
+#' @return A FitSBM object of the given model size
+#' @export
   function(Q,
            Z = NULL,
            independent = FALSE,
@@ -549,6 +565,17 @@ MLVSBM$set(
 MLVSBM$set(
   "public",
   "estimate_all_bm",
+#' Infer a MLVSBM with a greedy algorithm to navigate between different size
+#' of models
+#'
+#' @param Q A list of integers, the initial model size, default to NULL
+#' @param Z A list of vectors, the initial clustering, default to NULL
+#' @param independent A boolean, are the
+#' @param clear A boolean, should all previous models list be cleared from the
+#' object
+#'
+#' @return The FitSBM object with the best ICL
+#' @export
   function (Q = NULL, Z = NULL, independent = FALSE, clear = TRUE) {
     os <- Sys.info()["sysname"]
     if (os != 'Windows') {

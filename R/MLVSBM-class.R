@@ -1,9 +1,10 @@
-#' An R6Class for multilevel object
+#' A R6Class for multilevel object
+#'
+#' @description Store all simulation parameters and list of fittedmodels.
+#' Methods for global inference and model selection are included.
 #' @import R6
 #'
 #' @export
-
-
 MLVSBM <-
   R6::R6Class(
     "MLVSBM",
@@ -51,31 +52,50 @@ MLVSBM <-
       ),
     active = list(
       ## active binding to access fields outside the class
+      #' @field nb_nodes List of the umber of nodes for each levels
       nb_nodes              = function(value) private$n,
+      #' @field simulation_parameters List of parameters of the MLVSBM
       simulation_parameters = function(value) private$sim_param,
+      #' @field affiliation_matrix Access the affiliation matrix
       affiliation_matrix    = function(value)
         if (missing(value)) private$A else private$A = value,
+      #' @field adjacency_matrix Access the list of adjacency_matrix
       adjacency_matrix      = function(value)
         if (missing(value)) private$X else private$X = value,
+      #' @field memberships Access the list of the clusterings
       memberships           = function(value)
         if (missing(value)) private$Z else private$Z = value,
+      #' @field fittedmodels Get the list of selected fitted FitMLVSBM objects
       fittedmodels          = function(value) private$fitted,
+      #' @field ICL A summary table of selected fitted models and ICL model selection criterion
       ICL                   = function(value) private$ICLtab,
+      #' @field ICL_sbm Summary table of ICL by levels
       ICL_sbm               = function(value) private$ICLtab_sbm,
+      #' @field tmp_fittedmodels A list of all fitted FitMLVSBM objects
       tmp_fittedmodels      = function(value) private$tmp_fitted,
+      #' @field fittedmodels_sbm A list of selected fitted FitSBM objects of each levels
       fittedmodels_sbm      = function(value) private$fitted_sbm,
+      #' @field max_clusters Access the list of maximum model size
       max_clusters          = function(value)
         if (missing(value))  private$max_Q else private$max_Q = value,
+      #' @field min_clusters Access the list of minimum model size
       min_clusters          = function(value)
         if (missing(value))  private$min_Q else private$min_Q = value,
+      #' @field directed Access the list of boolean for levels  direction
       directed              = function(value)
         if (missing(value)) private$directed_ else private$directed_ = value,
+      #' @field directed Access the list of the distribution used for each levels
       distribution          = function(value)
         if (missing(value)) private$distribution_ else private$distribution_ = value
       )
     )
 
-
+#' @description Find a model among all fitted models
+#' @param nb_clusters A list of integer, the model size
+#' @param fit Set to  best  to return the model with the highest ICL
+#'
+#' @return A fitMLVSBM object, the desired fitted model
+#' @export
 MLVSBM$set(
   "public", "findmodel",
   function (nb_clusters = NA, fit = NA) {
@@ -98,6 +118,8 @@ MLVSBM$set(
             )
 MLVSBM$set(
   "public", "clearmodels",
+#' @description Delete all fitted models
+#' @export
   function () {
     private$fitted     <-  list()
     private$tmp_fitted <-  list()

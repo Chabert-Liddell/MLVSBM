@@ -9,7 +9,7 @@ simulate_adjacency(Z, n, alpha, directed, distribution)
 \arguments{
 \item{Z}{A vector of integer of size n, the label}
 
-\item{n}{An intger, the number of rows or columbns of the matrix}
+\item{n}{An integer, the number of rows or columbns of the matrix}
 
 \item{alpha}{A max(Z)xmax(Z) matrix, the connectivity parameters}
 
