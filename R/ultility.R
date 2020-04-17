@@ -130,7 +130,7 @@ quad_form  <- function(X, tau) tau %*% tcrossprod(X, tau)
 logistic   <- function(x) 1/(1 + exp(-x))
 logit      <- function(x) log(x/(1 - x))
 
-#' Compare to clustering with the Adjusted Rand Index
+#' Compare two clustering with the Adjusted Rand Index
 #'
 #' @param x A vector of integers, the clusters labels
 #' @param y A vector of integers of the same length as x, the clusters labels

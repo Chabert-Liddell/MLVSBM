@@ -20,4 +20,7 @@ Imports:
     R6
 Suggests: 
     testthat (>= 2.1.0),
-    covr
+    covr,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

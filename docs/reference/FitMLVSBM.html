@@ -40,7 +40,8 @@
 
 
 <meta property="og:title" content="An R6 Class ocject, a fitted multilevel network once $dovem() is done — FitMLVSBM" />
-<meta property="og:description" content="An R6 Class ocject, a fitted multilevel network once $dovem() is done" />
+<meta property="og:description" content="An R6 Class ocject, a fitted multilevel network once $dovem() is done
+An R6 Class ocject, a fitted multilevel network once $dovem() is done" />
 
 
 
@@ -121,14 +122,150 @@
 
     <div class="ref-description">
     <p>An R6 Class ocject, a fitted multilevel network once $dovem() is done</p>
+<p>An R6 Class ocject, a fitted multilevel network once $dovem() is done</p>
     </div>
 
-    <pre class="usage"><span class='no'>FitMLVSBM</span></pre>
 
 
-    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
+    <h2 class="hasAnchor" id="active-bindings"><a class="anchor" href="#active-bindings"></a>Active bindings</h2>
 
-    <p>An object of class <code>R6ClassGenerator</code> of length 24.</p>
+    <p><div class="r6-active-bindings"></p><dl'>
+<dt><code>affiliation_matrix</code></dt><dd><p>Get the affiliation matrix</p></dd>
+
+<dt><code>adjacency_matrix</code></dt><dd><p>Get the list of adjacency matrices</p></dd>
+
+<dt><code>nb_clusters</code></dt><dd><p>Get the list of the number of nodes</p></dd>
+
+<dt><code>nb_clusters</code></dt><dd><p>Get the list of the number of blocks</p></dd>
+
+<dt><code>parameters</code></dt><dd><p>Get the list of the model parameters</p></dd>
+
+<dt><code>membership</code></dt><dd><p>Get the list of the variational parameters</p></dd>
+
+<dt><code>entropy</code></dt><dd><p>Get the entropy of the model</p></dd>
+
+<dt><code>bound</code></dt><dd><p>Get the variational bound of the model</p></dd>
+
+<dt><code>ICL</code></dt><dd><p>Get the ICL model selection criterion of the mdeol</p></dd>
+
+<dt><code>full_penalty</code></dt><dd><p>Get the penalty used to compute the ICL</p></dd>
+
+<dt><code>Z</code></dt><dd><p>Get the list of block memberships (vector form)</p></dd>
+
+<dt><code>X_hat</code></dt><dd><p>Get the list of the matrices of probability conection predictions</p></dd>
+
+<dt><code>map</code></dt><dd><p>Get the list of block memberships (matrix form)</p></dd>
+
+</dl><p></div></p>
+    <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
+
+    
+<h3>Public methods</h3>
+
+<ul>
+<li><p><a href='#method-new'><code>FitMLVSBM$new()</code></a></p></li>
+<li><p><a href='#method-update_alpha'><code>FitMLVSBM$update_alpha()</code></a></p></li>
+<li><p><a href='#method-update_pi'><code>FitMLVSBM$update_pi()</code></a></p></li>
+<li><p><a href='#method-update_gamma'><code>FitMLVSBM$update_gamma()</code></a></p></li>
+<li><p><a href='#method-init_clustering'><code>FitMLVSBM$init_clustering()</code></a></p></li>
+<li><p><a href='#method-clear'><code>FitMLVSBM$clear()</code></a></p></li>
+<li><p><a href='#method-m_step'><code>FitMLVSBM$m_step()</code></a></p></li>
+<li><p><a href='#method-ve_step'><code>FitMLVSBM$ve_step()</code></a></p></li>
+<li><p><a href='#method-do_vem'><code>FitMLVSBM$do_vem()</code></a></p></li>
+<li><p><a href='#method-permute_empty_class'><code>FitMLVSBM$permute_empty_class()</code></a></p></li>
+<li><p><a href='#method-clone'><code>FitMLVSBM$clone()</code></a></p></li>
+</ul>
+<p><hr>
+<a id="method-new"></a></p><h3>Method <code>new()</code></h3>
+
+<h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>FitMLVSBM</span>$<span class='fu'>new</span>(
+  <span class='kw'>Q</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>I</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>O</span> <span class='kw'>=</span> <span class='fl'>1</span>),
+  <span class='kw'>A</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
+  <span class='kw'>X</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
+  <span class='kw'>M</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>I</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>O</span> <span class='kw'>=</span> <span class='fl'>NA</span>),
+  <span class='kw'>directed</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
+  <span class='kw'>distribution</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='st'>"bernoulli"</span>, <span class='st'>"bernoulli"</span>),
+  <span class='kw'>independent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)</pre><p></div></p>
+
+<p><hr>
+<a id="method-update_alpha"></a></p><h3>Method <code>update_alpha()</code></h3>
+
+<h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>FitMLVSBM</span>$<span class='fu'>update_alpha</span>(<span class='kw'>safeguard</span> <span class='kw'>=</span> <span class='fl'>2</span> * <span class='no'>.Machine</span>$<span class='no'>double.eps</span>)</pre><p></div></p>
+
+<p><hr>
+<a id="method-update_pi"></a></p><h3>Method <code>update_pi()</code></h3>
+
+<h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>FitMLVSBM</span>$<span class='fu'>update_pi</span>(<span class='kw'>safeguard</span> <span class='kw'>=</span> <span class='fl'>0.01</span>)</pre><p></div></p>
+
+<p><hr>
+<a id="method-update_gamma"></a></p><h3>Method <code>update_gamma()</code></h3>
+
+<h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>FitMLVSBM</span>$<span class='fu'>update_gamma</span>(<span class='kw'>safeguard</span> <span class='kw'>=</span> <span class='fl'>1e-06</span>)</pre><p></div></p>
+
+<p><hr>
+<a id="method-init_clustering"></a></p><h3>Method <code>init_clustering()</code></h3>
+
+<h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>FitMLVSBM</span>$<span class='fu'>init_clustering</span>(
+  <span class='kw'>safeguard</span> <span class='kw'>=</span> <span class='fl'>2</span> * <span class='no'>.Machine</span>$<span class='no'>double.eps</span>,
+  <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"hierarchical"</span>,
+  <span class='kw'>Z</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+)</pre><p></div></p>
+
+<p><hr>
+<a id="method-clear"></a></p><h3>Method <code>clear()</code></h3>
+
+<h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>FitMLVSBM</span>$<span class='fu'>clear</span>()</pre><p></div></p>
+
+<p><hr>
+<a id="method-m_step"></a></p><h3>Method <code>m_step()</code></h3>
+
+<h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>FitMLVSBM</span>$<span class='fu'>m_step</span>(<span class='kw'>safeguard</span> <span class='kw'>=</span> <span class='fl'>1e-06</span>)</pre><p></div></p>
+
+<p><hr>
+<a id="method-ve_step"></a></p><h3>Method <code>ve_step()</code></h3>
+
+<h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>FitMLVSBM</span>$<span class='fu'>ve_step</span>(<span class='kw'>threshold</span> <span class='kw'>=</span> <span class='fl'>1e-06</span>, <span class='kw'>fixPointIter</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>safeguard</span> <span class='kw'>=</span> <span class='fl'>1e-06</span>)</pre><p></div></p>
+
+<p><hr>
+<a id="method-do_vem"></a></p><h3>Method <code>do_vem()</code></h3>
+
+<h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>FitMLVSBM</span>$<span class='fu'>do_vem</span>(
+  <span class='kw'>init</span> <span class='kw'>=</span> <span class='st'>"hierarchical"</span>,
+  <span class='kw'>threshold</span> <span class='kw'>=</span> <span class='fl'>1e-06</span>,
+  <span class='kw'>maxIter</span> <span class='kw'>=</span> <span class='fl'>1000</span>,
+  <span class='kw'>fixPointIter</span> <span class='kw'>=</span> <span class='fl'>100</span>,
+  <span class='kw'>safeguard</span> <span class='kw'>=</span> <span class='fl'>1e-06</span>,
+  <span class='kw'>Z</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+)</pre><p></div></p>
+
+<p><hr>
+<a id="method-permute_empty_class"></a></p><h3>Method <code>permute_empty_class()</code></h3>
+
+<h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>FitMLVSBM</span>$<span class='fu'>permute_empty_class</span>()</pre><p></div></p>
+
+<p><hr>
+<a id="method-clone"></a></p><h3>Method <code>clone()</code></h3>
+<p>The objects of this class are cloneable with this method.</p><h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>FitMLVSBM</span>$<span class='fu'>clone</span>(<span class='kw'>deep</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre><p></div></p>
+
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl'>
+<dt><code>deep</code></dt><dd><p>Whether to make a deep clone.</p></dd>
+
+</dl><p></div></p>
+
+
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -145,7 +282,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>

@@ -40,7 +40,8 @@
 
 
 <meta property="og:title" content="An R6 Class ocject, a fitted level of a multilelvel network once $do_vem() is done — FitSBM" />
-<meta property="og:description" content="An R6 Class ocject, a fitted level of a multilelvel network once $do_vem() is done" />
+<meta property="og:description" content="An R6 Class ocject, a fitted level of a multilelvel network once $do_vem() is done
+An R6 Class ocject, a fitted level of a multilelvel network once $do_vem() is done" />
 
 
 
@@ -121,14 +122,152 @@
 
     <div class="ref-description">
     <p>An R6 Class ocject, a fitted level of a multilelvel network once $do_vem() is done</p>
+<p>An R6 Class ocject, a fitted level of a multilelvel network once $do_vem() is done</p>
     </div>
 
-    <pre class="usage"><span class='no'>FitSBM</span></pre>
 
 
-    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
+    <h2 class="hasAnchor" id="public-fields"><a class="anchor" href="#public-fields"></a>Public fields</h2>
 
-    <p>An object of class <code>R6ClassGenerator</code> of length 24.</p>
+    <p><div class="r6-fields"></p><dl'>
+<dt><code>df_mixtures</code></dt><dd><p>Get the degree of freedom of the block proportion</p></dd>
+
+</dl><p></div></p>
+    <h2 class="hasAnchor" id="active-bindings"><a class="anchor" href="#active-bindings"></a>Active bindings</h2>
+
+    <p><div class="r6-active-bindings"></p><dl'>
+<dt><code>adjacency</code></dt><dd><p>Get the adjacency matrix</p></dd>
+
+<dt><code>mask</code></dt><dd><p>Get the mask matrix for dealing with NA</p></dd>
+
+<dt><code>nb_nodes</code></dt><dd><p>Get the number of nodes of the level</p></dd>
+
+<dt><code>nb_clusters</code></dt><dd><p>Get the number of blocks</p></dd>
+
+<dt><code>distribution</code></dt><dd><p>Get the distribution used for the connections</p></dd>
+
+<dt><code>directed</code></dt><dd><p>Get if the level is directed or not</p></dd>
+
+<dt><code>mixture_parameter</code></dt><dd><p>Access the block proportions</p></dd>
+
+<dt><code>connectivity_parameter</code></dt><dd><p>Access the connectivity matrix</p></dd>
+
+<dt><code>membership</code></dt><dd><p>Access the variational parameters</p></dd>
+
+<dt><code>entropy</code></dt><dd><p>Get the entropy of the model</p></dd>
+
+<dt><code>bound</code></dt><dd><p>Get the variational bound of the model</p></dd>
+
+<dt><code>df_mixtures</code></dt><dd><p>Get the degree of freedom of the block proportion</p></dd>
+
+<dt><code>df_connect</code></dt><dd><p>Get the degree of freedom of the connection parameters</p></dd>
+
+<dt><code>ICL</code></dt><dd><p>Get the ICL model selection criterion</p></dd>
+
+<dt><code>penalty</code></dt><dd><p>Get the penalty used for computing the ICL</p></dd>
+
+<dt><code>Z</code></dt><dd><p>Access the vector of block membership (clustering)</p></dd>
+
+<dt><code>X_hat</code></dt><dd><p>Get the connection probability matrix</p></dd>
+
+</dl><p></div></p>
+    <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
+
+    
+<h3>Public methods</h3>
+
+<ul>
+<li><p><a href='#method-new'><code>FitSBM$new()</code></a></p></li>
+<li><p><a href='#method-update_alpha'><code>FitSBM$update_alpha()</code></a></p></li>
+<li><p><a href='#method-update_pi'><code>FitSBM$update_pi()</code></a></p></li>
+<li><p><a href='#method-init_clustering'><code>FitSBM$init_clustering()</code></a></p></li>
+<li><p><a href='#method-m_step'><code>FitSBM$m_step()</code></a></p></li>
+<li><p><a href='#method-ve_step'><code>FitSBM$ve_step()</code></a></p></li>
+<li><p><a href='#method-do_vem'><code>FitSBM$do_vem()</code></a></p></li>
+<li><p><a href='#method-permute_empty_class'><code>FitSBM$permute_empty_class()</code></a></p></li>
+<li><p><a href='#method-clear'><code>FitSBM$clear()</code></a></p></li>
+<li><p><a href='#method-clone'><code>FitSBM$clone()</code></a></p></li>
+</ul>
+<p><hr>
+<a id="method-new"></a></p><h3>Method <code>new()</code></h3>
+
+<h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>FitSBM</span>$<span class='fu'>new</span>(
+  <span class='kw'>Q</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>X</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>M</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>directed</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>distribution</span> <span class='kw'>=</span> <span class='st'>"bernoulli"</span>
+)</pre><p></div></p>
+
+<p><hr>
+<a id="method-update_alpha"></a></p><h3>Method <code>update_alpha()</code></h3>
+
+<h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>FitSBM</span>$<span class='fu'>update_alpha</span>(<span class='kw'>safeguard</span> <span class='kw'>=</span> <span class='fl'>1e-06</span>)</pre><p></div></p>
+
+<p><hr>
+<a id="method-update_pi"></a></p><h3>Method <code>update_pi()</code></h3>
+
+<h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>FitSBM</span>$<span class='fu'>update_pi</span>(<span class='kw'>safeguard</span> <span class='kw'>=</span> <span class='fl'>1e-06</span>)</pre><p></div></p>
+
+<p><hr>
+<a id="method-init_clustering"></a></p><h3>Method <code>init_clustering()</code></h3>
+
+<h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>FitSBM</span>$<span class='fu'>init_clustering</span>(<span class='kw'>safeguard</span> <span class='kw'>=</span> <span class='fl'>1e-06</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"hierarchical"</span>, <span class='kw'>Z</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre><p></div></p>
+
+<p><hr>
+<a id="method-m_step"></a></p><h3>Method <code>m_step()</code></h3>
+
+<h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>FitSBM</span>$<span class='fu'>m_step</span>(<span class='kw'>safeguard</span> <span class='kw'>=</span> <span class='fl'>1e-06</span>)</pre><p></div></p>
+
+<p><hr>
+<a id="method-ve_step"></a></p><h3>Method <code>ve_step()</code></h3>
+
+<h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>FitSBM</span>$<span class='fu'>ve_step</span>(<span class='kw'>threshold</span> <span class='kw'>=</span> <span class='fl'>1e-06</span>, <span class='kw'>fixPointIter</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>safeguard</span> <span class='kw'>=</span> <span class='fl'>1e-06</span>)</pre><p></div></p>
+
+<p><hr>
+<a id="method-do_vem"></a></p><h3>Method <code>do_vem()</code></h3>
+
+<h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>FitSBM</span>$<span class='fu'>do_vem</span>(
+  <span class='kw'>init</span> <span class='kw'>=</span> <span class='st'>"hierarchical"</span>,
+  <span class='kw'>threshold</span> <span class='kw'>=</span> <span class='fl'>1e-06</span>,
+  <span class='kw'>maxIter</span> <span class='kw'>=</span> <span class='fl'>1000</span>,
+  <span class='kw'>fixPointIter</span> <span class='kw'>=</span> <span class='fl'>100</span>,
+  <span class='kw'>safeguard</span> <span class='kw'>=</span> <span class='fl'>1e-06</span>,
+  <span class='kw'>Z</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>bound</span> <span class='kw'>=</span> <span class='fl'>NA</span>
+)</pre><p></div></p>
+
+<p><hr>
+<a id="method-permute_empty_class"></a></p><h3>Method <code>permute_empty_class()</code></h3>
+
+<h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>FitSBM</span>$<span class='fu'>permute_empty_class</span>()</pre><p></div></p>
+
+<p><hr>
+<a id="method-clear"></a></p><h3>Method <code>clear()</code></h3>
+
+<h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>FitSBM</span>$<span class='fu'>clear</span>()</pre><p></div></p>
+
+<p><hr>
+<a id="method-clone"></a></p><h3>Method <code>clone()</code></h3>
+<p>The objects of this class are cloneable with this method.</p><h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>FitSBM</span>$<span class='fu'>clone</span>(<span class='kw'>deep</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre><p></div></p>
+
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl'>
+<dt><code>deep</code></dt><dd><p>Whether to make a deep clone.</p></dd>
+
+</dl><p></div></p>
+
+
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -145,7 +284,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>

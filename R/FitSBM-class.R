@@ -50,36 +50,53 @@ FitSBM <-
     ),
     active = list(
       ## accessor and mutator
+      #' @field adjacency Get the adjacency matrix
       adjacency  = function(value) private$X,
+      #' @field mask Get the mask matrix for dealing with NA
       mask = function(value) private$M,
+      #' @field nb_nodes Get the number of nodes of the level
       nb_nodes   = function(value) private$n,
+      #' @field nb_clusters Get the number of blocks
       nb_clusters = function(value) private$Q,
+      #' @field distribution Get the distribution used for the connections
       distribution = function(value) private$distribution_,
+      #' @field directed Get if the level is directed or not
       directed = function(value) private$directed_,
+      #' @field mixture_parameter Access the block proportions
       mixture_parameter = function(value) {
         if (missing(value)) return(private$pi) else private$pi <- value
       },
+      #' @field connectivity_parameter Access the connectivity matrix
       connectivity_parameter = function(value) {
         if (missing(value)) return(private$alpha) else private$alpha <- value
       },
+      #' @field membership Access the variational parameters
       membership = function(value) {
         if (missing(value)) return(private$tau) else private$tau <- value
       },
       ## other functions
+      #' @field entropy Get the entropy of the model
       entropy    = function(value) - sum( xlogx(private$tau)),
+      #' @field bound Get the variational bound of the model
       bound     = function(value) self$likelihood + self$entropy,
+      #' @field df_mixtures Get the degree of freedom of the block proportion
       df_mixture = function(value) private$Q -1,
+      #' @field df_connect Get the degree of freedom of the connection parameters
       df_connect = function(value) {
         if (private$directed_) private$Q**2 else private$Q*(private$Q+1)/2
       },
       connect = function(value) ifelse (private$directed_, 1, .5)*sum(private$M),
+      #' @field ICL Get the ICL model selection criterion
       ICL        = function(value) self$likelihood - self$penalty,
+      #' @field penalty Get the penalty used for computing the ICL
       penalty    = function(value) {
         .5*self$df_connect*log(self$connect) + self$df_mixture*log(private$n)
       },
+      #' @field Z Access the vector of block membership (clustering)
       Z          = function(value){
         if (private$Q == 1) rep(1, private$n) else apply(private$tau, 1, which.max)
       },
+      #' @field X_hat Get the connection probability matrix
       X_hat = function(value) {
         quad_form(private$alpha,private$tau)
       }

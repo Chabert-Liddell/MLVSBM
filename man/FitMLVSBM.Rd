@@ -8,6 +8,37 @@ An R6 Class ocject, a fitted multilevel network once $dovem() is done
 
 An R6 Class ocject, a fitted multilevel network once $dovem() is done
 }
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
+\describe{
+\item{\code{affiliation_matrix}}{Get the affiliation matrix}
+
+\item{\code{adjacency_matrix}}{Get the list of adjacency matrices}
+
+\item{\code{nb_clusters}}{Get the list of the number of nodes}
+
+\item{\code{nb_clusters}}{Get the list of the number of blocks}
+
+\item{\code{parameters}}{Get the list of the model parameters}
+
+\item{\code{membership}}{Get the list of the variational parameters}
+
+\item{\code{entropy}}{Get the entropy of the model}
+
+\item{\code{bound}}{Get the variational bound of the model}
+
+\item{\code{ICL}}{Get the ICL model selection criterion of the mdeol}
+
+\item{\code{full_penalty}}{Get the penalty used to compute the ICL}
+
+\item{\code{Z}}{Get the list of block memberships (vector form)}
+
+\item{\code{X_hat}}{Get the list of the matrices of probability conection predictions}
+
+\item{\code{map}}{Get the list of block memberships (matrix form)}
+}
+\if{html}{\out{</div>}}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{

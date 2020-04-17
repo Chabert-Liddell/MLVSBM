@@ -8,6 +8,52 @@ An R6 Class ocject, a fitted level of a multilelvel network once $do_vem() is do
 
 An R6 Class ocject, a fitted level of a multilelvel network once $do_vem() is done
 }
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{df_mixtures}}{Get the degree of freedom of the block proportion}
+}
+\if{html}{\out{</div>}}
+}
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
+\describe{
+\item{\code{adjacency}}{Get the adjacency matrix}
+
+\item{\code{mask}}{Get the mask matrix for dealing with NA}
+
+\item{\code{nb_nodes}}{Get the number of nodes of the level}
+
+\item{\code{nb_clusters}}{Get the number of blocks}
+
+\item{\code{distribution}}{Get the distribution used for the connections}
+
+\item{\code{directed}}{Get if the level is directed or not}
+
+\item{\code{mixture_parameter}}{Access the block proportions}
+
+\item{\code{connectivity_parameter}}{Access the connectivity matrix}
+
+\item{\code{membership}}{Access the variational parameters}
+
+\item{\code{entropy}}{Get the entropy of the model}
+
+\item{\code{bound}}{Get the variational bound of the model}
+
+\item{\code{df_mixtures}}{Get the degree of freedom of the block proportion}
+
+\item{\code{df_connect}}{Get the degree of freedom of the connection parameters}
+
+\item{\code{ICL}}{Get the ICL model selection criterion}
+
+\item{\code{penalty}}{Get the penalty used for computing the ICL}
+
+\item{\code{Z}}{Access the vector of block membership (clustering)}
+
+\item{\code{X_hat}}{Get the connection probability matrix}
+}
+\if{html}{\out{</div>}}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{

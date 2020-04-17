@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Infer a multilevel network (MLVSBM object), the original object is modified — mlvsbm_estimate_network • MLVSBM</title>
+<title>Compare two clustering with the Adjusted Rand Index — ARI • MLVSBM</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Infer a multilevel network (MLVSBM object), the original object is modified — mlvsbm_estimate_network" />
-<meta property="og:description" content="Infer a multilevel network (MLVSBM object), the original object is modified" />
+<meta property="og:title" content="Compare two clustering with the Adjusted Rand Index — ARI" />
+<meta property="og:description" content="Compare two clustering with the Adjusted Rand Index" />
 
 
 
@@ -114,30 +114,36 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Infer a multilevel network (MLVSBM object), the original object is modified</h1>
-    <small class="dont-index">Source: <a href='https://github.com/Chabert-Liddell/MLVSBM/blob/master/R/user_function.R'><code>R/user_function.R</code></a></small>
-    <div class="hidden name"><code>mlvsbm_estimate_network.Rd</code></div>
+    <h1>Compare two clustering with the Adjusted Rand Index</h1>
+    <small class="dont-index">Source: <a href='https://github.com/Chabert-Liddell/MLVSBM/blob/master/R/ultility.R'><code>R/ultility.R</code></a></small>
+    <div class="hidden name"><code>ARI.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Infer a multilevel network (MLVSBM object), the original object is modified</p>
+    <p>Compare two clustering with the Adjusted Rand Index</p>
     </div>
 
-    <pre class="usage"><span class='fu'>mlvsbm_estimate_network</span>(<span class='no'>mlv</span>)</pre>
+    <pre class="usage"><span class='fu'>ARI</span>(<span class='no'>x</span>, <span class='no'>y</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>mlv</th>
-      <td><p>A MLVSBM object, the network to be inferred</p></td>
+      <th>x</th>
+      <td><p>A vector of integers, the clusters labels</p></td>
+    </tr>
+    <tr>
+      <th>y</th>
+      <td><p>A vector of integers of the same length as x, the clusters labels</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A FitMLVSBM object, the best inference of the network</p>
+    <p>A number between 0 (random clustering) and 1 (identical clustering)</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'>ARI</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>1</span>), <span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>, <span class='fl'>2</span>, <span class='fl'>1</span>))</div><div class='output co'>#&gt; [1] -0.5</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

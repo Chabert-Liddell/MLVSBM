@@ -58,15 +58,21 @@ FitMLVSBM <-
       vbound = NULL
     ),
     active = list(
-      ## accessor and mutator
+      ## accessor and
+      #' @field affiliation_matrix Get the affiliation matrix
       affiliation_matrix = function(value) private$A,
+      #' @field adjacency_matrix Get the list of adjacency matrices
       adjacency_matrix   = function(value) private$X,
+      #' @field nb_clusters Get the list of the number of nodes
       nb_nodes           = function(value) private$n,
+      #' @field nb_clusters Get the list of the number of blocks
       nb_clusters        = function(value) private$Q,
+      #' @field parameters Get the list of the model parameters
       parameters = function(value) {
         if(missing(value)) return(private$param)
         else private$param <- value
         },
+      #' @field membership Get the list of the variational parameters
       membership = function(value) {
         if(missing(value)) return(private$tau)
         else private$tau <- value
@@ -75,10 +81,12 @@ FitMLVSBM <-
       distribution   = function(value) private$distribution_,
       directed       = function(value) private$directed_,
       ## other functions
+      #' @field entropy Get the entropy of the model
       entropy     = function(value) {
         - sum(private$tau$O * log(private$tau$O)) -
           sum(private$tau$I * log(private$tau$I))
       },
+      #' @field bound Get the variational bound of the model
       bound      = function(value) self$complete_likelihood + self$entropy,
       df_mixture = function(value) list(I = private$Q$I -1,
                                         O = private$Q$O -1),
@@ -92,12 +100,15 @@ FitMLVSBM <-
         list(I = dplyr::if_else(private$directed_$I, 1, .5) * sum(private$M$I),
              O = dplyr::if_else(private$directed_$O, 1, .5) * sum(private$M$O))
       },
+      #' @field ICL Get the ICL model selection criterion of the mdeol
       ICL        = function(value) {
         self$complete_likelihood + self$entropy - self$full_penalty
         },
+      #' @field full_penalty Get the penalty used to compute the ICL
       full_penalty    = function(value) {
         self$penalty$O + self$penalty$I
         },
+      #' @field Z Get the list of block memberships (vector form)
       Z          = function(value) {
         Z = list()
         if (private$Q$I == 1) {
@@ -112,12 +123,14 @@ FitMLVSBM <-
         }
         return(Z)
       },
+      #' @field X_hat Get the list of the matrices of probability conection predictions
       X_hat = function(value) {
         list(
           I = quad_form(private$param$alpha$I, private$tau$I),
           O = quad_form(private$param$alpha$O, private$tau$O)
           )
         },
+      #' @field map Get the list of block memberships (matrix form)
       map = function(value) {
         tmp_map <-
           list(I = 1 * sapply(1:private$Q$O, function(x) self$Z$I %in% x),

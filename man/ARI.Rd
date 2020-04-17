@@ -2,7 +2,7 @@
 % Please edit documentation in R/ultility.R
 \name{ARI}
 \alias{ARI}
-\title{Compare to clustering with the Adjusted Rand Index}
+\title{Compare two clustering with the Adjusted Rand Index}
 \usage{
 ARI(x, y)
 }
@@ -15,7 +15,7 @@ ARI(x, y)
 A number between 0 (random clustering) and 1 (identical clustering)
 }
 \description{
-Compare to clustering with the Adjusted Rand Index
+Compare two clustering with the Adjusted Rand Index
 }
 \examples{
 ARI(x = c(1, 2, 1), y = c(2, 2, 1))

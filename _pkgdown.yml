@@ -19,19 +19,26 @@ navbar:
 
 
 reference:
-- title: All functions
+- title: Main user functions
   desc: ~
+  contents:
+  - '`mlvsbm_create_network`'
+  - '`mlvsbm_estimate_network`'
+  - '`mlvsbm_simulate_network`'
+- title: Advanced object functions
+  desc:  ~
   contents:
   - '`FitMLVSBM`'
   - '`FitSBM`'
   - '`MLVSBM`'
+- title: Miscellaneous helper functions
+  desc: ~
+  contents:
   - '`build_fold_matrix`'
   - '`hierarClust`'
   - '`merge_clust`'
-  - '`mlvsbm_create_network`'
-  - '`mlvsbm_estimate_network`'
-  - '`mlvsbm_simulate_network`'
   - '`simulate_adjacency`'
   - '`simulate_affiliation`'
   - '`spcClust`'
   - '`split_clust`'
+  - '`ARI`'
