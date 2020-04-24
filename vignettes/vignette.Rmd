@@ -67,77 +67,84 @@ best model for this network as another R6 object of type FitMLVSBM.
 ```{r infer}
 fit <- MLVSBM:::mlvsbm_estimate_network(my_mlvsbm, nb_cores = 1)
 ```
-
+```{r include=FALSE}
+library(tidyverse)
+library(blockmodels)
+library(tidygraph)
+library(ggforce)
+library(ggraph)
+library(cowplot)
+```
 ```{r eval=FALSE, echo=FALSE, include=FALSE}
-# graph_ind <- fit$adjacency_matrix$I %>%
-#   as_tbl_graph() %>%
-#   mutate(name = paste0("I", seq(nrow(fit$adjacency_matrix$I))),
-#          actor = "Individual",
-#          in_deg = colSums(fit$adjacency_matrix$I)) %>%
-#   activate(edges) %>% mutate(link = "Individual",
-#                              directed = fit$directed$I)
-# graph_org <- fit$adjacency_matrix$O %>%
-#   as_tbl_graph() %>%
-#   mutate(name = paste0("O", seq(nrow(fit$adjacency_matrix$O))),
-#          actor = "Organization",
-#          in_deg = colSums(fit$adjacency_matrix$O)) %>%
-#   activate(edges) %>% mutate(link = "Organization",
-#                              directed = fit$directed$O)
-# graph_aff <- fit$affiliation_matrix %>%
-#   as_tbl_graph() %>%
-#   mutate(name = c(paste0("I", seq(nrow(fit$adjacency_matrix$I))),
-#                   paste0("O", seq(nrow(fit$adjacency_matrix$O))))) %>% 
-#   activate(edges) %>% 
-#   mutate(link = "Affiliation", 
-#          directed = FALSE) 
-# 
-# lay_ind <- graph_ind %>% create_layout(layout = "stress")
-# lay_org <- graph_org %>% create_layout(layout = "stress")
-# lay_ind$x <- 8*(lay_ind$x - min(lay_ind$x))/max(lay_ind$x- min(lay_ind$x)) 
-# lay_ind$y <- 4*(lay_ind$y - min(lay_ind$y))/max(lay_ind$y- min(lay_ind$y)) 
-# lay_org$x <- 8*(lay_org$x - min(lay_org$x))/max(lay_org$x- min(lay_org$x)) +2
-# lay_org$y <- 4*(lay_org$y - min(lay_org$y))/max(lay_org$y- min(lay_org$y)) + 6 
-# 
-# graph_mlv <- graph_ind %>% bind_graphs(graph_org) %>%
-#   graph_join(graph_aff) 
-# 
-# pal_ind <- colorRampPalette(RColorBrewer::brewer.pal(max(3,max(fit$Z$I)), "GnBu"))
-# pal_org <- colorRampPalette(RColorBrewer::brewer.pal(max(3, max(fit$Z$O)), "YlOrRd"))
-# 
-# p <- graph_mlv %>%
-#   ggraph(layout = "manual", x = c(lay_ind$x, lay_org$x), y = c(lay_ind$y, lay_org$y)) +
-#   ggforce::geom_mark_rect(aes(x = x, y = y, group = actor, label = actor),
-#                           radius = 0) +
-#   # ggforce::geom_mark_ellipse(aes(x = x, y = y, filter = (as.factor(c(fit$Z$I, fit$Z$O + max(fit$Z$I))) == 2),
-#   #                                group = as.factor(c(fit$Z$I, fit$Z$O + max(fit$Z$I))),
-#   #                                fill = as.factor(c(fit$Z$I, fit$Z$O + max(fit$Z$I))))) +
-#   # annotate(geom = "segment", x = c(0, 0), y = c(-1, -1), xend = c(-1, 9), yend = c(4, 0)) +
-#   # annotate(geom = "segment", x = c(2, 2), y = c(5, 5), xend = c(1, 11), yend = c(10, 6)) +
-#   # annotate(geom = "text", x = c(8, 10), y = c(-.5, 5.5), label = c("Individuals", "Organizations"), angle = 45*1/9) +
-#   geom_edge_fan( aes(filter = (link != "Affiliation" & directed == TRUE) , 
-#                      alpha = .2*..index..),
-#                  width = .2) +
-#   geom_edge_link0(aes(filter = (link != "Affiliation" & directed == FALSE)),
-#                   width = .3, alpha = .2) +
-#   geom_edge_link0(aes(filter = (link == "Affiliation")), linetype = "dashed",
-#                   width = .3, alpha = .2) +
-#   geom_node_point(aes(filter = (actor == "Organization"), shape = actor, 
-#                       fill = as.factor(c(fit$Z$I, fit$Z$O + max(fit$Z$I))), 
-#                       size = in_deg), alpha = 1) +
-#   geom_node_point(aes(filter = (actor == "Individual"), shape = actor, 
-#                       fill = as.factor(c(fit$Z$I, fit$Z$O)), 
-#                       col = as.factor(c(as.vector(fit$affiliation_matrix %*% fit$Z$O),
-#                                         fit$Z$O)), size = in_deg), alpha = 1, stroke = 2) +
-#   # ggrepel::geom_text_repel(data = bind_rows(lay_ind, lay_org) %>% filter(in_deg > 10),
-#   #                          aes(x = x, y = y, label = name), size = 6) +
-#   scale_shape_manual(values = c(21, 22)) +
-#   scale_color_manual(values = pal_org(max(fit$Z$O))) +
-#   scale_fill_manual(values = c(pal_ind(max(fit$Z$I)), pal_org(max(fit$Z$O)))) +
-#   theme_graph() +
-#   theme(legend.position = "none")
-# 
-# 
-# ggsave(filename = "~/Pictures/multilevel.png", plot = p)
+graph_ind <- fit$adjacency_matrix$I %>%
+  as_tbl_graph() %>%
+  mutate(name = paste0("I", seq(nrow(fit$adjacency_matrix$I))),
+         actor = "Individual",
+         in_deg = colSums(fit$adjacency_matrix$I)) %>%
+  activate(edges) %>% mutate(link = "Individual",
+                             directed = fit$directed$I)
+graph_org <- fit$adjacency_matrix$O %>%
+  as_tbl_graph() %>%
+  mutate(name = paste0("O", seq(nrow(fit$adjacency_matrix$O))),
+         actor = "Organization",
+         in_deg = colSums(fit$adjacency_matrix$O)) %>%
+  activate(edges) %>% mutate(link = "Organization",
+                             directed = fit$directed$O)
+graph_aff <- fit$affiliation_matrix %>%
+  as_tbl_graph() %>%
+  mutate(name = c(paste0("I", seq(nrow(fit$adjacency_matrix$I))),
+                  paste0("O", seq(nrow(fit$adjacency_matrix$O))))) %>%
+  activate(edges) %>%
+  mutate(link = "Affiliation",
+         directed = FALSE)
+
+lay_ind <- graph_ind %>% create_layout(layout = "stress")
+lay_org <- graph_org %>% create_layout(layout = "stress")
+lay_ind$x <- 8*(lay_ind$x - min(lay_ind$x))/max(lay_ind$x- min(lay_ind$x))
+lay_ind$y <- 4*(lay_ind$y - min(lay_ind$y))/max(lay_ind$y- min(lay_ind$y))
+lay_org$x <- 8*(lay_org$x - min(lay_org$x))/max(lay_org$x- min(lay_org$x)) +2
+lay_org$y <- 4*(lay_org$y - min(lay_org$y))/max(lay_org$y- min(lay_org$y)) + 6
+
+graph_mlv <- graph_ind %>% bind_graphs(graph_org) %>%
+  graph_join(graph_aff)
+
+pal_ind <- colorRampPalette(RColorBrewer::brewer.pal(max(3,max(fit$Z$I)), "GnBu"))
+pal_org <- colorRampPalette(RColorBrewer::brewer.pal(max(3, max(fit$Z$O)), "YlOrRd"))
+
+p <- graph_mlv %>%
+  ggraph(layout = "manual", x = c(lay_ind$x, lay_org$x), y = c(lay_ind$y, lay_org$y)) +
+  ggforce::geom_mark_rect(aes(x = x, y = y, group = actor, label = actor),
+                          radius = 0) +
+  # ggforce::geom_mark_ellipse(aes(x = x, y = y, filter = (as.factor(c(fit$Z$I, fit$Z$O + max(fit$Z$I))) == 2),
+  #                                group = as.factor(c(fit$Z$I, fit$Z$O + max(fit$Z$I))),
+  #                                fill = as.factor(c(fit$Z$I, fit$Z$O + max(fit$Z$I))))) +
+  # annotate(geom = "segment", x = c(0, 0), y = c(-1, -1), xend = c(-1, 9), yend = c(4, 0)) +
+  # annotate(geom = "segment", x = c(2, 2), y = c(5, 5), xend = c(1, 11), yend = c(10, 6)) +
+  # annotate(geom = "text", x = c(8, 10), y = c(-.5, 5.5), label = c("Individuals", "Organizations"), angle = 45*1/9) +
+  geom_edge_fan( aes(filter = (link != "Affiliation" & directed == TRUE) ,
+                     alpha = .2*..index..),
+                 width = .2) +
+  geom_edge_link0(aes(filter = (link != "Affiliation" & directed == FALSE)),
+                  width = .3, alpha = .2) +
+  geom_edge_link0(aes(filter = (link == "Affiliation")), linetype = "dashed",
+                  width = .3, alpha = .2) +
+  geom_node_point(aes(filter = (actor == "Organization"), shape = actor,
+                      fill = as.factor(c(fit$Z$I, fit$Z$O + max(fit$Z$I))),
+                      size = in_deg), alpha = 1) +
+  geom_node_point(aes(filter = (actor == "Individual"), shape = actor,
+                      fill = as.factor(c(fit$Z$I, fit$Z$O)),
+                      col = as.factor(c(as.vector(fit$affiliation_matrix %*% fit$Z$O),
+                                        fit$Z$O)), size = in_deg), alpha = 1, stroke = 2) +
+  # ggrepel::geom_text_repel(data = bind_rows(lay_ind, lay_org) %>% filter(in_deg > 10),
+  #                          aes(x = x, y = y, label = name), size = 6) +
+  scale_shape_manual(values = c(21, 22)) +
+  scale_color_manual(values = pal_org(max(fit$Z$O))) +
+  scale_fill_manual(values = c(pal_ind(max(fit$Z$I)), pal_org(max(fit$Z$O)))) +
+  theme_graph() +
+  theme(legend.position = "none")
+
+
+ggsave(filename = "~/Pictures/multilevel.png", plot = p)
 ```
 
 
