@@ -1,3 +1,7 @@
+# MLVSBM 0.1.2
+* Added options for `mlvl_estimate_network()` function
+* It is now possible to simulate networks with no isolated nodes
+
 # MLVSBM 0.1.1
 * Fixed bug with `parallel` for Windows
 
