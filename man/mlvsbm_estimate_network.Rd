@@ -4,14 +4,57 @@
 \alias{mlvsbm_estimate_network}
 \title{Infer a multilevel network (MLVSBM object), the original object is modified}
 \usage{
-mlvsbm_estimate_network(mlv)
+mlvsbm_estimate_network(
+  mlv,
+  nb_clusters = NULL,
+  init_clustering = NULL,
+  nb_cores = NULL
+)
 }
 \arguments{
 \item{mlv}{A MLVSBM object, the network to be inferred}
+
+\item{nb_clusters}{A list of 2 integers, the model size.
+If left to \code{NULL}, the algorithm
+will navigate freely. Otherwise it will navigate between the specified model
+size and its neighbours.}
+
+\item{init_clustering}{A list of 2 vectors of integers of the same length as
+the number of node of each level. If specified, the algorithm will start from
+this clustering, then navigate freely.}
+
+\item{nb_cores}{An integer, the number of cores to use. Default to \code{1}
+for Windows and \code{detectCores()/2} for Linux and MacOS}
 }
 \value{
 A FitMLVSBM object, the best inference of the network
 }
 \description{
-Infer a multilevel network (MLVSBM object), the original object is modified
+The inference use a greedy algorithm to navigate between model
+size. For a given model size, the inference is done via a variational EM
+algorithm. The returned model is the one with the highest ICL criterion among
+all visited models.
+
+By default the algorithm fits a single level SBM for each level, before
+inferring the multilevel network. This step can be skipped by specifying an
+initial clustering with the \code{init_clustering}. Also, a given model size
+can be force by setting the parameters \code{nb_clusters} to a given value.
+}
+\examples{
+my_mlvsbm <- MLVSBM::mlvsbm_simulate_network(
+  n = list(I = 10, O = 20), # Number of nodes for the lower level and the upper level
+  Q = list(I = 2, O = 2), # Number of blocks for the lower level and the upper level
+  pi = c(.3, .7), # Block proportion for the upper level, must sum to one
+  gamma = matrix(c(.9, .2,   # Block proportion for the lower level,
+                   .1, .8), # each column must sum to one
+                 nrow = 2, ncol = 2, byrow = TRUE),
+  alpha = list(I = matrix(c(.8, .2,
+                            .2, .1),
+                          nrow = 2, ncol = 2, byrow = TRUE), # Connection matrix
+               O = matrix(c(.99, .3,
+                            .3, .1),
+                          nrow = 2, ncol = 2, byrow = TRUE)),# between blocks
+  directed = list(I = FALSE, O = FALSE), # Are the upper and lower level directed or not ?
+  affiliation = "preferential") # How the affiliation matrix is generated
+fit <- MLVSBM::mlvsbm_estimate_network(mlv = my_mlvsbm, nb_cores = 1)
 }

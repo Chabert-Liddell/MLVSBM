@@ -72,7 +72,8 @@ Methods for global inference and model selection are included.
   Q_min = 1,
   Q_max = 10,
   init = "hierarchical",
-  depth = 1
+  depth = 1,
+  nb_cores = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -87,7 +88,8 @@ Methods for global inference and model selection are included.
   Q = NULL,
   Q_min = 1,
   Q_max = 10,
-  fit = NULL
+  fit = NULL,
+  nb_cores = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -97,7 +99,12 @@ Methods for global inference and model selection are included.
 \if{latex}{\out{\hypertarget{method-estimate_sbm_from_neighbours}{}}}
 \subsection{Method \code{estimate_sbm_from_neighbours()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MLVSBM$estimate_sbm_from_neighbours(level = "lower", Q = NULL, fits = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{MLVSBM$estimate_sbm_from_neighbours(
+  level = "lower",
+  Q = NULL,
+  fits = NULL,
+  nb_cores = NULL
+)}\if{html}{\out{</div>}}
 }
 
 }
@@ -124,7 +131,12 @@ Methods for global inference and model selection are included.
 \if{latex}{\out{\hypertarget{method-estimate_from_neighbours}{}}}
 \subsection{Method \code{estimate_from_neighbours()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MLVSBM$estimate_from_neighbours(Q, models = NULL, independent = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{MLVSBM$estimate_from_neighbours(
+  Q,
+  models = NULL,
+  independent = FALSE,
+  nb_cores = nb_cores
+)}\if{html}{\out{</div>}}
 }
 
 }
@@ -133,7 +145,12 @@ Methods for global inference and model selection are included.
 \if{latex}{\out{\hypertarget{method-estimate_neighbours}{}}}
 \subsection{Method \code{estimate_neighbours()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MLVSBM$estimate_neighbours(Q, fit = NULL, independent = independent)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{MLVSBM$estimate_neighbours(
+  Q,
+  fit = NULL,
+  independent = independent,
+  nb_cores = NULL
+)}\if{html}{\out{</div>}}
 }
 
 }
@@ -153,7 +170,7 @@ Methods for global inference and model selection are included.
 \if{latex}{\out{\hypertarget{method-mc_ms_estimate}{}}}
 \subsection{Method \code{mc_ms_estimate()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MLVSBM$mc_ms_estimate(Z = NA, independent = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{MLVSBM$mc_ms_estimate(Z = NA, independent = FALSE, nb_cores = NULL)}\if{html}{\out{</div>}}
 }
 
 }
@@ -162,7 +179,13 @@ Methods for global inference and model selection are included.
 \if{latex}{\out{\hypertarget{method-estimate_one}{}}}
 \subsection{Method \code{estimate_one()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MLVSBM$estimate_one(Q, Z = NULL, independent = FALSE, init = "hierarchical")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{MLVSBM$estimate_one(
+  Q,
+  Z = NULL,
+  independent = FALSE,
+  init = "hierarchical",
+  nb_cores = NULL
+)}\if{html}{\out{</div>}}
 }
 
 }
@@ -171,7 +194,13 @@ Methods for global inference and model selection are included.
 \if{latex}{\out{\hypertarget{method-estimate_all_bm}{}}}
 \subsection{Method \code{estimate_all_bm()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MLVSBM$estimate_all_bm(Q = NULL, Z = NULL, independent = FALSE, clear = TRUE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{MLVSBM$estimate_all_bm(
+  Q = NULL,
+  Z = NULL,
+  independent = FALSE,
+  clear = TRUE,
+  nb_cores = NULL
+)}\if{html}{\out{</div>}}
 }
 
 }
@@ -224,7 +253,7 @@ Methods for global inference and model selection are included.
 \if{latex}{\out{\hypertarget{method-simulate}{}}}
 \subsection{Method \code{simulate()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MLVSBM$simulate(affiliation = "uniform", no_empty_org = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{MLVSBM$simulate()}\if{html}{\out{</div>}}
 }
 
 }

@@ -6,12 +6,13 @@ MLVSBM$set(
 #' @param affiliation One of c( uniform ,  preferential ), the way the
 #' affiliation are generated
 #' @param no_empty_org A boolean, may column of afiiliation sum to 0
-  function(affiliation = "uniform", no_empty_org = FALSE) {
+#' @param no_isolated_node A boolean, may row and column of adjacency matrices sum to 0
+  function() {
     if (is.null(private$A))
       private$A <- simulate_affiliation(private$n$I,
                                         private$n$O,
-                                        affiliation = affiliation,
-                                        no_empty_org = no_empty_org)
+                                        affiliation = private$sim_param$affiliation,
+                                        no_empty_org = private$sim_param$no_empty_org)
     private$Z    <-  list(I = NULL, O = NULL)
     private$Z$O  <-  sample(
       x = seq(private$sim_param$Q$O),
@@ -30,12 +31,14 @@ MLVSBM$set(
                                      n = private$n$I,
                                      alpha = private$sim_param$alpha$I,
                                      directed = private$directed_$I,
-                                     distribution = private$distribution_$I)
+                                     distribution = private$distribution_$I,
+                                     no_isolated_node = private$sim_param$no_isolated_node)
     private$X$O = simulate_adjacency(Z = private$Z$O,
                                      n = private$n$O,
                                      alpha = private$sim_param$alpha$O,
                                      directed = private$directed_$O,
-                                     distribution = private$distribution_$O)
+                                     distribution = private$distribution_$O,
+                                     no_isolated_node = private$sim_param$no_isolated_node)
     })
 
 #' Simulation an adjacency matrix
@@ -46,21 +49,30 @@ MLVSBM$set(
 #' @param n An integer, the number of rows or columbns of the matrix
 #' @param alpha A max(Z)xmax(Z) matrix, the connectivity parameters
 #' @param directed A boolean, Is the network directed or not ?
-#' @param distribution The distribution of the indices: only "bernouilli"
-#'
+#' @param distribution The distribution of the indices: only "bernoulli"
+#' @param no_isolated_node A boolean, may row and column of adjacency matrices sum to 0
 #' @return A nxn adjacency matrix
-simulate_adjacency <- function(Z, n, alpha, directed, distribution) {
+simulate_adjacency <- function(Z, n, alpha, directed,
+                               distribution = "bernoulli", no_isolated_node = FALSE) {
   X = matrix(0, n, n)
-  for (i in 1:(n-1)){
-    X[i, (i+1):n] = stats::rbinom(n-i, 1, alpha[Z[i], Z[(i+1):n]])
-  }
-  if (! directed) {
-    X = X + t(X)
-  } else {
-    for (i in 2:n) {
-      X[i, 1:(i-1)] =
-        stats::rbinom(i-1, 1, alpha[Z[i], Z[1:(i-1)]])
+  condition <- TRUE
+  it <- 1
+  while (condition) {
+    X[] <- 0
+    for (i in 1:(n-1)){
+      X[i, (i+1):n] = stats::rbinom(n-i, 1, alpha[Z[i], Z[(i+1):n]])
     }
+    if (! directed) {
+      X = X + t(X)
+    } else {
+      for (i in 2:n) {
+        X[i, 1:(i-1)] =
+          stats::rbinom(i-1, 1, alpha[Z[i], Z[1:(i-1)]])
+      }
+    }
+    condition <- no_isolated_node & it < 100 & any(colSums(X) + rowSums(X) == 0 )
+    it <- it + 1
+    if (it == 100 & no_isolated_node) warning("Could not generate a fully connected network!")
   }
   return(X)
 }

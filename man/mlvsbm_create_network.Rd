@@ -12,7 +12,7 @@ the first one being the individual or lower level
 the second one being the organisational or upper level}
 
 \item{A}{A matrix the affiliation matrix with individuals in rows and
-organisations in columns}
+organizations in columns}
 
 \item{distribution}{A list for the distribution of X,
 only "bernoulli" is implemented}
@@ -22,4 +22,13 @@ An unfitted MLVSBM object corresponding to the multilevel network
 }
 \description{
 Create a MLVSBM object from observed data
+}
+\examples{
+ind_adj <- matrix(stats::rbinom(n = 10**2, size = 1, prob = .2),
+                  nrow = 10, ncol = 10)
+org_adj <- matrix(stats::rbinom(n = 10**2, size = 1, prob = .3),
+                  nrow = 10, ncol = 10)
+affiliation <- diag(1, 10)
+my_mlvsbm <- mlvsbm_create_network(X = list(I = ind_adj, O = org_adj),
+                                   A = affiliation)
 }

@@ -13,7 +13,8 @@ mlvsbm_simulate_network(
   directed,
   affiliation = "uniform",
   distribution = list("bernoulli", "bernoulli"),
-  no_empty_org = FALSE
+  no_empty_org = FALSE,
+  no_isolated_node = FALSE
 )
 }
 \arguments{
@@ -39,12 +40,15 @@ Is the organisational level a directed network ?}
 \item{affiliation}{The distribution under which the affiliation matrix is
 simulated in c("uniform", "preferential")}
 
-\item{distribution}{list for the distribution of X,
+\item{distribution}{A list for the distribution of X,
 only "bernoulli" is implemented}
 
 \item{no_empty_org}{A boolean with FALSE as default, should
 every organisation have at least one affiliated individuals?
 Needs to have n_I >= n_O}
+
+\item{no_isolated_node}{A boolean, if TRUE then the network is resimulated
+until all nodes are connected}
 }
 \value{
 An MLVSBM object, a simulated multilevel network with levels,
@@ -52,4 +56,20 @@ affiliations and memberships
 }
 \description{
 Create a simulated multilevel network (MLVSBM object)
+}
+\examples{
+my_mlvsbm <- MLVSBM::mlvsbm_simulate_network(
+  n = list(I = 10, O = 20), # Number of nodes for the lower level and the upper level
+  Q = list(I = 2, O = 2), # Number of blocks for the lower level and the upper level
+  pi = c(.3, .7), # Block proportion for the upper level, must sum to one
+  gamma = matrix(c(.9, .2,   # Block proportion for the lower level,
+                   .1, .8), # each column must sum to one
+                 nrow = 2, ncol = 2, byrow = TRUE),
+  alpha = list(I = matrix(c(.8, .2,
+                            .2, .1),
+                          nrow = 2, ncol = 2, byrow = TRUE), # Connection matrix
+               O = matrix(c(.99, .3,
+                            .3, .1),
+                          nrow = 2, ncol = 2, byrow = TRUE)),# between blocks
+  directed = list(I = FALSE, O = FALSE)) # Are the upper and lower level directed
 }

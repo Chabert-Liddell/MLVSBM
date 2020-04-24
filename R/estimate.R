@@ -16,7 +16,8 @@ MLVSBM$set(
            Q_min = 1,
            Q_max = 10,
            init = "hierarchical",
-           depth = 1) {
+           depth = 1,
+           nb_cores = NULL) {
     model_list <-  vector("list", Q_max)
     ICL <- rep(-Inf, Q_max)
     bound <- rep(-Inf, Q_max)
@@ -35,7 +36,8 @@ MLVSBM$set(
                                            Q = best_fit$nb_clusters,
                                            Q_min = Q_min,
                                            Q_max = Q_max,
-                                           fit = best_fit)
+                                           fit = best_fit,
+                                           nb_cores = nb_cores)
       new_fit  <-  fits[[which.max(sapply(1:length(fits), function(x) fits[[x]]$ICL))]]
       # spc_fit  <- self$estimate_sbm(level = level, init = init,
       #                               Q = min(best_fit$nb_clusters +1, Q_max))
@@ -49,7 +51,6 @@ MLVSBM$set(
                      ", ICL = ", best_fit$ICL, " !" ))
       } else {
         condition = FALSE
-        # }
       }
     }
     # Descending
@@ -68,8 +69,10 @@ MLVSBM$set(
                                            Q = best_fit$nb_clusters,
                                            Q_min = Q_min,
                                            Q_max = Q_max,
-                                           fit = best_fit)
-      new_fit  <-  fits[[which.max(sapply(1:length(fits), function(x) fits[[x]]$ICL))]]
+                                           fit = best_fit,
+                                           nb_cores = nb_cores)
+      new_fit  <-  fits[[
+        which.max(sapply(1:length(fits), function(x) fits[[x]]$ICL))]]
       # # spc_fit  <- self$estimate_sbm(level = level, init = init,
       # #                               Q = max(best_fit$nb_clusters -1, Q_max))
       # if (new_fit$ICL < spc_fit$ICL) new_fit <- spc_fit
@@ -124,12 +127,17 @@ MLVSBM$set(
   function(level = "lower",
            Q = NULL, Q_min = 1,
            Q_max = 10,
-           fit = NULL) {
+           fit = NULL,
+           nb_cores = NULL) {
     os <- Sys.info()["sysname"]
-    if (os != 'Windows') {
-      nb_cores <-  max(parallel::detectCores(all.tests = FALSE, logical = TRUE) %/% 2, 1)
-    } else {
-      nb_cores <-  1
+    if (is.null(nb_cores)) {
+      if (os != 'Windows') {
+        nb_cores <-
+          max(parallel::detectCores(all.tests = FALSE, logical = TRUE) %/% 2, 1)
+        if (is.na(nb_cores)) nb_cores <- 1
+      } else {
+        nb_cores <-  1
+      }
     }
     models <- list()
     if (Q > Q_min) {
@@ -141,7 +149,7 @@ MLVSBM$set(
                             Q = Q -1,
                             Z = Z[[i]],
                             init = "merge_split")
-        })
+        }, mc.cores = nb_cores)
       fits <-
         fits[which(sapply( fits, function(x) ! is.null(x)))]
       fits <-
@@ -180,12 +188,17 @@ MLVSBM$set(
   "public",
   "estimate_sbm_from_neighbours",
   function(level = "lower",
-           Q = NULL, fits = NULL) {
+           Q = NULL, fits = NULL,
+           nb_cores = NULL) {
     os <- Sys.info()["sysname"]
-    if (os != 'Windows') {
-      nb_cores <-  max(parallel::detectCores(all.tests = FALSE, logical = TRUE) %/% 2, 1)
-    } else {
-      nb_cores <-  1
+    if (is.null(nb_cores)) {
+      if (os != 'Windows') {
+        nb_cores <-
+          max(parallel::detectCores(all.tests = FALSE, logical = TRUE) %/% 2, 1)
+        if (is.na(nb_cores)) nb_cores <- 1
+      } else {
+        nb_cores <-  1
+      }
     }
     if (is.null(fits)) return(NULL)
     new_fits <- list()
@@ -199,7 +212,7 @@ MLVSBM$set(
                               Q = Q,
                               Z = Z[[i]],
                               init = "merge_split")
-          })
+          }, mc.cores = nb_cores)
         new_fits <- c(new_fits, fit_tmp)
       }
       if (Q == fit$nb_clusters + 1) {
@@ -251,7 +264,7 @@ MLVSBM$set(
                        directed = private$directed_$O,
                        distribution = private$distribution_$O)
       },
-      print("Unknown level!!!")
+      stop("Unknown level!!!")
     )
     if(is.null(Z)) {
       fit$do_vem(init = init)
@@ -288,8 +301,19 @@ MLVSBM$set(
   "estimate_from_neighbours",
   function(Q,
            models = NULL,
-           independent = FALSE) {
+           independent = FALSE,
+           nb_cores = nb_cores) {
     if (is.null(models)) return(NULL)
+    os <- Sys.info()["sysname"]
+    if (is.null(nb_cores)) {
+      if (os != 'Windows') {
+        nb_cores <-
+          max(parallel::detectCores(all.tests = FALSE, logical = TRUE) %/% 2, 1)
+        if (is.na(nb_cores)) nb_cores <- 1
+      } else {
+        nb_cores <-  1
+      }
+    }
     new_models <- list()
     for (fit in models) {
       if (Q$I == fit$nb_clusters$I + 1) {
@@ -297,7 +321,9 @@ MLVSBM$set(
           new_model <- self$mc_ms_estimate(
             Z = list("I" = split_clust(private$X$I, fit$Z$I, fit$nb_lusters$I),
                      "O" = list(fit$Z$O)),
-            independent  = independent)
+            independent  = independent,
+            nb_cores = nb_cores
+            )
           new_models <- c(new_models, list(new_model))
         }
       }
@@ -306,7 +332,8 @@ MLVSBM$set(
           new_model <- self$mc_ms_estimate(
             Z = list("I" = merge_clust(Z = fit$Z$I, Q = fit$nRClusters),
                      "O" = list(fit$Z$O)),
-            independent = independent)
+            independent = independent,
+            nb_cores = nb_cores)
           new_models <- c(new_models, list(new_model))
         }
       }
@@ -315,7 +342,8 @@ MLVSBM$set(
           new_model <- self$mc_ms_estimate(
             Z = list("I" = list(fit$Z$I),
                      "O" = split_clust(private$XL, fit$Z$O, fit$nLClusters)),
-            independent = independent)
+            independent = independent,
+            nb_cores = nb_cores)
           new_models <- c(new_models, list(new_model))
         }
       }
@@ -324,7 +352,8 @@ MLVSBM$set(
           new_model <- self$mc_ms_estimate(
             Z = list("I" = list(fit$Z$I),
                      "O" = merge_clust(Z = fit$Z$O, Q = fit$nLClusters)),
-            independent = independent)
+            independent = independent,
+            nb_cores = nb_cores)
           new_models <- c(new_models, list(new_model))
         }
       }
@@ -347,8 +376,19 @@ MLVSBM$set(
   "estimate_neighbours",
   function (Q,
            fit = NULL,
-           independent = independent) {
+           independent = independent,
+           nb_cores = NULL) {
     if (is.null(fit)) return(NULL)
+    os <- Sys.info()["sysname"]
+    if (is.null(nb_cores)) {
+      if (os != 'Windows') {
+        nb_cores <-
+          max(parallel::detectCores(all.tests = FALSE, logical = TRUE) %/% 2, 1)
+        if (is.na(nb_cores)) nb_cores <- 1
+      } else {
+        nb_cores <-  1
+      }
+    }
     Z_tmp <-  self$merge_split_membership(fit)
     models <-  list(fit)
     if (! is.null(Z_tmp$I$split[[1]])) {
@@ -356,7 +396,8 @@ MLVSBM$set(
         fitted <- self$mc_ms_estimate(
           Z = list("I" = Z_tmp$I$split,
                    "O" = Z_tmp$O$same),
-          independent = independent)
+          independent = independent,
+          nb_cores = nb_cores)
         models = c(models, list(fitted))
       }
     }
@@ -365,7 +406,8 @@ MLVSBM$set(
         fitted = self$mc_ms_estimate(
           Z = list("I" = Z_tmp$I$same,
                    "O" = Z_tmp$O$split),
-          independent = independent)
+          independent = independent,
+          nb_cores = nb_cores)
         models = c(models, list(fitted))
       }
     }
@@ -374,7 +416,8 @@ MLVSBM$set(
         fitted <- self$mc_ms_estimate(
           Z = list("I" = Z_tmp$I$merge,
                    "O" = Z_tmp$O$same),
-          independent = independent)
+          independent = independent,
+          nb_cores = nb_cores)
         models <- c(models, list(fitted))
       }
     }
@@ -383,7 +426,8 @@ MLVSBM$set(
         fitted <- self$mc_ms_estimate(
           Z = list("I" = Z_tmp$I$same,
                    "O" = Z_tmp$O$merge),
-          independent = independent)
+          independent = independent,
+          nb_cores = nb_cores)
         models <- c(models, list(fitted))
       }
     }
@@ -435,14 +479,19 @@ MLVSBM$set(
   "public",
   "mc_ms_estimate",
   function (Z = NA,
-           independent = FALSE) {
-    os <- Sys.info()["sysname"]
-    if (os != 'Windows') {
-      nb_cores <-  max(parallel::detectCores(all.tests = FALSE, logical = TRUE) %/% 2, 1)
-    } else {
-        nb_cores <-  1
-        }
+           independent = FALSE,
+           nb_cores = NULL) {
     if (is.null(Z$I[[1]]) | is.null(Z$O[[1]])) return(NULL)
+    os <- Sys.info()["sysname"]
+    if (is.null(nb_cores)) {
+      if (os != 'Windows') {
+        nb_cores <-
+          max(parallel::detectCores(all.tests = FALSE, logical = TRUE) %/% 2, 1)
+        if (is.na(nb_cores)) nb_cores <- 1
+      } else {
+        nb_cores <-  1
+      }
+    }
     nb_models = list("I" = length(Z$I), "O" = length(Z$O))
     models  <-  parallel::mclapply(
       seq(nb_models$O * nb_models$I),
@@ -484,11 +533,21 @@ MLVSBM$set(
   function(Q,
            Z = NULL,
            independent = FALSE,
-           init = "hierarchical") {
+           init = "hierarchical",
+           nb_cores = NULL) {
+    os <- Sys.info()["sysname"]
+    if (is.null(nb_cores)) {
+      if (os != 'Windows') {
+        nb_cores <-
+          max(parallel::detectCores(all.tests = FALSE, logical = TRUE) %/% 2, 1)
+        if (is.na(nb_cores)) nb_cores <- 1
+      } else {
+        nb_cores <-  1
+      }
+    }
     if (is.null(Z)) {
       fit_tmp <- self$mcestimate(Q = Q,
-                                  type = type,
-                                  independent = independent)
+                                 independent = independent)
     } else {
       fit_tmp <- self$mcestimate(Q = Q,
                                   Z = Z,
@@ -502,11 +561,13 @@ MLVSBM$set(
         fitted <-  self$mc_ms_estimate(
           Z = list("I" = Z_tmp$I$split,
                    "O" = Z_tmp$O$same),
-          independent = independent)
+          independent = independent,
+          nb_cores = nb_cores)
         best   <-  self$mc_ms_estimate(
-          Z = list("I" = merge_clust(fitted$Z$I, fitted$nb_lusters$I),
+          Z = list("I" = merge_clust(fitted$Z$I, fitted$nb_clusters$I),
                    "O" = list(fitted$Z$O)),
-          independent = independent)
+          independent = independent,
+          nb_cores = nb_cores)
         models <-  c(models, list(best))
       }
     }
@@ -515,11 +576,13 @@ MLVSBM$set(
         fitted <-  self$mc_ms_estimate(
           Z = list("I" = Z_tmp$I$same,
                    "O" = Z_tmp$O$split),
-          independent = independent)
+          independent = independent,
+          nb_cores = nb_cores)
         best   <-  self$mc_ms_estimate(
           Z = list("I" = list(fitted$Z$I),
                    "O" = merge_clust(fitted$Z$O, fitted$nb_clusters$O)),
-          independent = independent)
+          independent = independent,
+          nb_cores = nb_cores)
         models <-  c(models, list(best))
       }
     }
@@ -528,11 +591,13 @@ MLVSBM$set(
         fitted <- self$mc_ms_estimate(
           Z = list("I" = Z_tmp$I$merge,
                    "O" = Z_tmp$O$same),
-          independent = independent)
+          independent = independent,
+          nb_cores = nb_cores)
         best <- self$mc_ms_estimate(
           Z = list("I" = split_clust(private$X$I, fitted$Z$I, fitted$nb_clusters$I),
                    "O"= list(fitted$Z$O)),
-          independent = independent)
+          independent = independent,
+          nb_cores = nb_cores)
         models <- c(models, list(best))
       }
     }
@@ -541,11 +606,13 @@ MLVSBM$set(
         fitted <- self$mc_ms_estimate(
           Z = list("I" = Z_tmp$I$same,
                    "O" = Z_tmp$O$merge),
-          independent = independent)
+          independent = independent,
+          nb_cores = nb_cores)
         best  <- self$mc_ms_estimate(
           Z = list("I" = list(fitted$Z$I),
-                   "O" = split_clust(private$XL, fitted$Z$O, fitted$nLClusters)),
-          independent = independent)
+                   "O" = split_clust(private$X$O, fitted$Z$O, fitted$nb_clusters$O)),
+          independent = independent,
+          nb_cores = nb_cores)
         models <- c(models, list(best))
       }
     }
@@ -576,12 +643,17 @@ MLVSBM$set(
 #'
 #' @return The FitSBM object with the best ICL
 #' @export
-  function (Q = NULL, Z = NULL, independent = FALSE, clear = TRUE) {
+  function (Q = NULL, Z = NULL, independent = FALSE,
+            clear = TRUE, nb_cores = NULL) {
     os <- Sys.info()["sysname"]
-    if (os != 'Windows') {
-      nb_cores <-  max(parallel::detectCores(all.tests = FALSE, logical = TRUE) %/% 2, 1)
-    } else {
-      nb_cores <-  1
+    if (is.null(nb_cores)) {
+      if (os != 'Windows') {
+        nb_cores <-
+          max(parallel::detectCores(all.tests = FALSE, logical = TRUE) %/% 2, 1)
+        if (is.na(nb_cores)) nb_cores <- 1
+      } else {
+        nb_cores <-  1
+      }
     }
     if (clear) self$clearmodels()
     best_model  <-  self$mcestimate(Q = Q, Z = Z, independent = independent)
@@ -594,7 +666,8 @@ MLVSBM$set(
       models <- self$estimate_neighbours(
         fit = best_model,
         Q = list("I" = best_model$nb_clusters$I,
-                 "O" = best_model$nb_clusters$O)
+                 "O" = best_model$nb_clusters$O),
+        nb_cores = nb_cores
         )
                 # Z   = self$merge_split_membership(best_model)
                 # models = parallel::mcmapply(rep(1:3, times = 3), rep(1:3, each = 3),

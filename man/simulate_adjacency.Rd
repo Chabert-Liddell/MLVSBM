@@ -4,7 +4,14 @@
 \alias{simulate_adjacency}
 \title{Simulation an adjacency matrix}
 \usage{
-simulate_adjacency(Z, n, alpha, directed, distribution)
+simulate_adjacency(
+  Z,
+  n,
+  alpha,
+  directed,
+  distribution = "bernoulli",
+  no_isolated_node = FALSE
+)
 }
 \arguments{
 \item{Z}{A vector of integer of size n, the label}
@@ -15,7 +22,9 @@ simulate_adjacency(Z, n, alpha, directed, distribution)
 
 \item{directed}{A boolean, Is the network directed or not ?}
 
-\item{distribution}{The distribution of the indices: only "bernouilli"}
+\item{distribution}{The distribution of the indices: only "bernoulli"}
+
+\item{no_isolated_node}{A boolean, may row and column of adjacency matrices sum to 0}
 }
 \value{
 A nxn adjacency matrix
