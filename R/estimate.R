@@ -499,11 +499,14 @@ MLVSBM$set(
         self$mcestimate(
           Q = list(
             I = max(Z$I[[
-              dplyr::if_else(! x %% nb_models$I == 0, x %% nb_models$I, nb_models$I)]]) ,
+              ifelse(! x %% nb_models$I == 0,
+                             x %% nb_models$I,
+                             nb_models$I)]]) ,
             O = max(Z$O[[(x + nb_models$I - 1) %/% nb_models$I]])),
           Z       = list(
-            I = Z$I[[dplyr::if_else(
-              ! x %% nb_models$I == 0, x %% nb_models$I, nb_models$I)]],
+            I = Z$I[[ifelse(! x %% nb_models$I == 0,
+                                    x %% nb_models$I,
+                                    nb_models$I)]],
             O = Z$O[[(x + nb_models$I - 1) %/% nb_models$I]]),
           init    ="merge_split",
           independent = independent)
