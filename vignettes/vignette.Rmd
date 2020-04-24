@@ -68,7 +68,7 @@ best model for this network as another R6 object of type FitMLVSBM.
 fit <- MLVSBM:::mlvsbm_estimate_network(my_mlvsbm, nb_cores = 1)
 ```
 
-```{r eval=FALSE, echo=FALSE}
+```{r eval=FALSE, echo=FALSE, include=FALSE}
 graph_ind <- fit$adjacency_matrix$I %>%
   as_tbl_graph() %>%
   mutate(name = paste0("I", seq(nrow(fit$adjacency_matrix$I))),

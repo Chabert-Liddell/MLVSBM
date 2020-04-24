@@ -73,7 +73,7 @@ Methods for global inference and model selection are included." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MLVSBM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
       </span>
     </div>
 
@@ -192,7 +192,8 @@ Methods for global inference and model selection are included.</p>
   <span class='kw'>Q_min</span> <span class='kw'>=</span> <span class='fl'>1</span>,
   <span class='kw'>Q_max</span> <span class='kw'>=</span> <span class='fl'>10</span>,
   <span class='kw'>init</span> <span class='kw'>=</span> <span class='st'>"hierarchical"</span>,
-  <span class='kw'>depth</span> <span class='kw'>=</span> <span class='fl'>1</span>
+  <span class='kw'>depth</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>nb_cores</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
 )</pre><p></div></p>
 
 <p><hr>
@@ -204,14 +205,20 @@ Methods for global inference and model selection are included.</p>
   <span class='kw'>Q</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>Q_min</span> <span class='kw'>=</span> <span class='fl'>1</span>,
   <span class='kw'>Q_max</span> <span class='kw'>=</span> <span class='fl'>10</span>,
-  <span class='kw'>fit</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+  <span class='kw'>fit</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>nb_cores</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
 )</pre><p></div></p>
 
 <p><hr>
 <a id="method-estimate_sbm_from_neighbours"></a></p><h3>Method <code>estimate_sbm_from_neighbours()</code></h3>
 
 <h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>MLVSBM</span>$<span class='fu'>estimate_sbm_from_neighbours</span>(<span class='kw'>level</span> <span class='kw'>=</span> <span class='st'>"lower"</span>, <span class='kw'>Q</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>fits</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre><p></div></p>
+<p><div class="r"></p><pre><span class='no'>MLVSBM</span>$<span class='fu'>estimate_sbm_from_neighbours</span>(
+  <span class='kw'>level</span> <span class='kw'>=</span> <span class='st'>"lower"</span>,
+  <span class='kw'>Q</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>fits</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>nb_cores</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+)</pre><p></div></p>
 
 <p><hr>
 <a id="method-estimate_sbm"></a></p><h3>Method <code>estimate_sbm()</code></h3>
@@ -229,13 +236,23 @@ Methods for global inference and model selection are included.</p>
 <a id="method-estimate_from_neighbours"></a></p><h3>Method <code>estimate_from_neighbours()</code></h3>
 
 <h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>MLVSBM</span>$<span class='fu'>estimate_from_neighbours</span>(<span class='no'>Q</span>, <span class='kw'>models</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>independent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre><p></div></p>
+<p><div class="r"></p><pre><span class='no'>MLVSBM</span>$<span class='fu'>estimate_from_neighbours</span>(
+  <span class='no'>Q</span>,
+  <span class='kw'>models</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>independent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>nb_cores</span> <span class='kw'>=</span> <span class='no'>nb_cores</span>
+)</pre><p></div></p>
 
 <p><hr>
 <a id="method-estimate_neighbours"></a></p><h3>Method <code>estimate_neighbours()</code></h3>
 
 <h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>MLVSBM</span>$<span class='fu'>estimate_neighbours</span>(<span class='no'>Q</span>, <span class='kw'>fit</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>independent</span> <span class='kw'>=</span> <span class='no'>independent</span>)</pre><p></div></p>
+<p><div class="r"></p><pre><span class='no'>MLVSBM</span>$<span class='fu'>estimate_neighbours</span>(
+  <span class='no'>Q</span>,
+  <span class='kw'>fit</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>independent</span> <span class='kw'>=</span> <span class='no'>independent</span>,
+  <span class='kw'>nb_cores</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+)</pre><p></div></p>
 
 <p><hr>
 <a id="method-merge_split_membership"></a></p><h3>Method <code>merge_split_membership()</code></h3>
@@ -249,19 +266,31 @@ Methods for global inference and model selection are included.</p>
 <a id="method-mc_ms_estimate"></a></p><h3>Method <code>mc_ms_estimate()</code></h3>
 
 <h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>MLVSBM</span>$<span class='fu'>mc_ms_estimate</span>(<span class='kw'>Z</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>independent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre><p></div></p>
+<p><div class="r"></p><pre><span class='no'>MLVSBM</span>$<span class='fu'>mc_ms_estimate</span>(<span class='kw'>Z</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>independent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>nb_cores</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre><p></div></p>
 
 <p><hr>
 <a id="method-estimate_one"></a></p><h3>Method <code>estimate_one()</code></h3>
 
 <h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>MLVSBM</span>$<span class='fu'>estimate_one</span>(<span class='no'>Q</span>, <span class='kw'>Z</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>independent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>init</span> <span class='kw'>=</span> <span class='st'>"hierarchical"</span>)</pre><p></div></p>
+<p><div class="r"></p><pre><span class='no'>MLVSBM</span>$<span class='fu'>estimate_one</span>(
+  <span class='no'>Q</span>,
+  <span class='kw'>Z</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>independent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>init</span> <span class='kw'>=</span> <span class='st'>"hierarchical"</span>,
+  <span class='kw'>nb_cores</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+)</pre><p></div></p>
 
 <p><hr>
 <a id="method-estimate_all_bm"></a></p><h3>Method <code>estimate_all_bm()</code></h3>
 
 <h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>MLVSBM</span>$<span class='fu'>estimate_all_bm</span>(<span class='kw'>Q</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>Z</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>independent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>clear</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre><p></div></p>
+<p><div class="r"></p><pre><span class='no'>MLVSBM</span>$<span class='fu'>estimate_all_bm</span>(
+  <span class='kw'>Q</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>Z</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>independent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>clear</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>nb_cores</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+)</pre><p></div></p>
 
 <p><hr>
 <a id="method-new"></a></p><h3>Method <code>new()</code></h3>
@@ -299,7 +328,7 @@ Methods for global inference and model selection are included.</p>
 <a id="method-simulate"></a></p><h3>Method <code><a href='https://rdrr.io/r/stats/simulate.html'>simulate()</a></code></h3>
 
 <h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>MLVSBM</span>$<span class='fu'><a href='https://rdrr.io/r/stats/simulate.html'>simulate</a></span>(<span class='kw'>affiliation</span> <span class='kw'>=</span> <span class='st'>"uniform"</span>, <span class='kw'>no_empty_org</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre><p></div></p>
+<p><div class="r"></p><pre><span class='no'>MLVSBM</span>$<span class='fu'><a href='https://rdrr.io/r/stats/simulate.html'>simulate</a></span>()</pre><p></div></p>
 
 <p><hr>
 <a id="method-clone"></a></p><h3>Method <code>clone()</code></h3>

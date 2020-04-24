@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MLVSBM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
       </span>
     </div>
 
@@ -123,7 +123,14 @@
     <p>Simulation an adjacency matrix</p>
     </div>
 
-    <pre class="usage"><span class='fu'>simulate_adjacency</span>(<span class='no'>Z</span>, <span class='no'>n</span>, <span class='no'>alpha</span>, <span class='no'>directed</span>, <span class='no'>distribution</span>)</pre>
+    <pre class="usage"><span class='fu'>simulate_adjacency</span>(
+  <span class='no'>Z</span>,
+  <span class='no'>n</span>,
+  <span class='no'>alpha</span>,
+  <span class='no'>directed</span>,
+  <span class='kw'>distribution</span> <span class='kw'>=</span> <span class='st'>"bernoulli"</span>,
+  <span class='kw'>no_isolated_node</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -146,7 +153,11 @@
     </tr>
     <tr>
       <th>distribution</th>
-      <td><p>The distribution of the indices: only "bernouilli"</p></td>
+      <td><p>The distribution of the indices: only "bernoulli"</p></td>
+    </tr>
+    <tr>
+      <th>no_isolated_node</th>
+      <td><p>A boolean, may row and column of adjacency matrices sum to 0</p></td>
     </tr>
     </table>
 
