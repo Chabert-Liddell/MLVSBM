@@ -128,6 +128,8 @@ MLVSBM$set(
   )
 MLVSBM$set(
   "public", "addmodel",
+#' @importFrom dplyr tibble
+#' @importFrom dplyr bind_rows
   function (fit) {
     private$fitted = c(private$fitted, list(fit))
     if (is.null(private$ICLtab)) {
