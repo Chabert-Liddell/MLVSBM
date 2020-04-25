@@ -128,27 +128,24 @@ MLVSBM$set(
   )
 MLVSBM$set(
   "public", "addmodel",
-#' @importFrom dplyr tibble
-#' @importFrom dplyr bind_rows
   function (fit) {
     private$fitted = c(private$fitted, list(fit))
     if (is.null(private$ICLtab)) {
       private$ICLtab <-
-        dplyr::tibble(index  = as.integer(1),
-                      Q_I      = fit$nb_clusters$I,
-                      Q_O      = fit$nb_clusters$O,
-                      ICL       = fit$ICL
-                  )
-      } else {
-        private$ICLtab <-
-          dplyr::bind_rows(
-            private$ICLtab,
-            dplyr::tibble(index  = as.integer(nrow(private$ICLtab) +1),
-                          Q_I    = fit$nb_clusters$I,
-                          Q_O    = fit$nb_clusters$O,
-                          ICL    = fit$ICL
-                          )
+        data.frame(index  = as.integer(1),
+                   Q_I      = fit$nb_clusters$I,
+                   Q_O      = fit$nb_clusters$O,
+                   ICL       = fit$ICL)
+    } else {
+      private$ICLtab <-
+        rbind(
+          private$ICLtab,
+          data.frame(index  = as.integer(nrow(private$ICLtab) +1),
+                     Q_I    = fit$nb_clusters$I,
+                     Q_O    = fit$nb_clusters$O,
+                     ICL    = fit$ICL
           )
-        }
+        )
     }
-  )
+  }
+)

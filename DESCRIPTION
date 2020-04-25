@@ -8,8 +8,12 @@ Authors@R:
            role = c("aut", "cre"),
            email = "saint-clair.chabert-liddell@agroparistech.fr")
 Maintainer: Saint-Clair Chabert-Liddell <saint-clair.chabert-liddell@agroparistech.frt>
-Description: Simulate, infer, partition as described in the following paper: 
-    https://arxiv.org/abs/1910.10512.
+Description: Simulation, inference and clustering of multilevel network using a
+    Stochastic Block Model framework as described in the following paper: 
+    https://arxiv.org/abs/1910.10512. A multilevel network is defined as the 
+    junction of two interaction networks, the upper level or inter-organizational  
+    level and the lower level or inter-individual level. 
+    The inter-level represents an affiliation relationship.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
