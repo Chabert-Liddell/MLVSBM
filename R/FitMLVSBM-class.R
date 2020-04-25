@@ -97,8 +97,8 @@ FitMLVSBM <-
              else choose(private$Q$O + 1, 2))
       },
       connect    = function(value) {
-        list(I = dplyr::if_else(private$directed_$I, 1, .5) * sum(private$M$I),
-             O = dplyr::if_else(private$directed_$O, 1, .5) * sum(private$M$O))
+        list(I = ifelse(private$directed_$I, 1, .5) * sum(private$M$I),
+             O = ifelse(private$directed_$O, 1, .5) * sum(private$M$O))
       },
       #' @field ICL Get the ICL model selection criterion of the mdeol
       ICL        = function(value) {
