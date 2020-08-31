@@ -76,14 +76,16 @@ split_clust <- function(X, Z, Q) {
 #'
 #' @examples
 merge_clust <- function(Z, Q) {
-  Z_merge = lapply(X = 1:choose(Q,2),
-                   FUN = function(q) {
-                     Z[Z == utils::combn(Q, 2)[2, q]] = utils::combn(Q, 2)[1, q]
-                     if(utils::combn(Q, 2)[2, q] < Q){
-                       Z[Z > utils::combn(Q, 2)[2, q]] = Z[Z > utils::combn(Q, 2)[2, q]] - 1
-                     }
-                     return(Z)
-                   })
+  Z_merge = lapply(
+    X = 1:choose(Q,2),
+    FUN = function(q) {
+      Z[Z == utils::combn(Q, 2)[2, q]] = utils::combn(Q, 2)[1, q]
+      if(utils::combn(Q, 2)[2, q] < Q){
+        Z[Z > utils::combn(Q, 2)[2, q]] = Z[Z > utils::combn(Q, 2)[2, q]] - 1
+        }
+      return(Z)
+      }
+    )
   return(Z_merge)
 }
 

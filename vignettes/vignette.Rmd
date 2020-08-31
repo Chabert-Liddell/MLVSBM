@@ -65,7 +65,7 @@ We can now infer the parameters, blocks and edge probabilities of our network by
 using the mlvlsbm_esimate_network function on an MLVSBM object. It will return the 
 best model for this network as another R6 object of type FitMLVSBM. 
 ```{r infer}
-fit <- MLVSBM:::mlvsbm_estimate_network(my_mlvsbm, nb_cores = 1)
+fit <- MLVSBM::mlvsbm_estimate_network(my_mlvsbm, nb_cores = 1L)
 ```
 
 ## Some useful output

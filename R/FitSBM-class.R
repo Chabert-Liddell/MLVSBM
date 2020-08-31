@@ -271,6 +271,7 @@ FitSBM$set("public", "permute_empty_class",
           }
         }
 )
+
 FitSBM$set("public", "clear",
         function(){
           private$pi     <-  NULL

@@ -2,11 +2,13 @@
 
 #' Create a MLVSBM object from observed data
 #'
-#' @param A A matrix the affiliation matrix with individuals in rows and
-#' organizations in columns
 #' @param X A list of 2 squares binary matrices,
 #' the first one being the individual or lower level
-#' the second one being the organisational or upper level
+#' the second one being the organizational or upper level
+#' @param A A matrix the affiliation matrix with individuals in rows and
+#' organizations in columns
+#' @param directed A list of 2 boolean are the upper and lower level
+#' directed or not. Default will check if the matrix are symmetric or not.
 #' @param distribution A list for the distribution of X,
 #' only "bernoulli" is implemented
 #'
@@ -20,9 +22,11 @@
 #'                   nrow = 10, ncol = 10)
 #' affiliation <- diag(1, 10)
 #' my_mlvsbm <- mlvsbm_create_network(X = list(I = ind_adj, O = org_adj),
+#'                                    directed = list(I = FALSE, O = FALSE),
 #'                                    A = affiliation)
 mlvsbm_create_network <-
-  function(X, A, distribution = list("bernoulli", "bernoulli")) {
+  function(X, A, directed = NULL,
+           distribution = list("bernoulli", "bernoulli")) {
     if (! is.matrix(A)) {
       warning(paste0("A must be a binary matrix!!!"))
     }
@@ -44,6 +48,10 @@ mlvsbm_create_network <-
         ncol(X[[2]]) != ncol(A)) {
       stop(paste0("A, X[[1]] and X[[2]]'s dimensions are not compatible!!!"))
     }
+    if (is.null(directed)) {
+      directed  <-  list(I = ! isSymmetric(X[[1]]),
+                      O = ! isSymmetric(X[[2]]))
+    }
     new_mlvsbm <-
       MLVSBM$new(
         n = list(I = nrow(A),
@@ -51,8 +59,7 @@ mlvsbm_create_network <-
         X = list(I = X[[1]],
                  O = X[[2]]),
         A = A,
-        directed = list(I = ! isSymmetric(X[[1]]),
-                        O = ! isSymmetric(X[[2]])),
+        directed = directed,
         distribution = list(I = distribution[[1]],
                             O = distribution[[2]])
         )
@@ -225,23 +232,29 @@ mlvsbm_estimate_network <-
         init_clustering <-
           list("I" = lower_fit$models[[which.max(lower_fit$ICL)]]$Z,
                "O" = upper_fit$models[[which.max(upper_fit$ICL)]]$Z)
+        fit <- mlv$estimate_all_bm(Q = nb_clusters,
+                                   Z = init_clustering,
+                                   nb_cores = nb_cores)
+        print(paste0("ICL for independent levels : ",
+                     max(lower_fit$ICL) + max(upper_fit$ICL)))
+        print(paste0("ICL for interdependent levels : ",
+                     fit$ICL))
+        if (max(lower_fit$ICL) + max(upper_fit$ICL) <= fit$ICL) {
+          print("=====Interdependence is detected between the two levels!=====")
+        } else {
+          print("=====The levels of this network are independent!=====")
+        }
+        return(fit)
       } else {
         nb_clusters <- list("I" = max(init_clustering[[1]]),
                             "O" = max(init_clustering[[2]]))
+        fit <- mlv$estimate_all_bm(Q = nb_clusters,
+                                   Z = init_clustering,
+                                   nb_cores = nb_cores)
+        print(paste0("ICL for interdependent levels : ",
+                     fit$ICL))
+        return(fit)
       }
-      fit <- mlv$estimate_all_bm(Q = nb_clusters,
-                                 Z = init_clustering,
-                                 nb_cores = nb_cores)
-      print(paste0("ICL for independent levels : ",
-                   max(lower_fit$ICL) + max(upper_fit$ICL)))
-      print(paste0("ICL for interdependent levels : ",
-                   fit$ICL))
-      if (max(lower_fit$ICL) + max(upper_fit$ICL) <= fit$ICL) {
-        print("=====Interdependence is detected between the two level=====")
-      } else {
-        print("=====The levels of this network are independent!=====")
-      }
-      return(fit)
     } else {
       fit <- mlv$estimate_one(Q = nb_clusters,
                        Z = init_clustering,

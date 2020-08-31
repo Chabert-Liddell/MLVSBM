@@ -4,15 +4,23 @@
 \alias{mlvsbm_create_network}
 \title{Create a MLVSBM object from observed data}
 \usage{
-mlvsbm_create_network(X, A, distribution = list("bernoulli", "bernoulli"))
+mlvsbm_create_network(
+  X,
+  A,
+  directed = NULL,
+  distribution = list("bernoulli", "bernoulli")
+)
 }
 \arguments{
 \item{X}{A list of 2 squares binary matrices,
 the first one being the individual or lower level
-the second one being the organisational or upper level}
+the second one being the organizational or upper level}
 
 \item{A}{A matrix the affiliation matrix with individuals in rows and
 organizations in columns}
+
+\item{directed}{A list of 2 boolean are the upper and lower level
+directed or not. Default will check if the matrix are symmetric or not.}
 
 \item{distribution}{A list for the distribution of X,
 only "bernoulli" is implemented}
@@ -30,5 +38,6 @@ org_adj <- matrix(stats::rbinom(n = 10**2, size = 1, prob = .3),
                   nrow = 10, ncol = 10)
 affiliation <- diag(1, 10)
 my_mlvsbm <- mlvsbm_create_network(X = list(I = ind_adj, O = org_adj),
+                                   directed = list(I = FALSE, O = FALSE),
                                    A = affiliation)
 }

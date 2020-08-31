@@ -29,7 +29,7 @@ MLVSBM$set(
     bound[Q_min] <- best_fit$bound
     condition <- TRUE
 
-    print(paste0("# cluster : ", best_fit$nb_clusters,
+    print(paste0("# blocks: ", best_fit$nb_clusters,
                  ", ICL = ", best_fit$ICL, " !" ))
     while (condition) {
       fits <- self$estimate_sbm_neighbours(level = level,
@@ -38,7 +38,7 @@ MLVSBM$set(
                                            Q_max = Q_max,
                                            fit = best_fit,
                                            nb_cores = nb_cores)
-      new_fit  <-  fits[[which.max(sapply(1:length(fits), function(x) fits[[x]]$ICL))]]
+      new_fit  <-  fits[[which.max(sapply(seq_along(fits), function(x) fits[[x]]$ICL))]]
       # spc_fit  <- self$estimate_sbm(level = level, init = init,
       #                               Q = min(best_fit$nb_clusters +1, Q_max))
       # if (new_fit$ICL < spc_fit$ICL) new_fit <- spc_fit
@@ -47,14 +47,16 @@ MLVSBM$set(
         model_list[[best_fit$nb_clusters]] <- best_fit
         ICL[best_fit$nb_clusters] <- best_fit$ICL
         bound[best_fit$nb_clusters] <- best_fit$bound
-        print(paste0("# cluster : ", best_fit$nb_clusters,
+        print(paste0("# blocks: ", best_fit$nb_clusters,
                      ", ICL = ", best_fit$ICL, " !" ))
       } else {
         condition = FALSE
       }
     }
     # Descending
-    best_fit <- self$estimate_sbm(level = level, Q = floor(Q_max/2), init = init)
+    best_fit <- self$estimate_sbm(level = level,
+                                  Q = floor(Q_max/2),
+                                  init = init)
     if (is.null(model_list[[best_fit$nb_clusters]]) |
         ICL[best_fit$nb_clusters] < best_fit$ICL) {
       model_list[[floor(Q_max/2)]] <- best_fit
@@ -62,7 +64,7 @@ MLVSBM$set(
       bound[best_fit$nb_clusters] <- best_fit$bound
     }
     condition <- TRUE
-    print(paste0("# cluster : ", best_fit$nb_clusters,
+    print(paste0("# blocks: ", best_fit$nb_clusters,
                  ", ICL = ", best_fit$ICL, " !" ))
     while (condition) {
       fits <- self$estimate_sbm_neighbours(level = level,
@@ -84,7 +86,7 @@ MLVSBM$set(
           ICL[best_fit$nb_clusters] <- best_fit$ICL
           bound[best_fit$nb_clusters] <- best_fit$bound
         }
-        print(paste0("# cluster : ", best_fit$nb_clusters,
+        print(paste0("# blocks: ", best_fit$nb_clusters,
                      ", ICL = ", best_fit$ICL, " !" ))
         # } else {
         #   print(paste0("Switching to neighbours mode!"))
@@ -702,8 +704,8 @@ MLVSBM$set(
                   condition = FALSE
                   # }
                 }
-      print(paste0("======= # Individual clusters : ", best_model$nb_clusters$I,
-                   " , # Organisation clusters ", best_model$nb_clusters$O,
+      print(paste0("======= # Individual blocks : ", best_model$nb_clusters$I,
+                   " , # Organizational blocks ", best_model$nb_clusters$O,
                    ",  ICL : ", best_model$ICL, "========"))
     }
   return(best_model)
