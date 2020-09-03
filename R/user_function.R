@@ -35,12 +35,12 @@ mlvsbm_create_network <-
       warning(paste0("All rows of A must have exactly one 1!!!"))
     }
     if (! is.matrix(X[[1]]) |
-        any(X[[1]] != 0 & X[[1]] != 1) |
+        any(X[[1]] != 0 & X[[1]] != 1, na.rm = TRUE) |
         ncol(X[[1]]) != nrow(X[[1]])) {
       warning(paste0("X[[1]] must be a square binary matrix!!!"))
     }
     if (! is.matrix(X[[2]]) |
-        any(X[[2]] != 0 & X[[2]] != 1)|
+        any(X[[2]] != 0 & X[[2]] != 1, na.rm = TRUE)|
         ncol(X[[2]]) != nrow(X[[2]])) {
       warning(paste0("X[[2]] must be a square binary matrix!!!"))
     }
@@ -50,7 +50,7 @@ mlvsbm_create_network <-
     }
     if (is.null(directed)) {
       directed  <-  list(I = ! isSymmetric(X[[1]]),
-                      O = ! isSymmetric(X[[2]]))
+                         O = ! isSymmetric(X[[2]]))
     }
     new_mlvsbm <-
       MLVSBM$new(
