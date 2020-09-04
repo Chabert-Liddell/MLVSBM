@@ -93,6 +93,12 @@ res_cost %>% group_by(nO, nI, Q) %>%
 # Near detectability threshold
 ################################################################################
 
+detect_threshold <- function(n, q) {
+  polyroot(c(n*q*(n*q-2),-2*n*(n*q+1),n**2 ))
+}
+detect_threshold(40, .1)
+detect_threshold(120, .1)
+
 Q     <- list(I = 2, O = 2)
 n     <- list(I = 60*Q$I, O = 20*Q$O)
 alpha <- list()
@@ -103,18 +109,14 @@ gamma   <- .1 * (diag(8, Q$I, Q$O) + 2/Q$I)
 
 
 
-detect_threshold <- function(n, q) {
-  polyroot(c(n*q*(n*q-2),-2*n*(n*q+1),n**2 ))
-}
-detect_threshold(40, .1)
-detect_threshold(120, .1)
+
 
 
 res_detect_thresh <- tibble()
-for (g in seq(.75, 1, .05)) {
+for (g in seq(.5, 1, .05)) {
   gamma <-   matrix(c(g, 1-g, 1-g, g), 2, 2)
   res <- pbmcapply::pbmclapply(
-    X = seq(5),
+    X = seq(50),
     FUN = function(i) {
       mlvl <-
         MLVSBM::mlvsbm_simulate_network(
@@ -152,14 +154,11 @@ for (g in seq(.75, 1, .05)) {
   res$d <- as.factor(g)
   res_detect_thresh <- bind_rows(res_detect_thresh, res)
 }
-
+write_rds(res_detect_thresh, "~/Documents/r_project/mlvsbm_analysis/res_detect_thresh.rds")
 res_detect_thresh %>%
   pivot_longer(-d, names_to = "Model", values_to = "ARI") %>%
-  ggplot(aes(x = d, y = ARI)) +
-  geom_boxplot() +
-  facet_wrap(~ Model)
-
-
-saveRDS("~/Documents/r_project/mlvsbm_analysis/")
-
-
+  ggplot(aes(x = d, y = ARI, group = Model, fill = Model)) +
+  stat_summary(geom = "ribbon", fun.data = "mean_se", alpha = .3) +
+  stat_summary(geom = "line", fun = "mean", col = "black", size = 1.1) +
+  facet_wrap(~ Model) +
+  theme_bw()

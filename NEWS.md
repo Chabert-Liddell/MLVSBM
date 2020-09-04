@@ -1,4 +1,6 @@
 # MLVSBM 0.1.3
+* Fixed but with `NA` interactions on user functions
+* added `sbm` package dependency for better initialization
 
 # MLVSBM 0.1.2
 * Added options for `mlvl_estimate_network()` function
