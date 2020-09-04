@@ -198,6 +198,8 @@ mlvsbm_simulate_network <-
 #' for Windows and \code{detectCores()/2} for Linux and MacOS
 #'
 #' @return A FitMLVSBM object, the best inference of the network
+#'
+#' @importFrom sbm estimateSimpleSBM
 #' @export
 
 #' @examples
@@ -225,8 +227,30 @@ mlvsbm_estimate_network <-
     }
     if (is.null(nb_clusters)) {
       if (is.null(init_clustering)) {
-        lower_fit <- mlv$estimate_level(level = "lower", nb_cores = nb_cores)
-        upper_fit <- mlv$estimate_level(level = "upper", nb_cores = nb_cores)
+        if (any(is.na(mlv$adjacency_matrix[[1]]))) {
+          lower_fit <- mlv$estimate_level(level = "lower", nb_cores = nb_cores)
+        } else {
+          sbm_fit <- sbm::estimateSimpleSBM(netMat = mlv$adjacency_matrix[[1]],
+                                             model = mlv$distribution[[1]],
+                                             directed = mlv$directed[[1]],
+                                             estimOptions = list(plot = FALSE,
+                                                                 verbosity = 0))
+          lower_fit <- mlv$estimate_level(level =  "lower",
+                                          Z = sbm_fit$memberships,
+                                          nb_cores = nb_cores)
+        }
+        if (any(is.na(mlv$adjacency_matrix[[1]]))) {
+          upper_fit <- mlv$estimate_level(level = "upper", nb_cores = nb_cores)
+        } else {
+          sbm_fit <- sbm::estimateSimpleSBM(netMat = mlv$adjacency_matrix[[2]],
+                                             model = mlv$distribution[[2]],
+                                             directed = mlv$directed[[2]],
+                                             estimOptions = list(plot = FALSE,
+                                                                 verbosity = 0))
+          upper_fit <- mlv$estimate_level(level =  "upper",
+                                          Z = sbm_fit$memberships,
+                                          nb_cores = nb_cores)
+        }
         nb_clusters <- list("I" = which.max(lower_fit$ICL),
                             "O" = which.max(upper_fit$ICL))
         init_clustering <-

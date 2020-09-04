@@ -15,20 +15,34 @@ MLVSBM$set(
   function(level = "lower",
            Q_min = 1,
            Q_max = 10,
+           Z     = NULL,
            init = "hierarchical",
            depth = 1,
            nb_cores = NULL) {
-    model_list <-  vector("list", Q_max)
-    ICL <- rep(-Inf, Q_max)
-    bound <- rep(-Inf, Q_max)
+    if (is.null(Z)) {
+      model_list <-  vector("list", Q_max)
+    } else {
+      model_list <-  vector("list", max(max(Z), Q_max))
+    }
+    ICL <- rep(-Inf, length(model_list))
+    bound <- rep(-Inf, length(model_list))
     print(paste0("Infering ", level, " level :"))
     # Ascending
-    best_fit <- self$estimate_sbm(level = level, Q = Q_min, init = init)
-    model_list[[Q_min]] <- best_fit
-    ICL[Q_min] <- best_fit$ICL
-    bound[Q_min] <- best_fit$bound
+    if (! is.null(Z)) {
+      init <- "merge_split"
+      best_fit <- self$estimate_sbm(level = level, Z = Z,
+                                    Q = max(Z), init = init)
+      model_list[[max(Z)]] <- best_fit
+      ICL[max(Z)] <- best_fit$ICL
+      bound[max(Z)] <- best_fit$bound
+    } else {
+      best_fit <- self$estimate_sbm(level = level, Z = Z,
+                                    Q = Q_min, init = init)
+      model_list[[Q_min]] <- best_fit
+      ICL[Q_min] <- best_fit$ICL
+      bound[Q_min] <- best_fit$bound
+    }
     condition <- TRUE
-
     print(paste0("# blocks: ", best_fit$nb_clusters,
                  ", ICL = ", best_fit$ICL, " !" ))
     while (condition) {
@@ -54,55 +68,57 @@ MLVSBM$set(
       }
     }
     # Descending
-    best_fit <- self$estimate_sbm(level = level,
-                                  Q = floor(Q_max/2),
-                                  init = init)
-    if (is.null(model_list[[best_fit$nb_clusters]]) |
-        ICL[best_fit$nb_clusters] < best_fit$ICL) {
-      model_list[[floor(Q_max/2)]] <- best_fit
-      ICL[best_fit$nb_clusters] <- best_fit$ICL
-      bound[best_fit$nb_clusters] <- best_fit$bound
-    }
-    condition <- TRUE
-    print(paste0("# blocks: ", best_fit$nb_clusters,
-                 ", ICL = ", best_fit$ICL, " !" ))
-    while (condition) {
-      fits <- self$estimate_sbm_neighbours(level = level,
-                                           Q = best_fit$nb_clusters,
-                                           Q_min = Q_min,
-                                           Q_max = Q_max,
-                                           fit = best_fit,
-                                           nb_cores = nb_cores)
-      new_fit  <-  fits[[
-        which.max(sapply(1:length(fits), function(x) fits[[x]]$ICL))]]
-      # # spc_fit  <- self$estimate_sbm(level = level, init = init,
-      # #                               Q = max(best_fit$nb_clusters -1, Q_max))
-      # if (new_fit$ICL < spc_fit$ICL) new_fit <- spc_fit
-      if (new_fit$ICL > best_fit$ICL) {
-        best_fit  <-  new_fit
-        if (is.null(model_list[[best_fit$nb_clusters]]) |
-            ICL[best_fit$nb_clusters] < best_fit$ICL) {
-          model_list[[best_fit$nb_clusters]] <- best_fit
-          ICL[best_fit$nb_clusters] <- best_fit$ICL
-          bound[best_fit$nb_clusters] <- best_fit$bound
+    if (is.null(Z)) {
+      best_fit <- self$estimate_sbm(level = level,
+                                    Q = floor(Q_max/2),
+                                    init = init)
+      if (is.null(model_list[[best_fit$nb_clusters]]) |
+          ICL[best_fit$nb_clusters] < best_fit$ICL) {
+        model_list[[floor(Q_max/2)]] <- best_fit
+        ICL[best_fit$nb_clusters] <- best_fit$ICL
+        bound[best_fit$nb_clusters] <- best_fit$bound
+      }
+      condition <- TRUE
+      print(paste0("# blocks: ", best_fit$nb_clusters,
+                   ", ICL = ", best_fit$ICL, " !" ))
+      while (condition) {
+        fits <- self$estimate_sbm_neighbours(level = level,
+                                             Q = best_fit$nb_clusters,
+                                             Q_min = Q_min,
+                                             Q_max = Q_max,
+                                             fit = best_fit,
+                                             nb_cores = nb_cores)
+        new_fit  <-  fits[[
+          which.max(sapply(1:length(fits), function(x) fits[[x]]$ICL))]]
+        # # spc_fit  <- self$estimate_sbm(level = level, init = init,
+        # #                               Q = max(best_fit$nb_clusters -1, Q_max))
+        # if (new_fit$ICL < spc_fit$ICL) new_fit <- spc_fit
+        if (new_fit$ICL > best_fit$ICL) {
+          best_fit  <-  new_fit
+          if (is.null(model_list[[best_fit$nb_clusters]]) |
+              ICL[best_fit$nb_clusters] < best_fit$ICL) {
+            model_list[[best_fit$nb_clusters]] <- best_fit
+            ICL[best_fit$nb_clusters] <- best_fit$ICL
+            bound[best_fit$nb_clusters] <- best_fit$bound
+          }
+          print(paste0("# blocks: ", best_fit$nb_clusters,
+                       ", ICL = ", best_fit$ICL, " !" ))
+          # } else {
+          #   print(paste0("Switching to neighbours mode!"))
+          #   new_fit <- self$estimate_sbm_from_neighbours(
+          #     Q = best_fit$nb_clusters,
+          #     fits = fits)
+          #   if ((!is.null(new_fit)) & (new_fit$bound > best_fit$bound)) {
+          #     best_fit  <-  new_fit
+          #     model_list <- c(model_list, best_fit)
+          #     ICL <- c(ICL, best_fit$ICL)
+          #     bound <- c(bound, best_fit$bound)
+          #     print(paste0("# cluster : ", best_fit$nb_clusters,
+          #                  ", ICL = ", best_fit$ICL, " !" ))
+        } else {
+          condition = FALSE
+          # }
         }
-        print(paste0("# blocks: ", best_fit$nb_clusters,
-                     ", ICL = ", best_fit$ICL, " !" ))
-        # } else {
-        #   print(paste0("Switching to neighbours mode!"))
-        #   new_fit <- self$estimate_sbm_from_neighbours(
-        #     Q = best_fit$nb_clusters,
-        #     fits = fits)
-        #   if ((!is.null(new_fit)) & (new_fit$bound > best_fit$bound)) {
-        #     best_fit  <-  new_fit
-        #     model_list <- c(model_list, best_fit)
-        #     ICL <- c(ICL, best_fit$ICL)
-        #     bound <- c(bound, best_fit$bound)
-        #     print(paste0("# cluster : ", best_fit$nb_clusters,
-        #                  ", ICL = ", best_fit$ICL, " !" ))
-      } else {
-        condition = FALSE
-        # }
       }
     }
 #     models <- lapply(seq(Q_min, Q_max), function(i) NULL)

@@ -1,0 +1,150 @@
+---
+title: "Hard Inference"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(MLVSBM)
+library(aricode)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(pbmcapply)
+```
+
+In this vignette we are interested in the behavior of our inference algorithm when both level of our multilevel network are hard to infer.
+
+For a standard Stochastic Block Model, a well known result is the detectability threshold when the mesoscale structure is the one of a planted partition, ie. the connectivity parameter matrix is of the shape of:
+$$\begin{pmatrix} 
+p & q \\ 
+q & p
+\end{pmatrix},$$
+where $p$ and $q$ are the connection probabilities for respectively an intra-block interaction and an extra-block interaction.
+
+Let define a multilevel network with 120 individuals belonging to one of 2 blocks of individuals and 40 organizations belonging to one of 2 blocks of organizations of equal size on average.
+```{r}
+Q     <- list(I = 2, O = 2)
+n     <- list(I = 60*Q$I, O = 20*Q$O)
+pi      <- rep(1/Q$O, Q$O)
+gamma   <- .1 * (diag(8, Q$I, Q$O) + 2/Q$I)
+```
+
+Then the detectability threshold for each level is given by:
+```{r}
+detect_threshold <- function(n, q) {
+  polyroot(c(n*q*(n*q-2),-2*n*(n*q+1),n**2 ))
+}
+```
+```{r}
+Re(detect_threshold(120, .1))
+```
+for the inter-individual level and 
+
+```{r}
+Re(detect_threshold(40, .1))
+```
+for the inter-organizational level.
+
+
+So we will fix the connectivity parameters a little bit above the detectability threshold in order to get a very challenging inference for a single level SBM and to see how the levels of the MLVSBM might help each other when the dependence is strong.
+```{r}
+alpha <- list()
+alpha$I <- matrix(c(.1, .21, .21, .1), 2, 2)
+alpha$O <- matrix(c(.29, .1, .1, .29), 2, 2)
+```
+
+```{r simulate, echo=FALSE, eval=TRUE}
+if(! file.exists("res_detect_thresh.rds")) {
+set.seed(42)
+res_detect_thresh <- tibble()
+for (g in seq(.5, 1, .05)) {
+  gamma <-   matrix(c(g, 1-g, 1-g, g), 2, 2)
+  res <- pbmcapply::pbmclapply(
+    X = seq(50L),
+    FUN = function(i) {
+      mlvl <-
+        MLVSBM::mlvsbm_simulate_network(
+          n = n, Q = Q, pi = pi, gamma = gamma, alpha = alpha,
+          directed = list(I = FALSE, O = FALSE))
+      fit <- MLVSBM::mlvsbm_estimate_network(mlvl, nb_cores = 2L)
+      return(tibble("SBM_ARI_I" =
+                      aricode::ARI(
+                        c1 = mlvl$memberships$I,
+                        c2 = mlvl$fittedmodels_sbm$lower[[which.max(mlvl$ICL_sbm$lower)]]$Z),
+                    "SBM_ARI_O" =
+                     aricode::ARI(
+                       c1 = mlvl$memberships$O,
+                       c2 = mlvl$fittedmodels_sbm$upper[[which.max(mlvl$ICL_sbm$upper)]]$Z),
+                    "MLVL_ARI_I" = aricode::ARI(
+                      c1 = mlvl$memberships$I,
+                      c2 = fit$Z$I),
+                    "MLVL_ARI_O" = aricode::ARI(
+                      c1 = mlvl$memberships$O,
+                      c2 = fit$Z$O)))
+    },
+    mc.cores = 6L)
+  res <- bind_rows(res)
+  res$g <- as.factor(g)
+  res_detect_thresh <- bind_rows(res_detect_thresh, res)
+}
+saveRDS(res_detect_thresh, file = "res_detect_thresh.rds")
+}
+
+```
+```{r simulate_echo, echo=TRUE, eval=FALSE}
+set.seed(42)
+res_detect_thresh <- tibble()
+for (g in seq(.5, 1, .05)) {
+  gamma <-   matrix(c(g, 1-g, 1-g, g), 2, 2)
+  res <- pbmcapply::pbmclapply(
+    X = seq(50L),
+    FUN = function(i) {
+      mlvl <-
+        MLVSBM::mlvsbm_simulate_network(
+          n = n, Q = Q, pi = pi, gamma = gamma, alpha = alpha,
+          directed = list(I = FALSE, O = FALSE))
+      fit <- MLVSBM::mlvsbm_estimate_network(mlvl, nb_cores = 2L)
+      return(tibble("SBM_ARI_I" =
+                      aricode::ARI(
+                        c1 = mlvl$memberships$I,
+                        c2 = mlvl$fittedmodels_sbm$lower[[which.max(mlvl$ICL_sbm$lower)]]$Z),
+                    "SBM_ARI_O" =
+                     aricode::ARI(
+                       c1 = mlvl$memberships$O,
+                       c2 = mlvl$fittedmodels_sbm$upper[[which.max(mlvl$ICL_sbm$upper)]]$Z),
+                    "MLVL_ARI_I" = aricode::ARI(
+                      c1 = mlvl$memberships$I,
+                      c2 = fit$Z$I),
+                    "MLVL_ARI_O" = aricode::ARI(
+                      c1 = mlvl$memberships$O,
+                      c2 = fit$Z$O)))
+    },
+    mc.cores = 6L)
+  res <- bind_rows(res)
+  res$g <- as.factor(g)
+  res_detect_thresh <- bind_rows(res_detect_thresh, res)
+}
+```
+
+
+## Plots & Results
+
+With $g$, the diagonal of the mixture dependency parameter $\gamma$, we notice that the greater the depedence the better the level are able to help each other for the recovery of the clutering. This is obvious from the beginning for the inter-organizational level which is slightly harder to infer. For the inter-individual we notice a great improvement when $g \geq .9$.
+
+```{r plot}
+res_detect_thresh %>%
+  pivot_longer(-g, names_to = "Model", values_to = "ARI") %>%
+  ggplot(aes(x = g, y = ARI, group = Model, fill = Model)) +
+  stat_summary(geom = "ribbon", fun.data = "mean_se", alpha = .3) +
+  stat_summary(geom = "line", fun = "mean", col = "black", size = 1.1) +
+  facet_wrap(~ Model) +
+  theme_bw()
+
+```
+
