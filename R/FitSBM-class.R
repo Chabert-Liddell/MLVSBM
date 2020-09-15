@@ -90,7 +90,7 @@ FitSBM <-
       ICL        = function(value) self$likelihood - self$penalty,
       #' @field penalty Get the penalty used for computing the ICL
       penalty    = function(value) {
-        .5*self$df_connect*log(self$connect) + self$df_mixture*log(private$n)
+        .5*self$df_connect*log(self$connect) + .5*self$df_mixture*log(private$n)
       },
       #' @field Z Access the vector of block membership (clustering)
       Z          = function(value){
