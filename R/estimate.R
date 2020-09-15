@@ -303,8 +303,7 @@ MLVSBM$set(
                     X = private$X,
                     A = private$A,
                     directed = private$directed_,
-                    distribution = private$distribution_,
-                    independent = independent)
+                    distribution = private$distribution_)
     if (is.null(Z)) {
       fit$do_vem(init = init)
       }  else {
