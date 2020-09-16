@@ -100,9 +100,9 @@ FitMLVSBM <-
         list(I = ifelse(private$directed_$I, 1, .5) * sum(private$M$I),
              O = ifelse(private$directed_$O, 1, .5) * sum(private$M$O))
       },
-      #' @field ICL Get the ICL model selection criterion of the mdeol
+      #' @field ICL Get the ICL model selection criterion of the model
       ICL        = function(value) {
-        self$complete_likelihood + self$entropy - self$full_penalty
+        self$complete_likelihood - self$full_penalty #+ self$entropy
         },
       #' @field full_penalty Get the penalty used to compute the ICL
       full_penalty    = function(value) {

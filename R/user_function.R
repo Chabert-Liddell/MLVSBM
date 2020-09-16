@@ -28,21 +28,26 @@ mlvsbm_create_network <-
   function(X, A, directed = NULL,
            distribution = list("bernoulli", "bernoulli")) {
     if (! is.matrix(A)) {
-      warning(paste0("A must be a binary matrix!!!"))
+      stop(paste0("A must be a binary matrix!!!"))
     }
     if ( any(rowSums(A) != 1) |
          any(A != 0 & A != 1)) {
       warning(paste0("All rows of A must have exactly one 1!!!"))
+      warning(paste0("Affiliation has been normalized so that any rows sum to one!"))
+      A <- A/rowSums(A)
+    }
+    if ( any(rowSums(A) == 0)) {
+      stop(paste0("All rows of A must have at least one non 0 entry!!!"))
     }
     if (! is.matrix(X[[1]]) |
         any(X[[1]] != 0 & X[[1]] != 1, na.rm = TRUE) |
         ncol(X[[1]]) != nrow(X[[1]])) {
-      warning(paste0("X[[1]] must be a square binary matrix!!!"))
+      stop(paste0("X[[1]] must be a square binary matrix!!!"))
     }
     if (! is.matrix(X[[2]]) |
         any(X[[2]] != 0 & X[[2]] != 1, na.rm = TRUE)|
         ncol(X[[2]]) != nrow(X[[2]])) {
-      warning(paste0("X[[2]] must be a square binary matrix!!!"))
+      stop(paste0("X[[2]] must be a square binary matrix!!!"))
     }
     if (ncol(X[[1]]) != nrow(A) |
         ncol(X[[2]]) != ncol(A)) {
