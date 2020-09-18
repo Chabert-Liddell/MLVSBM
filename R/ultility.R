@@ -52,15 +52,15 @@ hierarClust <- function(X, K){
 #' @examples
 split_clust <- function(X, Z, Q) {
   Z_split <-  lapply(
-    seq(Q),
-    q <- function(q) {
+    X = seq(Q),
+    FUN =  function(q) {
       if (sum(Z==q) < 2) return()
       Z_new        <-  Z
-      Z_new[Z==q]  <-  hierarClust(X[Z==q, Z==q], 2)+Q
+      Z_new[Z==q]  <-  hierarClust(X[Z==q, Z==q], 2) + Q
       Z_new[Z_new == Q + 2]  <-  q
       return(Z_new)
     })
-  Z_split  <-  Z_split[which(sapply(Z_split, x <- function(x) ! is.null(x)))]
+  Z_split  <-  Z_split[which(sapply(X = Z_split, FUN = function(x) ! is.null(x)))]
   return(Z_split)
 }
 

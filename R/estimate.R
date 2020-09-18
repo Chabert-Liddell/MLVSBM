@@ -337,7 +337,8 @@ MLVSBM$set(
       if (Q$I == fit$nb_clusters$I + 1) {
         if (Q$O == fit$nb_clusters$O) {
           new_model <- self$mc_ms_estimate(
-            Z = list("I" = split_clust(private$X$I, fit$Z$I, fit$nb_lusters$I),
+            Z = list("I" = split_clust(fit$adjacency_matrix$I,
+                                       fit$Z$I, fit$nb_clusters$I),
                      "O" = list(fit$Z$O)),
             independent  = independent,
             nb_cores = nb_cores
@@ -348,7 +349,7 @@ MLVSBM$set(
       if (Q$I == fit$nb_clusters$I - 1) {
         if (Q$O == fit$nb_clusters$O) {
           new_model <- self$mc_ms_estimate(
-            Z = list("I" = merge_clust(Z = fit$Z$I, Q = fit$nRClusters),
+            Z = list("I" = merge_clust(Z = fit$Z$I, Q = fit$nb_clusters$O),
                      "O" = list(fit$Z$O)),
             independent = independent,
             nb_cores = nb_cores)
@@ -359,7 +360,8 @@ MLVSBM$set(
         if (Q$O == fit$nb_clusters$O + 1) {
           new_model <- self$mc_ms_estimate(
             Z = list("I" = list(fit$Z$I),
-                     "O" = split_clust(private$XL, fit$Z$O, fit$nLClusters)),
+                     "O" = split_clust(fit$adjacency_matrix$O,
+                                       fit$Z$O, fit$nb_clusters$O)),
             independent = independent,
             nb_cores = nb_cores)
           new_models <- c(new_models, list(new_model))
@@ -369,7 +371,7 @@ MLVSBM$set(
         if (Q$O == fit$nb_clusters$O - 1) {
           new_model <- self$mc_ms_estimate(
             Z = list("I" = list(fit$Z$I),
-                     "O" = merge_clust(Z = fit$Z$O, Q = fit$nLClusters)),
+                     "O" = merge_clust(Z = fit$Z$O, Q = fit$nb_clusters$O)),
             independent = independent,
             nb_cores = nb_cores)
           new_models <- c(new_models, list(new_model))
@@ -468,12 +470,12 @@ MLVSBM$set(
     Z$I$same  <-  list(fitted$Z$I)
     Z$O$same  <-  list(fitted$Z$O)
     if (estim_Q$I <= private$max_Q$I) {
-      Z$I$split = split_clust(private$X$I, fitted$Z$I, estim_Q$I)
+      Z$I$split = split_clust(fitted$adjacency_matrix$I, fitted$Z$I, estim_Q$I)
       } else {
         Z$I$split = list(NULL)
         }
     if (estim_Q$O <= private$max_Q$O) {
-      Z$O$split = split_clust(private$X$O, fitted$Z$O, estim_Q$O)
+      Z$O$split = split_clust(fitted$adjacency_matrix$O, fitted$Z$O, estim_Q$O)
       } else {
         Z$O$split = list(NULL)
         }
@@ -615,7 +617,8 @@ MLVSBM$set(
           independent = independent,
           nb_cores = nb_cores)
         best <- self$mc_ms_estimate(
-          Z = list("I" = split_clust(private$X$I, fitted$Z$I, fitted$nb_clusters$I),
+          Z = list("I" = split_clust(fitted$adjacency_matrix$I,
+                                     fitted$Z$I, fitted$nb_clusters$I),
                    "O"= list(fitted$Z$O)),
           independent = independent,
           nb_cores = nb_cores)
@@ -631,7 +634,7 @@ MLVSBM$set(
           nb_cores = nb_cores)
         best  <- self$mc_ms_estimate(
           Z = list("I" = list(fitted$Z$I),
-                   "O" = split_clust(private$X$O, fitted$Z$O, fitted$nb_clusters$O)),
+                   "O" = split_clust(fitted$adjacency_matrix$O, fitted$Z$O, fitted$nb_clusters$O)),
           independent = independent,
           nb_cores = nb_cores)
         models <- c(models, list(best))
