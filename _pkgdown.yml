@@ -32,6 +32,7 @@ reference:
   - '`mlvsbm_create_network`'
   - '`mlvsbm_estimate_network`'
   - '`mlvsbm_simulate_network`'
+  - '`mlvsbm_log_likelihood`'
 - title: Advanced object functions
   desc:  ~
   contents:

@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hard Inference • MLVSBM</title>
+<title>Hard to Infer Levels • MLVSBM</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Hard Inference">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Hard to Infer Levels">
 <meta property="og:description" content="MLVSBM">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -88,7 +88,8 @@
       </header><script src="hard_to_infer_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Hard Inference</h1>
+      <h1 data-toc-skip>Hard to Infer Levels</h1>
+            <h3 class="subtitle">Benefits of the Multilevel Modeling</h3>
             
       
       <small class="dont-index">Source: <a href="https://github.com/Chabert-Liddell/MLVSBM/blob/master/vignettes/hard_to_infer.Rmd"><code>vignettes/hard_to_infer.Rmd</code></a></small>
@@ -104,11 +105,11 @@
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ggplot2</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">tidyr</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">pbmcapply</span>)</pre></body></html></div>
-<div id="description-of-the-simulation" class="section level2">
+<div id="simulation-scenario" class="section level2">
 <h2 class="hasAnchor">
-<a href="#description-of-the-simulation" class="anchor"></a>Description of the Simulation</h2>
+<a href="#simulation-scenario" class="anchor"></a>Simulation Scenario</h2>
 <p>In this vignette we are interested in the behavior of our inference algorithm when both level of our multilevel network are hard to infer.</p>
-<p>For a standard Stochastic Block Model, a well known result is the detectability threshold when the mesoscale structure is the one of a planted partition, ie. the connectivity parameter matrix has the following shape: <span class="math display">\[\begin{pmatrix} 
+<p>For a standard Stochastic Block Model, a well known result is the detectability threshold when the mesoscale structure is the one of a planted partition, i.e. the connectivity parameter matrix has the following shape: <span class="math display">\[\begin{pmatrix} 
 p &amp; q \\ 
 q &amp; p
 \end{pmatrix},\]</span> where <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span> are the connection probabilities for respectively an intra-block interaction and an extra-block interaction.</p>
@@ -127,7 +128,7 @@ q &amp; p
 <div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/complex.html">Re</a></span>(<span class="fu">detect_threshold</span>(<span class="fl">40</span>, <span class="fl">.1</span>))
 <span class="co">#&gt; [1] 0.02192236 0.22807764</span></pre></body></html></div>
 <p>for the inter-organizational level.</p>
-<p>So we will fix the connectivity parameters a little bit above the detectability threshold in order to get a very challenging inference for a single level SBM and to see how the levels of the MLVSBM might help each other when the dependence is strong.</p>
+<p>So we will fix the connectivity parameters a little bit above the detectability threshold in order to get a very challenging inference for a single level SBM and to see how the information in each level of the MLVSBM might help to recover the structure of the other level, and how does it vary with the strength of the inter-level dependence.</p>
 <div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">alpha</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>()
 <span class="no">alpha</span>$<span class="no">I</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">.1</span>, <span class="fl">.21</span>, <span class="fl">.21</span>, <span class="fl">.1</span>), <span class="fl">2</span>, <span class="fl">2</span>)
 <span class="no">alpha</span>$<span class="no">O</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">.29</span>, <span class="fl">.1</span>, <span class="fl">.1</span>, <span class="fl">.29</span>), <span class="fl">2</span>, <span class="fl">2</span>)</pre></body></html></div>
@@ -169,10 +170,10 @@ g &amp; 1-g \\
 }</pre></body></html></div>
 <div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">res_detect_thresh</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span>(<span class="kw">file</span> <span class="kw">=</span> <span class="st">"res_detect_thresh.rds"</span>)</pre></body></html></div>
 </div>
-<div id="plots-results" class="section level2">
+<div id="results" class="section level2">
 <h2 class="hasAnchor">
-<a href="#plots-results" class="anchor"></a>Plots &amp; Results</h2>
-<p>With <span class="math inline">\(g\)</span>, the diagonal of the mixture dependency parameter <span class="math inline">\(\gamma\)</span>, we notice that the greater the interdependence the better the levels are able to help each other for the recovery of the clustering. This is obvious from the beginning for the inter-organizational level which is slightly harder to infer. For the inter-individual we notice a great improvement when <span class="math inline">\(g \geq .9\)</span>. In all case, the problem so we do not obtain a perfect recovery of the blocks every time.</p>
+<a href="#results" class="anchor"></a>Results</h2>
+<p>With <span class="math inline">\(g\)</span>, the diagonal entry of the mixture dependency parameter <span class="math inline">\(\gamma\)</span>, we notice that the greater the interdependence the better the levels are able to help each other in the recovery of the clustering. This is obvious from the beginning for the inter-organizational level which is slightly harder to infer. For the inter-individual we notice a great improvement when <span class="math inline">\(g \geq .9\)</span>. In all case, the problem is hard so we do not obtain a perfect recovery of the blocks every time.</p>
 <div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">res_detect_thresh</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span>(-<span class="no">g</span>, <span class="kw">names_to</span> <span class="kw">=</span> <span class="st">"Model"</span>, <span class="kw">values_to</span> <span class="kw">=</span> <span class="st">"ARI"</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">g</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="no">ARI</span>, <span class="kw">group</span> <span class="kw">=</span> <span class="no">Model</span>, <span class="kw">fill</span> <span class="kw">=</span> <span class="no">Model</span>)) +
@@ -188,14 +189,14 @@ g &amp; 1-g \\
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">g</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="no">`Perfect Recovery`</span>, <span class="kw">group</span> <span class="kw">=</span> <span class="no">Model</span>, <span class="kw">col</span> <span class="kw">=</span> <span class="no">Model</span>, <span class="kw">linetype</span> <span class="kw">=</span> <span class="no">Model</span>)) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>(<span class="kw">size</span> <span class="kw">=</span> <span class="fl">1.1</span>) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>()</pre></body></html></div>
-<p><img src="hard_to_infer_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
+<p><img src="hard_to_infer_files/figure-html/perfect-1.png" width="700"></p>
 <div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">res_detect_thresh</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span>(-<span class="no">g</span>, <span class="kw">names_to</span> <span class="kw">=</span> <span class="st">"Model"</span>, <span class="kw">values_to</span> <span class="kw">=</span> <span class="st">"ARI"</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">g</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="no">ARI</span>, <span class="kw">group</span> <span class="kw">=</span> <span class="no">g</span>, <span class="kw">fill</span> <span class="kw">=</span> <span class="no">Model</span>)) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span>() +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span>(~ <span class="no">Model</span>) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>()</pre></body></html></div>
-<p><img src="hard_to_infer_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
+<p><img src="hard_to_infer_files/figure-html/boxplot-1.png" width="700"></p>
 </div>
   </div>
 

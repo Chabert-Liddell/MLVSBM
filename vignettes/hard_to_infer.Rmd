@@ -1,5 +1,6 @@
 ---
-title: "Hard Inference"
+title: "Hard to Infer Levels"
+subtitle: "Benefits of the Multilevel Modeling"
 output: rmarkdown::html_vignette
 ---
 
@@ -19,11 +20,11 @@ library(tidyr)
 library(pbmcapply)
 ```
 
-## Description of the Simulation
+## Simulation Scenario
 
 In this vignette we are interested in the behavior of our inference algorithm when both level of our multilevel network are hard to infer.
 
-For a standard Stochastic Block Model, a well known result is the detectability threshold when the mesoscale structure is the one of a planted partition, ie. the connectivity parameter matrix has the following shape:
+For a standard Stochastic Block Model, a well known result is the detectability threshold when the mesoscale structure is the one of a planted partition, i.e. the connectivity parameter matrix has the following shape:
 $$\begin{pmatrix} 
 p & q \\ 
 q & p
@@ -55,7 +56,7 @@ Re(detect_threshold(40, .1))
 for the inter-organizational level.
 
 
-So we will fix the connectivity parameters a little bit above the detectability threshold in order to get a very challenging inference for a single level SBM and to see how the levels of the MLVSBM might help each other when the dependence is strong.
+So we will fix the connectivity parameters a little bit above the detectability threshold in order to get a very challenging inference for a single level SBM and to see how the information in each level of the MLVSBM might help to recover the structure of the other level, and how does it vary with the strength of the inter-level dependence.
 ```{r}
 alpha <- list()
 alpha$I <- matrix(c(.1, .21, .21, .1), 2, 2)
@@ -146,9 +147,9 @@ res_detect_thresh <- readRDS(file = "res_detect_thresh.rds")
 ```
 
 
-## Plots & Results
+## Results
 
-With $g$, the diagonal of the mixture dependency parameter $\gamma$, we notice that the greater the interdependence the better the levels are able to help each other for the recovery of the clustering. This is obvious from the beginning for the inter-organizational level which is slightly harder to infer. For the inter-individual we notice a great improvement when $g \geq .9$. In all case, the problem so we do not obtain a perfect recovery of the blocks every time. 
+With $g$, the diagonal entry of the mixture dependency parameter $\gamma$, we notice that the greater the interdependence the better the levels are able to help each other in the recovery of the clustering. This is obvious from the beginning for the inter-organizational level which is slightly harder to infer. For the inter-individual we notice a great improvement when $g \geq .9$. In all case, the problem is hard so we do not obtain a perfect recovery of the blocks every time. 
 
 ```{r plot}
 res_detect_thresh %>%
@@ -159,7 +160,7 @@ res_detect_thresh %>%
   facet_wrap(~ Model) +
   theme_bw()
 ```
-```{r}
+```{r perfect}
 res_detect_thresh %>%
   group_by(g) %>% 
   summarise(across(.cols = everything(),  ~mean(.x == 1)), .groups = "keep") %>% 
@@ -168,7 +169,7 @@ res_detect_thresh %>%
   geom_line(size = 1.1) +
   theme_bw()
 ```
-```{r}
+```{r boxplot}
 res_detect_thresh %>%
   pivot_longer(-g, names_to = "Model", values_to = "ARI") %>%
   ggplot(aes(x = g, y = ARI, group = g, fill = Model)) +

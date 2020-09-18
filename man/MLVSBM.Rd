@@ -71,6 +71,7 @@ Methods for global inference and model selection are included.
   level = "lower",
   Q_min = 1,
   Q_max = 10,
+  Z = NULL,
   init = "hierarchical",
   depth = 1,
   nb_cores = NULL

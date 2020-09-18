@@ -6,7 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Infer a multilevel network (MLVSBM object), the original object is modified — mlvsbm_estimate_network • MLVSBM</title>
+<title>Compute the complete log likelihood of a multilevel network for a given
+clustering of the nodes — mlvsbm_log_likelihood • MLVSBM</title>
 
 
 <!-- jquery -->
@@ -39,15 +40,10 @@
 
 
 
-<meta property="og:title" content="Infer a multilevel network (MLVSBM object), the original object is modified — mlvsbm_estimate_network" />
-<meta property="og:description" content="The inference use a greedy algorithm to navigate between model
-size. For a given model size, the inference is done via a variational EM
-algorithm. The returned model is the one with the highest ICL criterion among
-all visited models.
-By default the algorithm fits a single level SBM for each level, before
-inferring the multilevel network. This step can be skipped by specifying an
-initial clustering with the init_clustering. Also, a given model size
-can be force by setting the parameters nb_clusters to a given value." />
+<meta property="og:title" content="Compute the complete log likelihood of a multilevel network for a given
+clustering of the nodes — mlvsbm_log_likelihood" />
+<meta property="og:description" content="This function is useful to compute the likelihood for clusters
+obtained by different methods." />
 
 
 
@@ -136,59 +132,37 @@ can be force by setting the parameters nb_clusters to a given value." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Infer a multilevel network (MLVSBM object), the original object is modified</h1>
+    <h1>Compute the complete log likelihood of a multilevel network for a given
+clustering of the nodes</h1>
     <small class="dont-index">Source: <a href='https://github.com/Chabert-Liddell/MLVSBM/blob/master/R/user_function.R'><code>R/user_function.R</code></a></small>
-    <div class="hidden name"><code>mlvsbm_estimate_network.Rd</code></div>
+    <div class="hidden name"><code>mlvsbm_log_likelihood.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>The inference use a greedy algorithm to navigate between model
-size. For a given model size, the inference is done via a variational EM
-algorithm. The returned model is the one with the highest ICL criterion among
-all visited models.</p>
-<p>By default the algorithm fits a single level SBM for each level, before
-inferring the multilevel network. This step can be skipped by specifying an
-initial clustering with the <code>init_clustering</code>. Also, a given model size
-can be force by setting the parameters <code>nb_clusters</code> to a given value.</p>
+    <p>This function is useful to compute the likelihood for clusters
+obtained by different methods.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>mlvsbm_estimate_network</span>(
-  <span class='no'>mlv</span>,
-  <span class='kw'>nb_clusters</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>init_clustering</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>nb_cores</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
-)</pre>
+    <pre class="usage"><span class='fu'>mlvsbm_log_likelihood</span>(<span class='no'>mlv</span>, <span class='no'>clustering</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>mlv</th>
-      <td><p>A MLVSBM object, the network to be inferred</p></td>
+      <td><p>A MLVSBM object, the network data</p></td>
     </tr>
     <tr>
-      <th>nb_clusters</th>
-      <td><p>A list of 2 integers, the model size.
-If left to <code>NULL</code>, the algorithm
-will navigate freely. Otherwise it will navigate between the specified model
-size and its neighbours.</p></td>
-    </tr>
-    <tr>
-      <th>init_clustering</th>
+      <th>clustering</th>
       <td><p>A list of 2 vectors of integers of the same length as
-the number of node of each level. If specified, the algorithm will start from
-this clustering, then navigate freely.</p></td>
-    </tr>
-    <tr>
-      <th>nb_cores</th>
-      <td><p>An integer, the number of cores to use. Default to <code>1</code>
-for Windows and <code>detectCores()/2</code> for Linux and MacOS</p></td>
+the number of node of each level.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A FitMLVSBM object, the best inference of the network</p>
+    <p>A numeric, the log likelihood of the multilevel network
+for the given clustering</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>my_mlvsbm</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>MLVSBM</span><span class='kw ns'>::</span><span class='fu'><a href='mlvsbm_simulate_network.html'>mlvsbm_simulate_network</a></span>(
@@ -206,17 +180,18 @@ for Windows and <code>detectCores()/2</code> for Linux and MacOS</p></td>
                           <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>byrow</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)),<span class='co'># between blocks</span>
   <span class='kw'>directed</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>I</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>O</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>), <span class='co'># Are the upper and lower level directed or not ?</span>
   <span class='kw'>affiliation</span> <span class='kw'>=</span> <span class='st'>"preferential"</span>) <span class='co'># How the affiliation matrix is generated</span>
-<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>MLVSBM</span><span class='kw ns'>::</span><span class='fu'>mlvsbm_estimate_network</span>(<span class='kw'>mlv</span> <span class='kw'>=</span> <span class='no'>my_mlvsbm</span>, <span class='kw'>nb_cores</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; 
-#&gt; [1] "Infering lower level :"
-#&gt; [1] "# blocks: 1, ICL = -32.1888562603017 !"
+<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>MLVSBM</span><span class='kw ns'>::</span><span class='fu'><a href='mlvsbm_estimate_network.html'>mlvsbm_estimate_network</a></span>(<span class='kw'>mlv</span> <span class='kw'>=</span> <span class='no'>my_mlvsbm</span>, <span class='kw'>nb_cores</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; 
+#&gt; [1] "Infering lower level :"
+#&gt; [1] "# blocks: 1, ICL = -31.1901446591053 !"
 #&gt; 
-#&gt; [1] "Infering upper level :"
-#&gt; [1] "# blocks: 2, ICL = -114.052229358306 !"
-#&gt; [1] "======= # Individual clusters : 1 , # Organisation clusters 2,  ICL : -146.356228742433========"
-#&gt; [1] "======= # Individual blocks : 1 , # Organizational blocks 2,  ICL : -146.356228742433========"
-#&gt; [1] "ICL for independent levels : -146.241085618608"
-#&gt; [1] "ICL for interdependent levels : -146.356228742433"
-#&gt; [1] "=====The levels of this network are independent!====="</div></pre>
+#&gt; [1] "Infering upper level :"
+#&gt; [1] "# blocks: 2, ICL = -103.785055615567 !"
+#&gt; [1] "======= # Individual clusters : 1 , # Organisation clusters 2,  ICL : -134.981731837864========"
+#&gt; [1] "======= # Individual blocks : 2 , # Organizational blocks 2,  ICL : -132.672574152993========"
+#&gt; [1] "======= # Individual blocks : 2 , # Organizational blocks 2,  ICL : -132.672574152993========"
+#&gt; [1] "ICL for independent levels : -134.975200274672"
+#&gt; [1] "ICL for interdependent levels : -132.672574152993"
+#&gt; [1] "=====Interdependence is detected between the two levels!====="</div><div class='input'><span class='fu'>mlvsbm_log_likelihood</span>(<span class='kw'>mlv</span> <span class='kw'>=</span> <span class='no'>my_mlvsbm</span>, <span class='kw'>clustering</span> <span class='kw'>=</span> <span class='no'>fit</span>$<span class='no'>Z</span>)</div><div class='output co'>#&gt; [1] -115.0889</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

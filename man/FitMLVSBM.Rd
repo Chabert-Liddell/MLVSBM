@@ -27,7 +27,7 @@ An R6 Class ocject, a fitted multilevel network once $dovem() is done
 
 \item{\code{bound}}{Get the variational bound of the model}
 
-\item{\code{ICL}}{Get the ICL model selection criterion of the mdeol}
+\item{\code{ICL}}{Get the ICL model selection criterion of the model}
 
 \item{\code{full_penalty}}{Get the penalty used to compute the ICL}
 
