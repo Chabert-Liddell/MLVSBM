@@ -6,36 +6,41 @@
 #' @param K the number of clusters
 #'
 #' @return A vector : The clusters labels
-#'
-#'
-#' @examples
 spcClust <- function(X, K){
+  if (K == 1) return (rep(1L, nrow(X)))
   n <- nrow(X)
-  D_moins1_2 <- diag(1/sqrt(colSums(X, na.rm = TRUE) + 1e-3))
+  X[X == -1] <- NA
+  isolated <- which(rowSums(X, na.rm = TRUE) == 0)
+  connected <- setdiff(seq(n), isolated)
+  X <- X[connected, connected]
+  D_moins1_2 <- diag(1/sqrt(rowSums(X, na.rm = TRUE) + 1e-3))
   X[is.na(X)] <- mean(X, na.rm=TRUE)
   Labs <- D_moins1_2 %*% X %*% D_moins1_2
-  specabs <- eigen(Labs)
-  index <- order(abs(specabs$values), decreasing = FALSE)[(n-K+1):n]
+  specabs <- eigen(Labs, symmetric = TRUE)
+  index <- order(abs(specabs$values))[1:K]
   U <- specabs$vectors[,index]
   U <- U / rowSums(U**2)**(1/2)
   U[is.na(U)] <- 0
-  clustering <- stats::kmeans(U, K, nstart=100)$cluster
+  cl <- stats::kmeans(U, K, iter.max = 100, nstart=100)$cluster
+  clustering <- rep(1, n)
+  clustering[connected] <- cl
+  clustering[isolated] <-   which.min(rowsum(rowSums(X, na.rm = TRUE),cl))
   return(clustering)
 }
 
 #' Perform a Hierarchical Clustering
 #' @importFrom stats cutree dist hclust
+#' @importFrom ape additive
 #' @param X An Adjacency Matrix
 #' @param K the number of wanted clusters
 #'
 #' @return A vector : The clusters labels
-#'
-#'
-#' @examples
 hierarClust <- function(X, K){
+  if (K == 1) return (rep(1L, nrow(X)))
   distance <- stats::dist(x = X, method = "manhattan")
+  X[X == -1] <- NA
   # distance[which(A == 1)] <- distance[which(A == 1)] - 2
-  # distance <- as.dist(ape::additive(distance))
+  distance <- stats::as.dist(ape::additive(distance))
   clust    <- stats::hclust(d = distance , method = "ward.D")
   return(stats::cutree(tree = clust, k = K))
 }
@@ -47,9 +52,6 @@ hierarClust <- function(X, K){
 #' @param Q The number of maximal clusters
 #'
 #' @return A list of Q clustering of Q+1 clusters
-#'
-#'
-#' @examples
 split_clust <- function(X, Z, Q) {
   Z_split <-  lapply(
     X = seq(Q),
@@ -72,9 +74,6 @@ split_clust <- function(X, Z, Q) {
 #' @param Q the number of original clusters
 #'
 #' @return A list of Q(Q-1)/2 clustering of Q-1 clusters
-#'
-#'
-#' @examples
 merge_clust <- function(Z, Q) {
   Z_merge = lapply(
     X = 1:choose(Q,2),
@@ -111,8 +110,6 @@ dist_param <- function(param, param_old) {
 #' @param K An integer, the number of folds
 #'
 #' @return A matrix of the same size than X with class integer as coefficient
-#'
-#' @examples
 build_fold_matrix <- function(X, K) {
   n <- ncol(X)
   arrange     <- sample(x = seq(n))
@@ -158,4 +155,65 @@ ARI <- function (x, y)
     (a - (a + b) * (a + c)/(a + b + c + d))/
     ((a + b + a + c)/2 - (a + b) * (a + c)/(a + b + c + d))
   return(ARI)
+}
+
+
+plot_multilevel_matrix <- function(X, X_hat, A, Z) {
+  Z_sup <- c(Z$I, Z$O + max(Z$I))
+  QI <- max(Z$I)
+  QO <- max(Z$O)
+  g_ind <- tidygraph::as_tbl_graph(t(X_hat$I * X$I ))  %>%
+    tidygraph::activate(nodes) %>%
+    tidygraph::mutate(group = Z$I) %>%
+    tidygraph::activate(edges) %>%
+    tidygraph::mutate(lvl = "ind")
+  g_org <-
+    tidygraph::as_tbl_graph(X_hat$O * X$O )  %>%
+    tidygraph::activate(nodes) %>%
+    tidygraph::mutate(group = Z$O + QI) %>%
+    tidygraph::activate(edges) %>%
+    tidygraph::mutate(lvl = "org")
+  g_aff <-
+    tidygraph::as_tbl_graph(A) %>%
+    tidygraph::activate(edges) %>%
+    tidygraph::mutate(lvl = "aff")
+
+  p_mat <-  tidygraph::graph_join(g_ind, g_org) %>%
+    tidygraph::graph_join(g_aff) %>%
+    ggraph::ggraph('matrix', sort.by = group)+
+    ggraph::geom_edge_point(ggplot2::aes(filter = (lvl == "aff")),
+                            edge_colour = "black",  edge_size = 1.5)+
+    ggraph::geom_edge_point(ggplot2::aes(filter = (lvl == "ind"),
+                                         edge_colour = weight),edge_size = 1.5)+
+    ggraph::geom_edge_point(ggplot2::aes(filter = (lvl == "org"), edge_fill = weight),
+                    edge_size = 2, edge_shape = 22, stroke = 0)+
+    ggplot2::geom_hline(yintercept = c( cumsum(table(Z_sup))[QI+seq(QO)]+.5)) +
+    ggplot2::geom_hline(yintercept = cumsum(table(Z_sup))[QI]+.5, size = 1.1) +
+    ggplot2::geom_vline(xintercept = cumsum(table(Z_sup))[QI]+.5, size = 1.1) +
+    ggplot2::geom_vline(xintercept = c(0, cumsum(table(Z_sup))[seq(QI)]+.5)) +
+    ggplot2::annotate(geom = "segment",
+                      x = c(0, cumsum(table(Z_sup))[QI+seq(QO)]+.5),
+                      y = cumsum(table(Z_sup))[QI]+.5,
+                      xend = c(0,cumsum(table(Z_sup))[QI+seq(QO)]+.5),
+                      yend = cumsum(table(Z_sup))[QI+QO]+.5) +
+    ggplot2::annotate(geom = "segment",
+                      y = c(0, cumsum(table(Z_sup))[seq(QI)]+.5),
+                      x = cumsum(table(Z_sup))[QI]+.5,
+                      yend = c(0, cumsum(table(Z_sup))[seq(QI)]+.5),
+                      xend = 0) +
+    ggraph::scale_edge_fill_gradient(
+      name = 'Individuals',
+      low = "#fcbba1",
+      high = "#67000d",
+      guide = ggraph::guide_edge_colorbar(order = 2,title.position = "top")) +
+    ggraph::scale_edge_color_gradient(
+      name = 'Organizations',
+      low = "#deebf7",
+      high = "#08519c",
+      guide = ggraph::guide_edge_colorbar(order = 1,
+                                          title.position = "top",
+                                          title.hjust = 1)) +
+    ggplot2::coord_fixed(xlim = c(-1, sum(dim(A)+1)), ylim = c(-1, sum(dim(A)+1))) +
+    ggraph::theme_graph()
+    return(p_mat)
 }

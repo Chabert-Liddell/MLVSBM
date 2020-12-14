@@ -1,4 +1,4 @@
-#' A R6Class for multilevel object
+#' R6Class for multilevel object
 #'
 #' @description Store all simulation parameters and list of fittedmodels.
 #' Methods for global inference and model selection are included.
@@ -21,17 +21,37 @@ MLVSBM <-
       min_Q        = NULL, # List of minimum clusters for inference
       max_Q        = NULL, # List of maximum clusters for inference
       directed_     = NULL, # Are levels directed
-      M            = NULL,  # list of NA masks for CV and missig data for X
+      M            = NULL,  # list of NA masks for CV and missing data for X
       distribution_ = NULL,
       fitted_sbm    = NULL,
       ICLtab_sbm    = NULL
       ),
     public = list(
-      ## constructor
+      #' @param n A list of size 2, the number of nodes
+      #' @param X A list of 2 adjacency matrices
+      #' @param A The affiliation matrix
+      #' @param Z A list of 2 vectors, the blocks membership
+      #' @param directed A list of 2 booleans
+      #' @param sim_param A list of MLVSBM parameters for simulating networks
+      #' @param distribution The distributions of the interactions ("bernoulli")
+      #'
+      #' @return A MLVSBM object
+      #' @description
+      #' Constructor for R6 class MLVSBM
       initialize = function(n = NULL, X = NULL, A = NULL,
                             Z = NULL, directed = NULL, sim_param = NULL,
                             distribution = list("bernoulli", "bernoulli")) {
         private$n            = n
+        if(! is.null(X)) {
+          if(is.null(rownames(X[[1]])) & is.null(colnames(X[[1]]))) {
+            rownames(X[[1]]) <- colnames(X[[1]]) <- paste0("I", seq(nrow(X$I)))
+          }
+          if(is.null(rownames(X[[2]])) & is.null(colnames(X[[2]]))) {
+            rownames(X[[2]]) <- colnames(X[[2]]) <- paste0("O", seq(nrow(X$O)))
+          }
+          rownames(A) <- rownames(X$I)
+          colnames(A) <- colnames(X$O)
+        }
         private$X            = X
         private$Z            = Z
         private$A            = A
@@ -48,7 +68,60 @@ MLVSBM <-
                                             "upper" = list())
         private$ICLtab_sbm   = list("lower" = list(),
                                     "upper" = list())
-      }
+      },
+      #' @description
+      #' Find a fitted model of a given size
+      #' @param nb_clusters A list of the size of the model
+      #' @param fit if fit = "best" return the best model according to the ICL
+      #' @return A FitMLVSBM object
+      findmodel =
+        function (nb_clusters = NA, fit = NA) {
+          if (fit == "best") {
+            return(self$ICL %>%
+                     filter(ICL == max(ICL)) %>%
+                     filter(index == max(index)) %>%
+                     select(index) %>%
+                     as.numeric() %>%
+                     self$fittedmodels[[.]])
+          } else {
+            return(self$ICL %>%
+                     filter(Q_I == nb_clusters$I, Q_O == nb_clusters$O) %>%
+                     filter(ICL == max(ICL)) %>%
+                     filter(index == max(index)) %>%
+                     select(index) %>%
+                     as.numeric() %>%
+                     self$fittedmodels[[.]])}
+        },
+      #' @description delete all fitted models
+      clearmodels =
+        function () {
+          private$fitted     <-  list()
+          private$tmp_fitted <-  list()
+          private$ICLtab     <-  NULL
+        },
+      #' @description Added a FitMLVSBM object to the list of fitted model
+      #' @param fit The FitMLVSBM object to be added
+      addmodel =
+        function (fit) {
+          private$fitted = c(private$fitted, list(fit))
+          if (is.null(private$ICLtab)) {
+            private$ICLtab <-
+              data.frame(index  = as.integer(1),
+                         Q_I      = fit$nb_clusters$I,
+                         Q_O      = fit$nb_clusters$O,
+                         ICL       = fit$ICL)
+          } else {
+            private$ICLtab <-
+              rbind(
+                private$ICLtab,
+                data.frame(index  = as.integer(nrow(private$ICLtab) +1),
+                           Q_I    = fit$nb_clusters$I,
+                           Q_O    = fit$nb_clusters$O,
+                           ICL    = fit$ICL
+                )
+              )
+          }
+        }
       ),
     active = list(
       ## active binding to access fields outside the class
@@ -90,62 +163,3 @@ MLVSBM <-
       )
     )
 
-#' @description Find a model among all fitted models
-#' @param nb_clusters A list of integer, the model size
-#' @param fit Set to  best  to return the model with the highest ICL
-#'
-#' @return A fitMLVSBM object, the desired fitted model
-#' @export
-MLVSBM$set(
-  "public", "findmodel",
-  function (nb_clusters = NA, fit = NA) {
-    if (fit == "best") {
-      return(self$ICL %>%
-               filter(ICL == max(ICL)) %>%
-               filter(index == max(index)) %>%
-               select(index) %>%
-               as.numeric() %>%
-               self$fittedmodels[[.]])
-      } else {
-        return(self$ICL %>%
-                 filter(Q_I == nb_clusters$I, Q_O == nb_clusters$O) %>%
-                 filter(ICL == max(ICL)) %>%
-                 filter(index == max(index)) %>%
-                 select(index) %>%
-                 as.numeric() %>%
-                 self$fittedmodels[[.]])}
-            }
-            )
-MLVSBM$set(
-  "public", "clearmodels",
-#' @description Delete all fitted models
-#' @export
-  function () {
-    private$fitted     <-  list()
-    private$tmp_fitted <-  list()
-    private$ICLtab     <-  NULL
-    }
-  )
-MLVSBM$set(
-  "public", "addmodel",
-  function (fit) {
-    private$fitted = c(private$fitted, list(fit))
-    if (is.null(private$ICLtab)) {
-      private$ICLtab <-
-        data.frame(index  = as.integer(1),
-                   Q_I      = fit$nb_clusters$I,
-                   Q_O      = fit$nb_clusters$O,
-                   ICL       = fit$ICL)
-    } else {
-      private$ICLtab <-
-        rbind(
-          private$ICLtab,
-          data.frame(index  = as.integer(nrow(private$ICLtab) +1),
-                     Q_I    = fit$nb_clusters$I,
-                     Q_O    = fit$nb_clusters$O,
-                     ICL    = fit$ICL
-          )
-        )
-    }
-  }
-)

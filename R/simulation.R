@@ -1,12 +1,6 @@
 MLVSBM$set(
   "public", "simulate",
-#' Simulate a multilevel network from a MLVSBM object
-#'
-#' The function does not return anything, but update the MLVSBM object
-#' @param affiliation One of c( uniform ,  preferential ), the way the
-#' affiliation are generated
-#' @param no_empty_org A boolean, may column of afiiliation sum to 0
-#' @param no_isolated_node A boolean, may row and column of adjacency matrices sum to 0
+# Simulate a multilevel network from a MLVSBM object
   function() {
     if (is.null(private$A))
       private$A <- simulate_affiliation(private$n$I,
@@ -39,7 +33,14 @@ MLVSBM$set(
                                      directed = private$directed_$O,
                                      distribution = private$distribution_$O,
                                      no_isolated_node = private$sim_param$no_isolated_node)
-    })
+    names(private$Z$I) <- paste0("I", seq(length(private$Z$I)))
+    names(private$Z$O) <- paste0("O", seq(length(private$Z$O)))
+    rownames(private$X$I) <- colnames(private$X$I) <- names(private$Z$I)
+    rownames(private$X$O) <- colnames(private$X$O) <- names(private$Z$O)
+    rownames(private$A) <- names(private$Z$I)
+    colnames(private$A) <- names(private$Z$O)
+    }
+)
 
 #' Simulation an adjacency matrix
 #'

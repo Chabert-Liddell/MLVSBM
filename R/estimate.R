@@ -6,12 +6,16 @@ MLVSBM$set(
   "estimate_level",
 #' Fit a SBM on a given level of a MLVSBM object
 #'
-#' @param level One of c( upper ,  lower )
-#' @param Q_min An integer, the minimum number of clusters
-#' @param Q_max An integer, the maximun number of clusters
+#' @param level "lower" or "upper"
+#' @param Q_min Lower bound of exploration space
+#' @param Q_max Upper bound of exploration space
+#' @param Z Initial clustering if any
+#' @param init Initialization method one of "hierarchical",
+#' "spectral" or "merged_split"
+#' @param depth Exploration depth (not used)
+#' @param nb_cores Number of cores for parallel computing
 #'
-#' @return A list of inferred models
-#' @export
+#' @return A list of FitSBM objects
   function(level = "lower",
            Q_min = 1,
            Q_max = 10,
@@ -37,7 +41,7 @@ MLVSBM$set(
       bound[max(Z)] <- best_fit$bound
     } else {
       best_fit <- self$estimate_sbm(level = level, Z = Z,
-                                    Q = Q_min, init = init)
+                                      Q = Q_min, init = init)
       model_list[[Q_min]] <- best_fit
       ICL[Q_min] <- best_fit$ICL
       bound[Q_min] <- best_fit$bound
@@ -51,10 +55,9 @@ MLVSBM$set(
                                            Q_min = Q_min,
                                            Q_max = Q_max,
                                            fit = best_fit,
-                                           nb_cores = nb_cores)
+                                           nb_cores = nb_cores,
+                                           init = init)
       new_fit  <-  fits[[which.max(sapply(seq_along(fits), function(x) fits[[x]]$ICL))]]
-      # spc_fit  <- self$estimate_sbm(level = level, init = init,
-      #                               Q = min(best_fit$nb_clusters +1, Q_max))
       # if (new_fit$ICL < spc_fit$ICL) new_fit <- spc_fit
       if (new_fit$ICL > best_fit$ICL) {
         best_fit  <-  new_fit
@@ -87,7 +90,8 @@ MLVSBM$set(
                                              Q_min = Q_min,
                                              Q_max = Q_max,
                                              fit = best_fit,
-                                             nb_cores = nb_cores)
+                                             nb_cores = nb_cores,
+                                             init = init)
         new_fit  <-  fits[[
           which.max(sapply(1:length(fits), function(x) fits[[x]]$ICL))]]
         # # spc_fit  <- self$estimate_sbm(level = level, init = init,
@@ -142,11 +146,24 @@ MLVSBM$set(
 MLVSBM$set(
   "public",
   "estimate_sbm_neighbours",
+  #' Fit models with size adjacent of a given model
+  #'
+  #' @param level "lower" or "upper"
+  #' @param Q Size of the initial model
+  #' @param Q_min Lower bound of exploration space
+  #' @param Q_max Upper bound of exploration space
+  #' @param fit A FitSBM object from where to explore
+  #' @param init Initialization method for additional fits,
+  #' one of "hierarchical", "spectral" or "merged_split"
+  #' @param nb_cores Number of cores for parallel computing
+  #'
+  #' @return A list of FitSBM objects
   function(level = "lower",
            Q = NULL, Q_min = 1,
            Q_max = 10,
            fit = NULL,
-           nb_cores = NULL) {
+           nb_cores = NULL,
+           init = NULL) {
     os <- Sys.info()["sysname"]
     if (is.null(nb_cores)) {
       if (os != 'Windows') {
@@ -168,6 +185,9 @@ MLVSBM$set(
                             Z = Z[[i]],
                             init = "merge_split")
         }, mc.cores = nb_cores)
+      fits  <- c(fits, self$estimate_sbm(level = level,
+                                Q = Q-1,
+                                init = "spectral"))
       fits <-
         fits[which(sapply( fits, function(x) ! is.null(x)))]
       fits <-
@@ -188,6 +208,9 @@ MLVSBM$set(
                             Z = Z[[i]],
                             init = "merge_split")
         }, mc.cores = nb_cores)
+      fits  <- c(fits, self$estimate_sbm(level = level,
+                                         Q = fit$nb_clusters+1,
+                                         init = "spectral"))
       fits <-
         fits[which(sapply( fits, function(x) ! is.null(x)))]
       fits <-
@@ -205,6 +228,14 @@ MLVSBM$set(
 MLVSBM$set(
   "public",
   "estimate_sbm_from_neighbours",
+  #' Fit a model of a given size by initiating from its neighbours
+  #'
+  #' @param level "lower" or "upper"
+  #' @param Q Size of the model
+  #' @param fits A list of FitSBM object from where to initialize the new model
+  #' @param nb_cores Number of cores for parallel computing
+  #'
+  #' @return A  FitSBM object
   function(level = "lower",
            Q = NULL, fits = NULL,
            nb_cores = NULL) {
@@ -246,6 +277,9 @@ MLVSBM$set(
         new_fits <- c(new_fits, fit_tmp)
       }
     }
+    new_fits  <- c(new_fits, self$estimate_sbm(level = level,
+                                       Q = Q,
+                                       init = "spectral"))
     new_fits <-
       new_fits[which(sapply( new_fits, function(x) ! is.null(x)))]
     new_fits <-
@@ -418,9 +452,11 @@ MLVSBM$set(
                    "O" = Z_tmp$O$same),
           independent = independent,
           nb_cores = nb_cores)
-        models = c(models, list(fitted))
+        models <-  c(models, list(fitted))
       }
     }
+    models <- c(models,
+                self$mcestimate(Q = list(I = Q$I +1, O = Q$O), init = "spectral"))
     if (! is.null(Z_tmp$O$split[[1]])) {
       if (! is.null(Z_tmp$I$same[[1]])) {
         fitted = self$mc_ms_estimate(
@@ -431,6 +467,8 @@ MLVSBM$set(
         models = c(models, list(fitted))
       }
     }
+    models <- c(models,
+                self$mcestimate(Q = list(I = Q$I, O = Q$O+1), init = "spectral"))
     if (! is.null(Z_tmp$I$merge[[1]])) {
       if (! is.null(Z_tmp$O$same[[1]])) {
         fitted <- self$mc_ms_estimate(
@@ -441,6 +479,10 @@ MLVSBM$set(
         models <- c(models, list(fitted))
       }
     }
+    if(Q$I != 1) {
+      models <- c(models,
+                  self$mcestimate(Q = list(I = Q$I-1, O = Q$O), init = "spectral"))
+    }
     if (! is.null(Z_tmp$O$merge[[1]])) {
       if (! is.null(Z_tmp$I$same[[1]])) {
         fitted <- self$mc_ms_estimate(
@@ -450,6 +492,10 @@ MLVSBM$set(
           nb_cores = nb_cores)
         models <- c(models, list(fitted))
       }
+    }
+    if(Q$O != 1) {
+      models <- c(models,
+                  self$mcestimate(Q = list(I = Q$I, O = Q$O-1), init = "spectral"))
     }
     models <- models[which(sapply( models, x <- function(x) ! is.null(x)))]
     models <- models[which(sapply( models, x <- function(x) ! is.null(x$ICL)))]
@@ -730,133 +776,3 @@ MLVSBM$set(
   return(best_model)
   }
 )
-#-------------------------------------------------------------------------------
-#
-# MlvlSBM$set("public", "estimate_all",
-#             function(model = private$model, min_Q = 1, min_S = 1,
-#                      max_Q = 10, max_S = 10, type = "classic", init = "hierarchical", icl = "asymptotic", clear = TRUE){
-#               os <- Sys.info()["sysname"]
-#               if (os != 'Windows') {
-#                 nb_cores = parallel::detectCores(all.tests = FALSE, logical = TRUE) %/% 2
-#               }
-#               private$min_Q = min_Q
-#               private$min_S = min_S
-#               private$max_Q = max_Q
-#               private$max_S = max_S
-#               if (clear) self$clearmodels()
-#               best_model <-  self$mcestimate(min_Q, min_S, model, type = type, init = init)
-#               self$addmodel(best_model)
-#               condition = TRUE
-#               while (condition) {
-#                 if(icl == "map") {
-#                   print(paste0("======= # R clusters : ", best_model$nRClusters,
-#                                " , # L clusters ", best_model$nLClusters,
-#                                ",  ICL : ", best_model$map_ICL, "========"))
-#                 } else {
-#                   print(paste0("======= # R clusters : ", best_model$nRClusters,
-#                                " , # L clusters ", best_model$nLClusters,
-#                                ",  ICL : ", best_model$ICL, "========"))
-#                 }
-#                 models <- self$estimate_neighbours(
-#                   Q = best_model$nRClusters,
-#                   S = best_model$nLClusters,
-#                   model = model,
-#                   fit = best_model,
-#                   type = type,
-#                   icl = icl
-#                 )
-#                 #      private$tmp_fitted = c(private$tmp_fitted, models)
-#                 if (icl == "map") {
-#                   new_best_model <- models[[which.max(sapply(1:length(models), function(x) models[[x]]$map_ICL))]]
-#                   if (new_best_model$map_ICL > best_model$map_ICL) {
-#                     best_model <-  new_best_model
-#                     self$addmodel(new_best_model)
-#                   } else {
-#                     condition = FALSE
-#                   }
-#                 } else {
-#                   new_best_model <- models[[which.max(sapply(1:length(models), function(x) models[[x]]$ICL))]]
-#                   if (new_best_model$ICL > best_model$ICL) {
-#                     best_model = new_best_model
-#                     self$addmodel(new_best_model)
-#                   } else {
-#                     # print(paste0("Switching to neighbours mode!"))
-#                     # new_model <- self$estimate_from_neighbours(
-#                     #   Q = best_model$nRClusters,
-#                     #   S = best_model$nLClusters,
-#                     #   models = models,
-#                     #   type = type)
-#                     # if ((!is.null(new_model)) & (new_model$bound > best_model$bound)) {
-#                     #   best_model  <-  new_model
-#                     #   self$addmodel(new_model)
-#                     # } else {
-#                     condition = FALSE
-#                     # }
-#                   }
-#                 }
-#               }
-#               first_best_model <-  best_model
-#               best_model <-
-#                 self$mcestimate(ceiling(log(private$n)),ceiling(log(private$m)),
-#                                 model, type = type, init = init)
-#               self$addmodel(best_model)
-#               condition = TRUE
-#               while (condition) {
-#                 if(icl == "map") {
-#                   print(paste0("======= # R clusters : ", best_model$nRClusters,
-#                                " , # L clusters ", best_model$nLClusters,
-#                                ",  ICL : ", best_model$map_ICL, "========"))
-#                 } else {
-#                   print(paste0("======= # R clusters : ", best_model$nRClusters,
-#                                " , # L clusters ", best_model$nLClusters,
-#                                ",  ICL : ", best_model$ICL, "========"))
-#                 }
-#                 models <- self$estimate_neighbours(
-#                   Q = best_model$nRClusters,
-#                   S = best_model$nLClusters,
-#                   model = model,
-#                   fit = best_model,
-#                   type = type,
-#                   icl = icl
-#                 )
-#                 #      private$tmp_fitted = c(private$tmp_fitted, models)
-#                 if(icl == "map") {
-#                   new_best_model <- models[[which.max(sapply(1:length(models), function(x) models[[x]]$map_ICL))]]
-#                   if (new_best_model$map_ICL > best_model$map_ICL) {
-#                     best_model  <-  new_best_model
-#                     self$addmodel(new_best_model)
-#                   } else {
-#                     condition = FALSE
-#                   }
-#                 } else {
-#                   if (new_best_model$ICL > best_model$ICL) {
-#                     best_model = new_best_model
-#                     self$addmodel(new_best_model)
-#                   } else {
-#                     # print(paste0("Switching to neighbours mode!"))
-#                     # new_model <- self$estimate_from_neighbours(
-#                     #   Q = best_model$nRClusters,
-#                     #   S = best_model$nLClusters,
-#                     #   models = models,
-#                     #   type = type)
-#                     # if ((!is.null(new_model)) & (new_model$bound > best_model$bound)) {
-#                     #   best_model  <-  new_model
-#                     #   self$addmodel(new_model)
-#                     # } else {
-#                     condition = FALSE
-#                     # }
-#                   }
-#                 }
-#               }
-#               if (icl == "map") {
-#                 if (first_best_model$map_ICL > best_model$map_ICL) {
-#                   best_model <-  first_best_model
-#                 }
-#               } else {
-#                 if (first_best_model$ICL > best_model$ICL) {
-#                   best_model <-  first_best_model
-#                 }
-#               }
-#
-#               return(best_model)
-#             })

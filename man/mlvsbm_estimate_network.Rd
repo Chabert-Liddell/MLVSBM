@@ -8,7 +8,8 @@ mlvsbm_estimate_network(
   mlv,
   nb_clusters = NULL,
   init_clustering = NULL,
-  nb_cores = NULL
+  nb_cores = NULL,
+  init_method = "hierarchical"
 )
 }
 \arguments{
@@ -25,6 +26,10 @@ this clustering, then navigate freely.}
 
 \item{nb_cores}{An integer, the number of cores to use. Default to \code{1}
 for Windows and \code{detectCores()/2} for Linux and MacOS}
+
+\item{init_method}{One of "hierarchical" (the default) or "spectral",
+"spectral" might be more efficient but can lead to some numeric errors.
+Not used when int_clustering is given.}
 }
 \value{
 A FitMLVSBM object, the best inference of the network

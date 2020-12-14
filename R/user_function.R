@@ -201,10 +201,13 @@ mlvsbm_simulate_network <-
 #' this clustering, then navigate freely.
 #' @param nb_cores An integer, the number of cores to use. Default to \code{1}
 #' for Windows and \code{detectCores()/2} for Linux and MacOS
+#' @param init_method One of "hierarchical" (the default) or "spectral",
+#' "spectral" might be more efficient but can lead to some numeric errors.
+#' Not used when int_clustering is given.
 #'
 #' @return A FitMLVSBM object, the best inference of the network
 #'
-#' @importFrom sbm estimateSimpleSBM
+#' @importFrom blockmodels BM_bernoulli
 #' @export
 
 #' @examples
@@ -225,35 +228,65 @@ mlvsbm_simulate_network <-
 #'   affiliation = "preferential") # How the affiliation matrix is generated
 #' fit <- MLVSBM::mlvsbm_estimate_network(mlv = my_mlvsbm, nb_cores = 1)
 mlvsbm_estimate_network <-
-  function(mlv, nb_clusters = NULL, init_clustering = NULL, nb_cores = NULL) {
+  function(mlv, nb_clusters = NULL, init_clustering = NULL, nb_cores = NULL,
+           init_method = "hierarchical") {
     if (! "MLVSBM" %in% class(mlv)) {
       stop("Object mlv must be of class MLVSBM,
             please use the function mlvsbm_create_network to create one")
     }
+    os <- Sys.info()["sysname"]
+    if (is.null(nb_cores)) {
+      if (os != 'Windows') {
+        nb_cores <-
+          max(parallel::detectCores(all.tests = FALSE, logical = TRUE) %/% 2, 1)
+        if (is.na(nb_cores)) nb_cores <- 1
+      } else {
+        nb_cores <-  1
+      }
+    }
     if (is.null(nb_clusters)) {
       if (is.null(init_clustering)) {
         if (any(is.na(mlv$adjacency_matrix[[1]]))) {
-          lower_fit <- mlv$estimate_level(level = "lower", nb_cores = nb_cores)
+          lower_fit <- mlv$estimate_level(level = "lower", nb_cores = nb_cores,
+                                          init = init_method)
         } else {
-          sbm_fit <- sbm::estimateSimpleSBM(netMat = mlv$adjacency_matrix[[1]],
-                                             model = mlv$distribution[[1]],
-                                             directed = mlv$directed[[1]],
-                                             estimOptions = list(plot = FALSE,
-                                                                 verbosity = 0))
+          net_type <- ifelse(mlv$directed[[1]], "SBM", "SBM_sym")
+          sbm_fit <- blockmodels::BM_bernoulli(net_type,
+                                    adj = mlv$adjacency_matrix[[1]],
+                                    verbosity = 0,
+                                    plotting = "",
+                                    ncores = nb_cores)
+          sbm_fit$estimate()
+          memberships <- sbm_fit$memberships[[which.max(sbm_fit$ICL)]]$map()$C
+          # sbm_fit <- sbm::estimateSimpleSBM(netMat = mlv$adjacency_matrix[[1]],
+          #                                    model = mlv$distribution[[1]],
+          #                                    directed = mlv$directed[[1]],
+          #                                    directed = mlv$directed[[1]],
+          #                                    estimOptions = list(plot = FALSE,
+          #                                                        verbosity = 0))
           lower_fit <- mlv$estimate_level(level =  "lower",
-                                          Z = sbm_fit$memberships,
+                                          Z = memberships,
                                           nb_cores = nb_cores)
         }
         if (any(is.na(mlv$adjacency_matrix[[1]]))) {
-          upper_fit <- mlv$estimate_level(level = "upper", nb_cores = nb_cores)
+          upper_fit <- mlv$estimate_level(level = "upper", nb_cores = nb_cores,
+                                          init = init_method)
         } else {
-          sbm_fit <- sbm::estimateSimpleSBM(netMat = mlv$adjacency_matrix[[2]],
-                                             model = mlv$distribution[[2]],
-                                             directed = mlv$directed[[2]],
-                                             estimOptions = list(plot = FALSE,
-                                                                 verbosity = 0))
+          net_type <- ifelse(mlv$directed[[2]], "SBM", "SBM_sym")
+          sbm_fit <- blockmodels::BM_bernoulli(net_type,
+                                               adj = mlv$adjacency_matrix[[2]],
+                                               verbosity = 0,
+                                               plotting = "",
+                                               ncores = nb_cores)
+          sbm_fit$estimate()
+          memberships <- sbm_fit$memberships[[which.max(sbm_fit$ICL)]]$map()$C
+          # sbm_fit <- sbm::estimateSimpleSBM(netMat = mlv$adjacency_matrix[[2]],
+          #                                    model = mlv$distribution[[2]],
+          #                                    directed = mlv$directed[[2]],
+          #                                    estimOptions = list(plot = FALSE,
+          #                                                        verbosity = 0))
           upper_fit <- mlv$estimate_level(level =  "upper",
-                                          Z = sbm_fit$memberships,
+                                          Z = memberships,
                                           nb_cores = nb_cores)
         }
         nb_clusters <- list("I" = which.max(lower_fit$ICL),

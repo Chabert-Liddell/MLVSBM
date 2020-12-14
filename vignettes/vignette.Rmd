@@ -1,8 +1,8 @@
 ---
-title: "vignette"
+title: "Tutorial"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{vignette}
+  %\VignetteIndexEntry{Tutorial}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -68,7 +68,19 @@ best model for this network as another R6 object of type FitMLVSBM.
 fit <- MLVSBM::mlvsbm_estimate_network(my_mlvsbm, nb_cores = 1L)
 ```
 
-## Some useful output
+## Generic functions
+
+Generic functions are provided to print, plot, extract the model parameters and
+predict the existence of a dyad for the fitted network.
+```{r generic, fig.width=7, fig.height=7}
+print(fit)
+plot(fit, type = "matrix")
+coef(fit)
+pred <- predict(fit)
+```
+
+
+## Other useful output
 Output of the algorithm are stocked in the MLVSBM and FitMLVSBM objects.
 The MLVSBM object stocks information of the observed or simulated network and a
 list of all the fitted SBM and MLVSBM models.

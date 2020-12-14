@@ -2,11 +2,18 @@
 % Please edit documentation in R/FitMLVSBM-class.R
 \name{FitMLVSBM}
 \alias{FitMLVSBM}
-\title{An R6 Class ocject, a fitted multilevel network once $dovem() is done}
+\title{An R6 Class object, a fitted multilevel network once $dovem() is done}
 \description{
-An R6 Class ocject, a fitted multilevel network once $dovem() is done
+An R6 Class object, a fitted multilevel network once $dovem() is done
 
-An R6 Class ocject, a fitted multilevel network once $dovem() is done
+An R6 Class object, a fitted multilevel network once $dovem() is done
+}
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{vbound}}{The vector of variational bound for monitoring convergence}
+}
+\if{html}{\out{</div>}}
 }
 \section{Active bindings}{
 \if{html}{\out{<div class="r6-active-bindings">}}
@@ -15,7 +22,7 @@ An R6 Class ocject, a fitted multilevel network once $dovem() is done
 
 \item{\code{adjacency_matrix}}{Get the list of adjacency matrices}
 
-\item{\code{nb_clusters}}{Get the list of the number of nodes}
+\item{\code{nb_nodes}}{Get the list of the number of nodes}
 
 \item{\code{nb_clusters}}{Get the list of the number of blocks}
 
@@ -23,9 +30,23 @@ An R6 Class ocject, a fitted multilevel network once $dovem() is done
 
 \item{\code{membership}}{Get the list of the variational parameters}
 
+\item{\code{independent}}{Are the levels independent?}
+
+\item{\code{distribution}}{Emission distribution of each level}
+
+\item{\code{directed}}{Are the levels directed?}
+
 \item{\code{entropy}}{Get the entropy of the model}
 
 \item{\code{bound}}{Get the variational bound of the model}
+
+\item{\code{df_mixture}}{Get the degrees of freedom of the
+mixture parameters}
+
+\item{\code{df_connect}}{Get the degrees of freedom of the
+connection parameters}
+
+\item{\code{connect}}{Get the number of possible observed connections}
 
 \item{\code{ICL}}{Get the ICL model selection criterion of the model}
 
@@ -33,9 +54,16 @@ An R6 Class ocject, a fitted multilevel network once $dovem() is done
 
 \item{\code{Z}}{Get the list of block memberships (vector form)}
 
-\item{\code{X_hat}}{Get the list of the matrices of probability conection predictions}
+\item{\code{X_hat}}{Get the list of the matrices of probability conection
+predictions}
 
 \item{\code{map}}{Get the list of block memberships (matrix form)}
+
+\item{\code{penalty}}{Get the ICL penalty}
+
+\item{\code{likelihood}}{Compute the likelihood of both levels}
+
+\item{\code{complete_likelihood}}{Get the complete likelihood of the model}
 }
 \if{html}{\out{</div>}}
 }
@@ -52,6 +80,9 @@ An R6 Class ocject, a fitted multilevel network once $dovem() is done
 \item \href{#method-ve_step}{\code{FitMLVSBM$ve_step()}}
 \item \href{#method-do_vem}{\code{FitMLVSBM$do_vem()}}
 \item \href{#method-permute_empty_class}{\code{FitMLVSBM$permute_empty_class()}}
+\item \href{#method-plot}{\code{FitMLVSBM$plot()}}
+\item \href{#method-show}{\code{FitMLVSBM$show()}}
+\item \href{#method-print}{\code{FitMLVSBM$print()}}
 \item \href{#method-clone}{\code{FitMLVSBM$clone()}}
 }
 }
@@ -59,6 +90,7 @@ An R6 Class ocject, a fitted multilevel network once $dovem() is done
 \if{html}{\out{<a id="method-new"></a>}}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
+Constructor for the FitMLVSBM class
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FitMLVSBM$new(
   Q = list(I = 1, O = 1),
@@ -71,38 +103,85 @@ An R6 Class ocject, a fitted multilevel network once $dovem() is done
 )}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{Q}}{List of number of blocks}
+
+\item{\code{A}}{Affiliation matrix}
+
+\item{\code{X}}{List of adjacency matrices}
+
+\item{\code{M}}{List of Mask matrices}
+
+\item{\code{directed}}{List of boolean}
+
+\item{\code{distribution}}{List of string}
+
+\item{\code{independent}}{Boolean}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A FitMLVSBM object
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-update_alpha"></a>}}
 \if{latex}{\out{\hypertarget{method-update_alpha}{}}}
 \subsection{Method \code{update_alpha()}}{
+Update the connection parameters for the M step
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FitMLVSBM$update_alpha(safeguard = 2 * .Machine$double.eps)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{safeguard}}{Parameter live in a compact [safeguard, 1-safeguard]}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-update_pi"></a>}}
 \if{latex}{\out{\hypertarget{method-update_pi}{}}}
 \subsection{Method \code{update_pi()}}{
+Update the upper level mixture parameter for the M step
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FitMLVSBM$update_pi(safeguard = 0.01)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FitMLVSBM$update_pi(safeguard = 0.001)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{safeguard}}{Parameter live in a compact [safeguard, 1-safeguard]}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-update_gamma"></a>}}
 \if{latex}{\out{\hypertarget{method-update_gamma}{}}}
 \subsection{Method \code{update_gamma()}}{
+Update the lower level mixture parameter for the M step
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FitMLVSBM$update_gamma(safeguard = 1e-06)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{safeguard}}{Parameter live in a compact [safeguard, 1-safeguard]}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-init_clustering"></a>}}
 \if{latex}{\out{\hypertarget{method-init_clustering}{}}}
 \subsection{Method \code{init_clustering()}}{
+init_clustering Initial clustering for VEM algorithm
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FitMLVSBM$init_clustering(
   safeguard = 2 * .Machine$double.eps,
@@ -111,11 +190,24 @@ An R6 Class ocject, a fitted multilevel network once $dovem() is done
 )}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{safeguard}}{Parameter live in a compact [safeguard, 1-safeguard]}
+
+\item{\code{method}}{Algorithm used to initiate the clustering, either
+"spectral", "hierarchical" or "merge_split" (if \code{Z} is provided)}
+
+\item{\code{Z}}{Initial clustering if provided}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clear"></a>}}
 \if{latex}{\out{\hypertarget{method-clear}{}}}
 \subsection{Method \code{clear()}}{
+Reset all parameters
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FitMLVSBM$clear()}\if{html}{\out{</div>}}
 }
@@ -125,24 +217,45 @@ An R6 Class ocject, a fitted multilevel network once $dovem() is done
 \if{html}{\out{<a id="method-m_step"></a>}}
 \if{latex}{\out{\hypertarget{method-m_step}{}}}
 \subsection{Method \code{m_step()}}{
+m_step Compute the M step of the VEM algorithm
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FitMLVSBM$m_step(safeguard = 1e-06)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{safeguard}}{Parameter live in a compact [safeguard, 1-safeguard]}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-ve_step"></a>}}
 \if{latex}{\out{\hypertarget{method-ve_step}{}}}
 \subsection{Method \code{ve_step()}}{
+Compute the VE step of the VEM algorithm
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FitMLVSBM$ve_step(threshold = 1e-06, fixPointIter = 100, safeguard = 1e-06)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FitMLVSBM$ve_step(threshold = 1e-06, fixPointIter = 10, safeguard = 1e-06)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{threshold}}{The convergence threshold}
+
+\item{\code{fixPointIter}}{The maximum number of fixed point iterations}
+
+\item{\code{safeguard}}{Parameter live in a compact [safeguard, 1-safeguard]}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-do_vem"></a>}}
 \if{latex}{\out{\hypertarget{method-do_vem}{}}}
 \subsection{Method \code{do_vem()}}{
+Launch a Variational EM algorithm
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FitMLVSBM$do_vem(
   init = "hierarchical",
@@ -154,13 +267,78 @@ An R6 Class ocject, a fitted multilevel network once $dovem() is done
 )}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{init}}{The method for \code{self$init_clustering}}
+
+\item{\code{threshold}}{The convergence threshold}
+
+\item{\code{maxIter}}{The max number of VEM iterations}
+
+\item{\code{fixPointIter}}{The max number of fixed point iterations for VE step}
+
+\item{\code{safeguard}}{Parameter live in a compact [safeguard, 1-safeguard]}
+
+\item{\code{Z}}{Initial clustering if provided}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-permute_empty_class"></a>}}
 \if{latex}{\out{\hypertarget{method-permute_empty_class}{}}}
 \subsection{Method \code{permute_empty_class()}}{
+permute_empty_class Put empty blocks numbers at the end
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FitMLVSBM$permute_empty_class()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-plot"></a>}}
+\if{latex}{\out{\hypertarget{method-plot}{}}}
+\subsection{Method \code{plot()}}{
+Plot of FitMLVSBM objects
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FitMLVSBM$plot(type = c("matrix", "mesoscale"))}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{type}}{A string for the type of plot, either "matrix" or "mesoscale"}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+a ggplot2 object
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-show"></a>}}
+\if{latex}{\out{\hypertarget{method-show}{}}}
+\subsection{Method \code{show()}}{
+print method
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FitMLVSBM$show(type = "Multilevel Stochastic Block Model")}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{type}}{character to tune the displayed name}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-print"></a>}}
+\if{latex}{\out{\hypertarget{method-print}{}}}
+\subsection{Method \code{print()}}{
+print method
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FitMLVSBM$print()}\if{html}{\out{</div>}}
 }
 
 }

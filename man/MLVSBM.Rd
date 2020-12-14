@@ -2,7 +2,7 @@
 % Please edit documentation in R/MLVSBM-class.R
 \name{MLVSBM}
 \alias{MLVSBM}
-\title{A R6Class for multilevel object}
+\title{R6Class for multilevel object}
 \description{
 Store all simulation parameters and list of fittedmodels.
 Methods for global inference and model selection are included.
@@ -90,7 +90,8 @@ Methods for global inference and model selection are included.
   Q_min = 1,
   Q_max = 10,
   fit = NULL,
-  nb_cores = NULL
+  nb_cores = NULL,
+  init = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -209,6 +210,7 @@ Methods for global inference and model selection are included.
 \if{html}{\out{<a id="method-new"></a>}}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
+Constructor for R6 class MLVSBM
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MLVSBM$new(
   n = NULL,
@@ -221,20 +223,56 @@ Methods for global inference and model selection are included.
 )}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{n}}{A list of size 2, the number of nodes}
+
+\item{\code{X}}{A list of 2 adjacency matrices}
+
+\item{\code{A}}{The affiliation matrix}
+
+\item{\code{Z}}{A list of 2 vectors, the blocks membership}
+
+\item{\code{directed}}{A list of 2 booleans}
+
+\item{\code{sim_param}}{A list of MLVSBM parameters for simulating networks}
+
+\item{\code{distribution}}{The distributions of the interactions ("bernoulli")}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A MLVSBM object
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-findmodel"></a>}}
 \if{latex}{\out{\hypertarget{method-findmodel}{}}}
 \subsection{Method \code{findmodel()}}{
+Find a fitted model of a given size
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MLVSBM$findmodel(nb_clusters = NA, fit = NA)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{nb_clusters}}{A list of the size of the model}
+
+\item{\code{fit}}{if fit = "best" return the best model according to the ICL}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A FitMLVSBM object
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clearmodels"></a>}}
 \if{latex}{\out{\hypertarget{method-clearmodels}{}}}
 \subsection{Method \code{clearmodels()}}{
+delete all fitted models
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MLVSBM$clearmodels()}\if{html}{\out{</div>}}
 }
@@ -244,10 +282,18 @@ Methods for global inference and model selection are included.
 \if{html}{\out{<a id="method-addmodel"></a>}}
 \if{latex}{\out{\hypertarget{method-addmodel}{}}}
 \subsection{Method \code{addmodel()}}{
+Added a FitMLVSBM object to the list of fitted model
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MLVSBM$addmodel(fit)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{fit}}{The FitMLVSBM object to be added}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-simulate"></a>}}

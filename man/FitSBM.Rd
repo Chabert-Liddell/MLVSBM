@@ -2,16 +2,15 @@
 % Please edit documentation in R/FitSBM-class.R
 \name{FitSBM}
 \alias{FitSBM}
-\title{An R6 Class ocject, a fitted level of a multilelvel network once $do_vem() is done}
+\title{An R6 Class object for unilevel network}
 \description{
-An R6 Class ocject, a fitted level of a multilelvel network once $do_vem() is done
-
-An R6 Class ocject, a fitted level of a multilelvel network once $do_vem() is done
+a fitted level of a unilevel network once
+$do_vem() is done
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{df_mixtures}}{Get the degree of freedom of the block proportion}
+\item{\code{vbound}}{vector of variational bound for convergence monitoring}
 }
 \if{html}{\out{</div>}}
 }
@@ -40,9 +39,11 @@ An R6 Class ocject, a fitted level of a multilelvel network once $do_vem() is do
 
 \item{\code{bound}}{Get the variational bound of the model}
 
-\item{\code{df_mixtures}}{Get the degree of freedom of the block proportion}
+\item{\code{df_mixture}}{Get the degree of freedom of the block proportion}
 
 \item{\code{df_connect}}{Get the degree of freedom of the connection parameters}
+
+\item{\code{connect}}{Get the number of observed dyads}
 
 \item{\code{ICL}}{Get the ICL model selection criterion}
 
@@ -51,6 +52,12 @@ An R6 Class ocject, a fitted level of a multilelvel network once $do_vem() is do
 \item{\code{Z}}{Access the vector of block membership (clustering)}
 
 \item{\code{X_hat}}{Get the connection probability matrix}
+
+\item{\code{X_likelihood}}{adjacency part of the log likelihood}
+
+\item{\code{Z_likelihood}}{block part of the log likelihood}
+
+\item{\code{likelihood}}{complete log likelihood}
 }
 \if{html}{\out{</div>}}
 }
@@ -73,6 +80,7 @@ An R6 Class ocject, a fitted level of a multilelvel network once $do_vem() is do
 \if{html}{\out{<a id="method-new"></a>}}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
+Constructor for FitSBM  R6 class
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FitSBM$new(
   Q = 1,
@@ -83,56 +91,124 @@ An R6 Class ocject, a fitted level of a multilelvel network once $do_vem() is do
 )}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{Q}}{Number of blocks}
+
+\item{\code{X}}{Adjacency matrix}
+
+\item{\code{M}}{Mask matrix}
+
+\item{\code{directed}}{boolean}
+
+\item{\code{distribution}}{string (only "bernoulli")}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A new FitSBM object
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-update_alpha"></a>}}
 \if{latex}{\out{\hypertarget{method-update_alpha}{}}}
 \subsection{Method \code{update_alpha()}}{
+Update the connection parameter for the M step
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FitSBM$update_alpha(safeguard = 1e-06)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{safeguard}}{Parameter live in a compact [safeguard, 1-safeguard]}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-update_pi"></a>}}
 \if{latex}{\out{\hypertarget{method-update_pi}{}}}
 \subsection{Method \code{update_pi()}}{
+Update the upper level mixture parameter for the M step
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FitSBM$update_pi(safeguard = 1e-06)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{safeguard}}{Parameter live in a compact [safeguard, 1-safeguard]}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-init_clustering"></a>}}
 \if{latex}{\out{\hypertarget{method-init_clustering}{}}}
 \subsection{Method \code{init_clustering()}}{
+init_clustering Initial clustering for VEM algorithm
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FitSBM$init_clustering(safeguard = 1e-06, method = "hierarchical", Z = NULL)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{safeguard}}{Parameter live in a compact [safeguard, 1-safeguard]}
+
+\item{\code{method}}{Algorithm used to initiate the clustering, either
+"spectral", "hierarchical" or "merge_split" (if \code{Z} is provided)}
+
+\item{\code{Z}}{Initial clustering if provided}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-m_step"></a>}}
 \if{latex}{\out{\hypertarget{method-m_step}{}}}
 \subsection{Method \code{m_step()}}{
+m_step Compute the M step of the VEM algorithm
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FitSBM$m_step(safeguard = 1e-06)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{safeguard}}{Parameter live in a compact [safeguard, 1-safeguard]}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-ve_step"></a>}}
 \if{latex}{\out{\hypertarget{method-ve_step}{}}}
 \subsection{Method \code{ve_step()}}{
+Compute the VE step of the VEM algorithm
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FitSBM$ve_step(threshold = 1e-06, fixPointIter = 100, safeguard = 1e-06)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{threshold}}{The convergence threshold}
+
+\item{\code{fixPointIter}}{The maximum number of fixed point iterations}
+
+\item{\code{safeguard}}{Parameter live in a compact [safeguard, 1-safeguard]}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-do_vem"></a>}}
 \if{latex}{\out{\hypertarget{method-do_vem}{}}}
 \subsection{Method \code{do_vem()}}{
+Launch a Variational EM algorithm
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FitSBM$do_vem(
   init = "hierarchical",
@@ -140,16 +216,33 @@ An R6 Class ocject, a fitted level of a multilelvel network once $do_vem() is do
   maxIter = 1000,
   fixPointIter = 100,
   safeguard = 1e-06,
-  Z = NULL,
-  bound = NA
+  Z = NULL
 )}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{init}}{The method for \code{self$init_clustering}}
+
+\item{\code{threshold}}{The convergence threshold}
+
+\item{\code{maxIter}}{The max number of VEM iterations}
+
+\item{\code{fixPointIter}}{The max number of fixed point iterations for VE step}
+
+\item{\code{safeguard}}{Parameter live in a compact [safeguard, 1-safeguard]}
+
+\item{\code{Z}}{Initial clustering if provided}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-permute_empty_class"></a>}}
 \if{latex}{\out{\hypertarget{method-permute_empty_class}{}}}
 \subsection{Method \code{permute_empty_class()}}{
+permute_empty_class Put empty blocks numbers at the end
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FitSBM$permute_empty_class()}\if{html}{\out{</div>}}
 }
@@ -159,6 +252,7 @@ An R6 Class ocject, a fitted level of a multilelvel network once $do_vem() is do
 \if{html}{\out{<a id="method-clear"></a>}}
 \if{latex}{\out{\hypertarget{method-clear}{}}}
 \subsection{Method \code{clear()}}{
+Reset all parameters
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FitSBM$clear()}\if{html}{\out{</div>}}
 }
