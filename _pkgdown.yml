@@ -17,7 +17,7 @@ navbar:
       -  text: Introduction
          href: articles/vignette.html
       -  text: Hard Inference
-         href: articles/hard_to_infer.html
+         href: articles/articles/hard_to_infer.html
     - text: "Changelog"
       href: "news/index.html"
   right:
@@ -50,11 +50,9 @@ reference:
   - '`spcClust`'
   - '`split_clust`'
   - '`ARI`'
-
-
-articles:
-- title: Articles
-  navbar: ~
+- title: Other generic methods
+  desc:  ~
   contents:
-  - vignette
-  - hard_to_infer
+  - '`coef.FitMLVSBM`'
+  - '`plot.FitMLVSBM`'
+  - '`predict.FitMLVSBM`'

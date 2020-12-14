@@ -1,6 +1,6 @@
 Package: MLVSBM
 Type: Package
-Title: A Stochastic Block Model for MultiLeVel Networks
+Title: A Stochastic Block Model for Multilevel Networks
 Version: 0.2.0
 Authors@R: 
     person(given = "Saint-Clair",
@@ -8,7 +8,6 @@ Authors@R:
            role = c("aut", "cre"),
            email = "saint-clair.chabert-liddell@agroparistech.fr",
            comment = c(ORCID = "0000-0001-5604-7308"))
-Maintainer: 'Saint-Clair Chabert-Liddell <saint-clair.chabert-liddell@agroparistech.fr>'
 Description: Simulation, inference and clustering of multilevel network using a
     Stochastic Block Model framework as described in the following paper: 
     <arXiv:1910.10512>. A multilevel network is defined as the 

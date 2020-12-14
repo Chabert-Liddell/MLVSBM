@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>A R6Class for multilevel object — MLVSBM • MLVSBM</title>
+<title>R6Class for multilevel object — MLVSBM • MLVSBM</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,7 @@
 
 
 
-<meta property="og:title" content="A R6Class for multilevel object — MLVSBM" />
+<meta property="og:title" content="R6Class for multilevel object — MLVSBM" />
 <meta property="og:description" content="Store all simulation parameters and list of fittedmodels.
 Methods for global inference and model selection are included." />
 
@@ -73,7 +73,7 @@ Methods for global inference and model selection are included." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MLVSBM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -102,7 +102,7 @@ Methods for global inference and model selection are included." />
       <a href="../articles/vignette.html">Introduction</a>
     </li>
     <li>
-      <a href="../articles/hard_to_infer.html">Hard Inference</a>
+      <a href="../articles/articles/hard_to_infer.html">Hard Inference</a>
     </li>
   </ul>
 </li>
@@ -130,7 +130,7 @@ Methods for global inference and model selection are included." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>A R6Class for multilevel object</h1>
+    <h1>R6Class for multilevel object</h1>
     <small class="dont-index">Source: <a href='https://github.com/Chabert-Liddell/MLVSBM/blob/master/R/MLVSBM-class.R'><code>R/MLVSBM-class.R</code></a></small>
     <div class="hidden name"><code>MLVSBM.Rd</code></div>
     </div>
@@ -144,7 +144,7 @@ Methods for global inference and model selection are included.</p>
 
     <h2 class="hasAnchor" id="active-bindings"><a class="anchor" href="#active-bindings"></a>Active bindings</h2>
 
-    <p><div class="r6-active-bindings"></p><dl'>
+    <p><div class="r6-active-bindings"></p><dl>
 <dt><code>nb_nodes</code></dt><dd><p>List of the umber of nodes for each levels</p></dd>
 
 <dt><code>simulation_parameters</code></dt><dd><p>List of parameters of the MLVSBM</p></dd>
@@ -177,7 +177,7 @@ Methods for global inference and model selection are included.</p>
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     
-<h3>Public methods</h3>
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Public methods</h3>
 
 <ul>
 <li><p><a href='#method-estimate_level'><code>MLVSBM$estimate_level()</code></a></p></li>
@@ -199,160 +199,190 @@ Methods for global inference and model selection are included.</p>
 <li><p><a href='#method-clone'><code>MLVSBM$clone()</code></a></p></li>
 </ul>
 <p><hr>
-<a id="method-estimate_level"></a></p><h3>Method <code>estimate_level()</code></h3>
+<a id="method-estimate_level"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>estimate_level()</code></h3>
 
-<h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>MLVSBM</span>$<span class='fu'>estimate_level</span>(
-  <span class='kw'>level</span> <span class='kw'>=</span> <span class='st'>"lower"</span>,
-  <span class='kw'>Q_min</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>Q_max</span> <span class='kw'>=</span> <span class='fl'>10</span>,
-  <span class='kw'>Z</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>init</span> <span class='kw'>=</span> <span class='st'>"hierarchical"</span>,
-  <span class='kw'>depth</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>nb_cores</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
-)</pre><p></div></p>
-
-<p><hr>
-<a id="method-estimate_sbm_neighbours"></a></p><h3>Method <code>estimate_sbm_neighbours()</code></h3>
-
-<h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>MLVSBM</span>$<span class='fu'>estimate_sbm_neighbours</span>(
-  <span class='kw'>level</span> <span class='kw'>=</span> <span class='st'>"lower"</span>,
-  <span class='kw'>Q</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>Q_min</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>Q_max</span> <span class='kw'>=</span> <span class='fl'>10</span>,
-  <span class='kw'>fit</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>nb_cores</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
-)</pre><p></div></p>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>MLVSBM</span><span class='op'>$</span><span class='fu'>estimate_level</span><span class='op'>(</span>
+  level <span class='op'>=</span> <span class='st'>"lower"</span>,
+  Q_min <span class='op'>=</span> <span class='fl'>1</span>,
+  Q_max <span class='op'>=</span> <span class='fl'>10</span>,
+  Z <span class='op'>=</span> <span class='cn'>NULL</span>,
+  init <span class='op'>=</span> <span class='st'>"hierarchical"</span>,
+  depth <span class='op'>=</span> <span class='fl'>1</span>,
+  nb_cores <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre><p></div></p>
 
 <p><hr>
-<a id="method-estimate_sbm_from_neighbours"></a></p><h3>Method <code>estimate_sbm_from_neighbours()</code></h3>
+<a id="method-estimate_sbm_neighbours"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>estimate_sbm_neighbours()</code></h3>
 
-<h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>MLVSBM</span>$<span class='fu'>estimate_sbm_from_neighbours</span>(
-  <span class='kw'>level</span> <span class='kw'>=</span> <span class='st'>"lower"</span>,
-  <span class='kw'>Q</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>fits</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>nb_cores</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
-)</pre><p></div></p>
-
-<p><hr>
-<a id="method-estimate_sbm"></a></p><h3>Method <code>estimate_sbm()</code></h3>
-
-<h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>MLVSBM</span>$<span class='fu'>estimate_sbm</span>(<span class='kw'>level</span> <span class='kw'>=</span> <span class='st'>"lower"</span>, <span class='kw'>Q</span> <span class='kw'>=</span> <span class='no'>Q</span>, <span class='kw'>Z</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>init</span> <span class='kw'>=</span> <span class='st'>"hierarchical"</span>)</pre><p></div></p>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>MLVSBM</span><span class='op'>$</span><span class='fu'>estimate_sbm_neighbours</span><span class='op'>(</span>
+  level <span class='op'>=</span> <span class='st'>"lower"</span>,
+  Q <span class='op'>=</span> <span class='cn'>NULL</span>,
+  Q_min <span class='op'>=</span> <span class='fl'>1</span>,
+  Q_max <span class='op'>=</span> <span class='fl'>10</span>,
+  fit <span class='op'>=</span> <span class='cn'>NULL</span>,
+  nb_cores <span class='op'>=</span> <span class='cn'>NULL</span>,
+  init <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre><p></div></p>
 
 <p><hr>
-<a id="method-mcestimate"></a></p><h3>Method <code>mcestimate()</code></h3>
+<a id="method-estimate_sbm_from_neighbours"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>estimate_sbm_from_neighbours()</code></h3>
 
-<h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>MLVSBM</span>$<span class='fu'>mcestimate</span>(<span class='no'>Q</span>, <span class='kw'>Z</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>init</span> <span class='kw'>=</span> <span class='st'>"hierarchical"</span>, <span class='kw'>independent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre><p></div></p>
-
-<p><hr>
-<a id="method-estimate_from_neighbours"></a></p><h3>Method <code>estimate_from_neighbours()</code></h3>
-
-<h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>MLVSBM</span>$<span class='fu'>estimate_from_neighbours</span>(
-  <span class='no'>Q</span>,
-  <span class='kw'>models</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>independent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>nb_cores</span> <span class='kw'>=</span> <span class='no'>nb_cores</span>
-)</pre><p></div></p>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>MLVSBM</span><span class='op'>$</span><span class='fu'>estimate_sbm_from_neighbours</span><span class='op'>(</span>
+  level <span class='op'>=</span> <span class='st'>"lower"</span>,
+  Q <span class='op'>=</span> <span class='cn'>NULL</span>,
+  fits <span class='op'>=</span> <span class='cn'>NULL</span>,
+  nb_cores <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre><p></div></p>
 
 <p><hr>
-<a id="method-estimate_neighbours"></a></p><h3>Method <code>estimate_neighbours()</code></h3>
+<a id="method-estimate_sbm"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>estimate_sbm()</code></h3>
 
-<h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>MLVSBM</span>$<span class='fu'>estimate_neighbours</span>(
-  <span class='no'>Q</span>,
-  <span class='kw'>fit</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>independent</span> <span class='kw'>=</span> <span class='no'>independent</span>,
-  <span class='kw'>nb_cores</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
-)</pre><p></div></p>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>MLVSBM</span><span class='op'>$</span><span class='fu'>estimate_sbm</span><span class='op'>(</span>level <span class='op'>=</span> <span class='st'>"lower"</span>, Q <span class='op'>=</span> <span class='va'>Q</span>, Z <span class='op'>=</span> <span class='cn'>NULL</span>, init <span class='op'>=</span> <span class='st'>"hierarchical"</span><span class='op'>)</span></pre><p></div></p>
 
 <p><hr>
-<a id="method-merge_split_membership"></a></p><h3>Method <code>merge_split_membership()</code></h3>
+<a id="method-mcestimate"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>mcestimate()</code></h3>
 
-<h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>MLVSBM</span>$<span class='fu'>merge_split_membership</span>(
-  <span class='kw'>fitted</span> <span class='kw'>=</span> <span class='no'>private</span>$<span class='no'>fitted</span><span class='kw'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>private</span>$<span class='no'>fitted</span>)]]
-)</pre><p></div></p>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>MLVSBM</span><span class='op'>$</span><span class='fu'>mcestimate</span><span class='op'>(</span><span class='va'>Q</span>, Z <span class='op'>=</span> <span class='cn'>NULL</span>, init <span class='op'>=</span> <span class='st'>"hierarchical"</span>, independent <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre><p></div></p>
 
 <p><hr>
-<a id="method-mc_ms_estimate"></a></p><h3>Method <code>mc_ms_estimate()</code></h3>
+<a id="method-estimate_from_neighbours"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>estimate_from_neighbours()</code></h3>
 
-<h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>MLVSBM</span>$<span class='fu'>mc_ms_estimate</span>(<span class='kw'>Z</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>independent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>nb_cores</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre><p></div></p>
-
-<p><hr>
-<a id="method-estimate_one"></a></p><h3>Method <code>estimate_one()</code></h3>
-
-<h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>MLVSBM</span>$<span class='fu'>estimate_one</span>(
-  <span class='no'>Q</span>,
-  <span class='kw'>Z</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>independent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>init</span> <span class='kw'>=</span> <span class='st'>"hierarchical"</span>,
-  <span class='kw'>nb_cores</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
-)</pre><p></div></p>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>MLVSBM</span><span class='op'>$</span><span class='fu'>estimate_from_neighbours</span><span class='op'>(</span>
+  <span class='va'>Q</span>,
+  models <span class='op'>=</span> <span class='cn'>NULL</span>,
+  independent <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  nb_cores <span class='op'>=</span> <span class='va'>nb_cores</span>
+<span class='op'>)</span></pre><p></div></p>
 
 <p><hr>
-<a id="method-estimate_all_bm"></a></p><h3>Method <code>estimate_all_bm()</code></h3>
+<a id="method-estimate_neighbours"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>estimate_neighbours()</code></h3>
 
-<h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>MLVSBM</span>$<span class='fu'>estimate_all_bm</span>(
-  <span class='kw'>Q</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>Z</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>independent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>clear</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>nb_cores</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
-)</pre><p></div></p>
-
-<p><hr>
-<a id="method-new"></a></p><h3>Method <code>new()</code></h3>
-
-<h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>MLVSBM</span>$<span class='fu'>new</span>(
-  <span class='kw'>n</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>X</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>A</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>Z</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>directed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>sim_param</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>distribution</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='st'>"bernoulli"</span>, <span class='st'>"bernoulli"</span>)
-)</pre><p></div></p>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>MLVSBM</span><span class='op'>$</span><span class='fu'>estimate_neighbours</span><span class='op'>(</span>
+  <span class='va'>Q</span>,
+  fit <span class='op'>=</span> <span class='cn'>NULL</span>,
+  independent <span class='op'>=</span> <span class='va'>independent</span>,
+  nb_cores <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre><p></div></p>
 
 <p><hr>
-<a id="method-findmodel"></a></p><h3>Method <code>findmodel()</code></h3>
+<a id="method-merge_split_membership"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>merge_split_membership()</code></h3>
 
-<h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>MLVSBM</span>$<span class='fu'>findmodel</span>(<span class='kw'>nb_clusters</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>fit</span> <span class='kw'>=</span> <span class='fl'>NA</span>)</pre><p></div></p>
-
-<p><hr>
-<a id="method-clearmodels"></a></p><h3>Method <code>clearmodels()</code></h3>
-
-<h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>MLVSBM</span>$<span class='fu'>clearmodels</span>()</pre><p></div></p>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>MLVSBM</span><span class='op'>$</span><span class='fu'>merge_split_membership</span><span class='op'>(</span>
+  fitted <span class='op'>=</span> <span class='va'>private</span><span class='op'>$</span><span class='va'>fitted</span><span class='op'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>private</span><span class='op'>$</span><span class='va'>fitted</span><span class='op'>)</span><span class='op'>]</span><span class='op'>]</span>
+<span class='op'>)</span></pre><p></div></p>
 
 <p><hr>
-<a id="method-addmodel"></a></p><h3>Method <code>addmodel()</code></h3>
+<a id="method-mc_ms_estimate"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>mc_ms_estimate()</code></h3>
 
-<h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>MLVSBM</span>$<span class='fu'>addmodel</span>(<span class='no'>fit</span>)</pre><p></div></p>
-
-<p><hr>
-<a id="method-simulate"></a></p><h3>Method <code><a href='https://rdrr.io/r/stats/simulate.html'>simulate()</a></code></h3>
-
-<h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>MLVSBM</span>$<span class='fu'><a href='https://rdrr.io/r/stats/simulate.html'>simulate</a></span>()</pre><p></div></p>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>MLVSBM</span><span class='op'>$</span><span class='fu'>mc_ms_estimate</span><span class='op'>(</span>Z <span class='op'>=</span> <span class='cn'>NA</span>, independent <span class='op'>=</span> <span class='cn'>FALSE</span>, nb_cores <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre><p></div></p>
 
 <p><hr>
-<a id="method-clone"></a></p><h3>Method <code>clone()</code></h3>
-<p>The objects of this class are cloneable with this method.</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>MLVSBM</span>$<span class='fu'>clone</span>(<span class='kw'>deep</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre><p></div></p>
+<a id="method-estimate_one"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>estimate_one()</code></h3>
 
-<h3>Arguments</h3>
-<p><div class="arguments"></p><dl'>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>MLVSBM</span><span class='op'>$</span><span class='fu'>estimate_one</span><span class='op'>(</span>
+  <span class='va'>Q</span>,
+  Z <span class='op'>=</span> <span class='cn'>NULL</span>,
+  independent <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  init <span class='op'>=</span> <span class='st'>"hierarchical"</span>,
+  nb_cores <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre><p></div></p>
+
+<p><hr>
+<a id="method-estimate_all_bm"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>estimate_all_bm()</code></h3>
+
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>MLVSBM</span><span class='op'>$</span><span class='fu'>estimate_all_bm</span><span class='op'>(</span>
+  Q <span class='op'>=</span> <span class='cn'>NULL</span>,
+  Z <span class='op'>=</span> <span class='cn'>NULL</span>,
+  independent <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  clear <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  nb_cores <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre><p></div></p>
+
+<p><hr>
+<a id="method-new"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>new()</code></h3>
+<p>Constructor for R6 class MLVSBM</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>MLVSBM</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>
+  n <span class='op'>=</span> <span class='cn'>NULL</span>,
+  X <span class='op'>=</span> <span class='cn'>NULL</span>,
+  A <span class='op'>=</span> <span class='cn'>NULL</span>,
+  Z <span class='op'>=</span> <span class='cn'>NULL</span>,
+  directed <span class='op'>=</span> <span class='cn'>NULL</span>,
+  sim_param <span class='op'>=</span> <span class='cn'>NULL</span>,
+  distribution <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"bernoulli"</span>, <span class='st'>"bernoulli"</span><span class='op'>)</span>
+<span class='op'>)</span></pre><p></div></p>
+
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
+<p><div class="arguments"></p><dl>
+<dt><code>n</code></dt><dd><p>A list of size 2, the number of nodes</p></dd>
+
+<dt><code>X</code></dt><dd><p>A list of 2 adjacency matrices</p></dd>
+
+<dt><code>A</code></dt><dd><p>The affiliation matrix</p></dd>
+
+<dt><code>Z</code></dt><dd><p>A list of 2 vectors, the blocks membership</p></dd>
+
+<dt><code>directed</code></dt><dd><p>A list of 2 booleans</p></dd>
+
+<dt><code>sim_param</code></dt><dd><p>A list of MLVSBM parameters for simulating networks</p></dd>
+
+<dt><code>distribution</code></dt><dd><p>The distributions of the interactions ("bernoulli")</p></dd>
+
+</dl><p></div></p>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
+<p>A MLVSBM object</p>
+<p><hr>
+<a id="method-findmodel"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>findmodel()</code></h3>
+<p>Find a fitted model of a given size</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>MLVSBM</span><span class='op'>$</span><span class='fu'>findmodel</span><span class='op'>(</span>nb_clusters <span class='op'>=</span> <span class='cn'>NA</span>, fit <span class='op'>=</span> <span class='cn'>NA</span><span class='op'>)</span></pre><p></div></p>
+
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
+<p><div class="arguments"></p><dl>
+<dt><code>nb_clusters</code></dt><dd><p>A list of the size of the model</p></dd>
+
+<dt><code>fit</code></dt><dd><p>if fit = "best" return the best model according to the ICL</p></dd>
+
+</dl><p></div></p>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
+<p>A FitMLVSBM object</p>
+<p><hr>
+<a id="method-clearmodels"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>clearmodels()</code></h3>
+<p>delete all fitted models</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>MLVSBM</span><span class='op'>$</span><span class='fu'>clearmodels</span><span class='op'>(</span><span class='op'>)</span></pre><p></div></p>
+
+<p><hr>
+<a id="method-addmodel"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>addmodel()</code></h3>
+<p>Added a FitMLVSBM object to the list of fitted model</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>MLVSBM</span><span class='op'>$</span><span class='fu'>addmodel</span><span class='op'>(</span><span class='va'>fit</span><span class='op'>)</span></pre><p></div></p>
+
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
+<p><div class="arguments"></p><dl>
+<dt><code>fit</code></dt><dd><p>The FitMLVSBM object to be added</p></dd>
+
+</dl><p></div></p>
+<p><hr>
+<a id="method-simulate"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code><a href='https://rdrr.io/r/stats/simulate.html'>simulate()</a></code></h3>
+
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>MLVSBM</span><span class='op'>$</span><span class='fu'>simulate</span><span class='op'>(</span><span class='op'>)</span></pre><p></div></p>
+
+<p><hr>
+<a id="method-clone"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>clone()</code></h3>
+<p>The objects of this class are cloneable with this method.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>MLVSBM</span><span class='op'>$</span><span class='fu'>clone</span><span class='op'>(</span>deep <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre><p></div></p>
+
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
+<p><div class="arguments"></p><dl>
 <dt><code>deep</code></dt><dd><p>Whether to make a deep clone.</p></dd>
 
 </dl><p></div></p>
@@ -374,7 +404,7 @@ Methods for global inference and model selection are included.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

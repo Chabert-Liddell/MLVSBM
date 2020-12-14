@@ -79,7 +79,7 @@ can be force by setting the parameters nb_clusters to a given value." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MLVSBM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -108,7 +108,7 @@ can be force by setting the parameters nb_clusters to a given value." />
       <a href="../articles/vignette.html">Introduction</a>
     </li>
     <li>
-      <a href="../articles/hard_to_infer.html">Hard Inference</a>
+      <a href="../articles/articles/hard_to_infer.html">Hard Inference</a>
     </li>
   </ul>
 </li>
@@ -152,12 +152,13 @@ initial clustering with the <code>init_clustering</code>. Also, a given model si
 can be force by setting the parameters <code>nb_clusters</code> to a given value.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>mlvsbm_estimate_network</span>(
-  <span class='no'>mlv</span>,
-  <span class='kw'>nb_clusters</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>init_clustering</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>nb_cores</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
-)</pre>
+    <pre class="usage"><span class='fu'>mlvsbm_estimate_network</span><span class='op'>(</span>
+  <span class='va'>mlv</span>,
+  nb_clusters <span class='op'>=</span> <span class='cn'>NULL</span>,
+  init_clustering <span class='op'>=</span> <span class='cn'>NULL</span>,
+  nb_cores <span class='op'>=</span> <span class='cn'>NULL</span>,
+  init_method <span class='op'>=</span> <span class='st'>"hierarchical"</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -184,6 +185,12 @@ this clustering, then navigate freely.</p></td>
       <td><p>An integer, the number of cores to use. Default to <code>1</code>
 for Windows and <code>detectCores()/2</code> for Linux and MacOS</p></td>
     </tr>
+    <tr>
+      <th>init_method</th>
+      <td><p>One of "hierarchical" (the default) or "spectral",
+"spectral" might be more efficient but can lead to some numeric errors.
+Not used when int_clustering is given.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -191,22 +198,23 @@ for Windows and <code>detectCores()/2</code> for Linux and MacOS</p></td>
     <p>A FitMLVSBM object, the best inference of the network</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>my_mlvsbm</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>MLVSBM</span><span class='kw ns'>::</span><span class='fu'><a href='mlvsbm_simulate_network.html'>mlvsbm_simulate_network</a></span>(
-  <span class='kw'>n</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>I</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>O</span> <span class='kw'>=</span> <span class='fl'>20</span>), <span class='co'># Number of nodes for the lower level and the upper level</span>
-  <span class='kw'>Q</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>I</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>O</span> <span class='kw'>=</span> <span class='fl'>2</span>), <span class='co'># Number of blocks for the lower level and the upper level</span>
-  <span class='kw'>pi</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.3</span>, <span class='fl'>.7</span>), <span class='co'># Block proportion for the upper level, must sum to one</span>
-  <span class='kw'>gamma</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.9</span>, <span class='fl'>.2</span>,   <span class='co'># Block proportion for the lower level,</span>
-                   <span class='fl'>.1</span>, <span class='fl'>.8</span>), <span class='co'># each column must sum to one</span>
-                 <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>byrow</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>),
-  <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>I</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.8</span>, <span class='fl'>.2</span>,
-                            <span class='fl'>.2</span>, <span class='fl'>.1</span>),
-                          <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>byrow</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>), <span class='co'># Connection matrix</span>
-               <span class='kw'>O</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.99</span>, <span class='fl'>.3</span>,
-                            <span class='fl'>.3</span>, <span class='fl'>.1</span>),
-                          <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>byrow</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)),<span class='co'># between blocks</span>
-  <span class='kw'>directed</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>I</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>O</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>), <span class='co'># Are the upper and lower level directed or not ?</span>
-  <span class='kw'>affiliation</span> <span class='kw'>=</span> <span class='st'>"preferential"</span>) <span class='co'># How the affiliation matrix is generated</span>
-<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>MLVSBM</span><span class='kw ns'>::</span><span class='fu'>mlvsbm_estimate_network</span>(<span class='kw'>mlv</span> <span class='kw'>=</span> <span class='no'>my_mlvsbm</span>, <span class='kw'>nb_cores</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; 
+    <pre class="examples"><div class='input'><span class='va'>my_mlvsbm</span> <span class='op'>&lt;-</span> <span class='fu'>MLVSBM</span><span class='fu'>::</span><span class='fu'><a href='mlvsbm_simulate_network.html'>mlvsbm_simulate_network</a></span><span class='op'>(</span>
+  n <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>I <span class='op'>=</span> <span class='fl'>10</span>, O <span class='op'>=</span> <span class='fl'>20</span><span class='op'>)</span>, <span class='co'># Number of nodes for the lower level and the upper level</span>
+  Q <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>I <span class='op'>=</span> <span class='fl'>2</span>, O <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>, <span class='co'># Number of blocks for the lower level and the upper level</span>
+  pi <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.3</span>, <span class='fl'>.7</span><span class='op'>)</span>, <span class='co'># Block proportion for the upper level, must sum to one</span>
+  gamma <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.9</span>, <span class='fl'>.2</span>,   <span class='co'># Block proportion for the lower level,</span>
+                   <span class='fl'>.1</span>, <span class='fl'>.8</span><span class='op'>)</span>, <span class='co'># each column must sum to one</span>
+                 nrow <span class='op'>=</span> <span class='fl'>2</span>, ncol <span class='op'>=</span> <span class='fl'>2</span>, byrow <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>,
+  alpha <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>I <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.8</span>, <span class='fl'>.2</span>,
+                            <span class='fl'>.2</span>, <span class='fl'>.1</span><span class='op'>)</span>,
+                          nrow <span class='op'>=</span> <span class='fl'>2</span>, ncol <span class='op'>=</span> <span class='fl'>2</span>, byrow <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>, <span class='co'># Connection matrix</span>
+               O <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.99</span>, <span class='fl'>.3</span>,
+                            <span class='fl'>.3</span>, <span class='fl'>.1</span><span class='op'>)</span>,
+                          nrow <span class='op'>=</span> <span class='fl'>2</span>, ncol <span class='op'>=</span> <span class='fl'>2</span>, byrow <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>,<span class='co'># between blocks</span>
+  directed <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>I <span class='op'>=</span> <span class='cn'>FALSE</span>, O <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>, <span class='co'># Are the upper and lower level directed or not ?</span>
+  affiliation <span class='op'>=</span> <span class='st'>"preferential"</span><span class='op'>)</span> <span class='co'># How the affiliation matrix is generated</span>
+<span class='va'>fit</span> <span class='op'>&lt;-</span> <span class='fu'>MLVSBM</span><span class='fu'>::</span><span class='fu'>mlvsbm_estimate_network</span><span class='op'>(</span>mlv <span class='op'>=</span> <span class='va'>my_mlvsbm</span>, nb_cores <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; 
 #&gt; [1] "Infering lower level :"
 #&gt; [1] "# blocks: 1, ICL = -32.1888562603017 !"
 #&gt; 
@@ -232,7 +240,7 @@ for Windows and <code>detectCores()/2</code> for Linux and MacOS</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
