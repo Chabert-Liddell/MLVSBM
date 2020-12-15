@@ -202,12 +202,12 @@ plot_multilevel_matrix <- function(X, X_hat, A, Z) {
                       yend = c(0, cumsum(table(Z_sup))[seq(QI)]+.5),
                       xend = 0) +
     ggraph::scale_edge_fill_gradient(
-      name = 'Individuals',
+      name = 'Organizations',
       low = "#fcbba1",
       high = "#67000d",
       guide = ggraph::guide_edge_colorbar(order = 2,title.position = "top")) +
     ggraph::scale_edge_color_gradient(
-      name = 'Organizations',
+      name = 'Individuals',
       low = "#deebf7",
       high = "#08519c",
       guide = ggraph::guide_edge_colorbar(order = 1,

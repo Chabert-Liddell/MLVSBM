@@ -301,13 +301,13 @@ permute_empty_class Put empty blocks numbers at the end
 \subsection{Method \code{plot()}}{
 Plot of FitMLVSBM objects
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FitMLVSBM$plot(type = c("matrix", "mesoscale"))}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FitMLVSBM$plot(type = c("matrix"))}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{type}}{A string for the type of plot, either "matrix" or "mesoscale"}
+\item{\code{type}}{A string for the type of plot, just "matrix" for now}
 }
 \if{html}{\out{</div>}}
 }

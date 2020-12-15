@@ -4,12 +4,12 @@
 \alias{plot.FitMLVSBM}
 \title{Multilevel SBM Plot}
 \usage{
-\method{plot}{FitMLVSBM}(x, type = c("matrix", "mesoscale"), ...)
+\method{plot}{FitMLVSBM}(x, type = c("matrix"), ...)
 }
 \arguments{
 \item{x}{an R6 object of class \code{\link[=FitMLVSBM]{FitMLVSBM}}}
 
-\item{type}{A string for the type of plot, either "matrix" or "mesoscale"}
+\item{type}{A string for the type of plot, just "matrix" for now}
 
 \item{...}{additional parameters for S3 compatibility. Not used}
 }
