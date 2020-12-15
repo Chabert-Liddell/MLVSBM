@@ -16,7 +16,7 @@ simulate_adjacency(
 \arguments{
 \item{Z}{A vector of integer of size n, the label}
 
-\item{n}{An integer, the number of rows or columbns of the matrix}
+\item{n}{An integer, the number of rows or columns of the matrix}
 
 \item{alpha}{A \eqn{\max(Z)\times \max(Z)} matrix, the connectivity parameters}
 

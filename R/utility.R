@@ -75,12 +75,12 @@ split_clust <- function(X, Z, Q) {
 #'
 #' @return A list of Q(Q-1)/2 clustering of Q-1 clusters
 merge_clust <- function(Z, Q) {
-  Z_merge = lapply(
+  Z_merge <- lapply(
     X = 1:choose(Q,2),
     FUN = function(q) {
-      Z[Z == utils::combn(Q, 2)[2, q]] = utils::combn(Q, 2)[1, q]
+      Z[Z == utils::combn(Q, 2)[2, q]] <- utils::combn(Q, 2)[1, q]
       if(utils::combn(Q, 2)[2, q] < Q){
-        Z[Z > utils::combn(Q, 2)[2, q]] = Z[Z > utils::combn(Q, 2)[2, q]] - 1
+        Z[Z > utils::combn(Q, 2)[2, q]] <- Z[Z > utils::combn(Q, 2)[2, q]] - 1
         }
       return(Z)
       }
@@ -159,6 +159,7 @@ ARI <- function (x, y)
 
 
 plot_multilevel_matrix <- function(X, X_hat, A, Z) {
+  nodes <- group <- lvl <- edges <- weight <- NULL
   Z_sup <- c(Z$I, Z$O + max(Z$I))
   QI <- max(Z$I)
   QO <- max(Z$O)

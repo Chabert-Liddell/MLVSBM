@@ -103,7 +103,7 @@ MLVSBM <-
       #' @param fit The FitMLVSBM object to be added
       addmodel =
         function (fit) {
-          private$fitted = c(private$fitted, list(fit))
+          private$fitted <- c(private$fitted, list(fit))
           if (is.null(private$ICLtab)) {
             private$ICLtab <-
               data.frame(index  = as.integer(1),

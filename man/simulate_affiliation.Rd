@@ -13,7 +13,7 @@ simulate_affiliation(n, m, affiliation = "uniform", no_empty_org = FALSE)
 
 \item{affiliation}{The type of affiliation between c("uniform", "preferential")}
 
-\item{no_empty_org}{A Boolean. Force all column to have at least a 1.
+\item{no_empty_org}{A Boolean. Force all columns to have at least a 1.
 Must have \eqn{n>m}.}
 }
 \value{

@@ -81,7 +81,7 @@ FitSBM <-
                  function(safeguard = 1e-6){
                    ## pi
                    if (private$Q == 1) {
-                     private$pi = 1
+                     private$pi <- 1
                    } else {
                      pi                 <- colMeans(private$tau)
                      pi[pi < safeguard] <- safeguard
@@ -148,7 +148,7 @@ FitSBM <-
             } else {
               tau  <-  exp(t(apply(tau, 1, function(x) x - max(x))) )
             }
-            tau[tau < safeguard] = safeguard
+            tau[tau < safeguard] <- safeguard
             tau <-  tau/rowSums(tau)
             it <-  it + 1
             condition  <- dist_param(tau, tau_old) > threshold && it <= fixPointIter
@@ -202,8 +202,8 @@ FitSBM <-
                    if(length(unique(self$Z)) < private$Q){
                      perm  <-  c(unique(self$Z), setdiff( 1:private$Q, self$Z))
                      private$tau     <-  private$tau[, perm]
-                     private$alpha         = private$alpha[perm, perm]
-                     private$pi            = private$pi[perm]
+                     private$alpha   <- private$alpha[perm, perm]
+                     private$pi      <- private$pi[perm]
                    }
                  },
       #' @description Reset all parameters

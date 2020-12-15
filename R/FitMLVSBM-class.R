@@ -107,7 +107,7 @@ FitMLVSBM <-
         function(safeguard = 1e-3) {
           ## rho
           if (private$Q$O == 1) {
-            private$param$pi$O = 1
+            private$param$pi$O <- 1
           } else {
             pi <- colMeans(private$tau$O)
             pi[pi < safeguard] <- safeguard
@@ -197,8 +197,8 @@ FitMLVSBM <-
         },
       #' @description Reset all parameters
       clear = function(){
-        private$param = NULL
-        private$tau = NULL
+        private$param <- NULL
+        private$tau <- NULL
       },
       #-------------------------------------------------------------------------
       # Varational EM algorithm
@@ -260,7 +260,7 @@ FitMLVSBM <-
                                       MARGIN = 1,
                                       FUN = function(x) x - max(x))) )
               }
-              tau$O[tau$O < safeguard] = safeguard
+              tau$O[tau$O < safeguard] <- safeguard
               tau$O  <-  tau$O/rowSums(tau$O)
               it  <-  it + 1
               condition  <-  (max(dist_param(tau$O, tau_old$O),
@@ -430,16 +430,16 @@ FitMLVSBM <-
         },
       #' @field Z Get the list of block memberships (vector form)
       Z          = function(value) {
-        Z = list()
+        Z <- list()
         if (private$Q$I == 1) {
-          Z$I = rep(1, private$n$I)
+          Z$I <- rep(1, private$n$I)
         } else {
-          Z$I = apply(private$tau$I, 1, which.max)
+          Z$I <- apply(private$tau$I, 1, which.max)
         }
         if (private$Q$O == 1) {
-          Z$O = rep(1, private$n$O)
+          Z$O <- rep(1, private$n$O)
         } else {
-          Z$O = apply(private$tau$O, 1, which.max)
+          Z$O <- apply(private$tau$O, 1, which.max)
         }
         return(Z)
       },
@@ -490,7 +490,7 @@ FitMLVSBM <-
             ) +
             sum(private$A * private$tau$I %*%
                   tcrossprod(log(private$param$gamma), private$tau$O))
-          factor = if (private$directed_$O) 1 else .5
+          factor <- if (private$directed_$O) 1 else .5
           likelihood$O <-
             factor * (
               sum((private$M$O * private$X$O) *
@@ -550,7 +550,7 @@ predict.FitMLVSBM <- function(object, ...) {
 #' @param ... additional parameters for S3 compatibility. Not used
 #' @return a ggplot2 object
 #' @export
-plot.FitMLVSBM = function(x, type = c('matrix'), ...){
+plot.FitMLVSBM <- function(x, type = c('matrix'), ...){
   stopifnot(inherits(x, "FitMLVSBM"))
   p <- x$plot(type)
   p

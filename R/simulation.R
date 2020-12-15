@@ -21,13 +21,13 @@ MLVSBM$set(
                                prob = private$sim_param$gamma[, ind[i, ]])
     }
     private$X <- list(I = NULL, O = NULL)
-    private$X$I = simulate_adjacency(Z = private$Z$I,
+    private$X$I <- simulate_adjacency(Z = private$Z$I,
                                      n = private$n$I,
                                      alpha = private$sim_param$alpha$I,
                                      directed = private$directed_$I,
                                      distribution = private$distribution_$I,
                                      no_isolated_node = private$sim_param$no_isolated_node)
-    private$X$O = simulate_adjacency(Z = private$Z$O,
+    private$X$O <- simulate_adjacency(Z = private$Z$O,
                                      n = private$n$O,
                                      alpha = private$sim_param$alpha$O,
                                      directed = private$directed_$O,
@@ -47,7 +47,7 @@ MLVSBM$set(
 #' @importFrom stats rbinom
 #'
 #' @param Z A vector of integer of size n, the label
-#' @param n An integer, the number of rows or columbns of the matrix
+#' @param n An integer, the number of rows or columns of the matrix
 #' @param alpha A \eqn{\max(Z)\times \max(Z)} matrix, the connectivity parameters
 #' @param directed A boolean, Is the network directed or not ?
 #' @param distribution The distribution of the indices: only "bernoulli"
@@ -55,19 +55,19 @@ MLVSBM$set(
 #' @return A nxn adjacency matrix
 simulate_adjacency <- function(Z, n, alpha, directed,
                                distribution = "bernoulli", no_isolated_node = FALSE) {
-  X = matrix(0, n, n)
+  X <- matrix(0, n, n)
   condition <- TRUE
   it <- 1
   while (condition) {
     X[] <- 0
     for (i in 1:(n-1)){
-      X[i, (i+1):n] = stats::rbinom(n-i, 1, alpha[Z[i], Z[(i+1):n]])
+      X[i, (i+1):n] <- stats::rbinom(n-i, 1, alpha[Z[i], Z[(i+1):n]])
     }
     if (! directed) {
-      X = X + t(X)
+      X <- X + t(X)
     } else {
       for (i in 2:n) {
-        X[i, 1:(i-1)] =
+        X[i, 1:(i-1)] <-
           stats::rbinom(i-1, 1, alpha[Z[i], Z[1:(i-1)]])
       }
     }
@@ -85,7 +85,7 @@ simulate_adjacency <- function(Z, n, alpha, directed,
 #' @param n An integer, the number of individuals
 #' @param m An integer, the number of organizations
 #' @param affiliation The type of affiliation between c("uniform", "preferential")
-#' @param no_empty_org A Boolean. Force all column to have at least a 1.
+#' @param no_empty_org A Boolean. Force all columns to have at least a 1.
 #' Must have \eqn{n>m}.
 #'
 #' @return A \eqn{n \times m} affiliation matrix, with a unique 1 on each rows

@@ -9,11 +9,12 @@ Authors@R:
            email = "saint-clair.chabert-liddell@agroparistech.fr",
            comment = c(ORCID = "0000-0001-5604-7308"))
 Description: Simulation, inference and clustering of multilevel networks using a
-    Stochastic Block Model framework as described in Chabert-Liddell et al. 
-    (2020) <arXiv:1910.10512>. A multilevel network is defined as the 
-    junction of two interaction networks, the upper level or 
-    inter-organizational level and the lower level or inter-individual level. 
-    The inter-level represents an affiliation relationship.
+    Stochastic Block Model framework as described in Chabert-Liddell, Barbillon,
+    Donnet and Lazega (2020) <arXiv:1910.10512>. 
+    A multilevel network is defined as the junction of two interaction networks, 
+    the upper level or inter-organizational level and the lower level or 
+    inter-individual level. The inter-level represents an affiliation 
+    relationship.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

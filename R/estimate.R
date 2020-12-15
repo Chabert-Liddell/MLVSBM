@@ -57,7 +57,8 @@ MLVSBM$set(
                                            fit = best_fit,
                                            nb_cores = nb_cores,
                                            init = init)
-      new_fit  <-  fits[[which.max(sapply(seq_along(fits), function(x) fits[[x]]$ICL))]]
+      new_fit  <-  fits[[which.max(sapply(seq_along(fits),
+                                          function(x) fits[[x]]$ICL))]]
       # if (new_fit$ICL < spc_fit$ICL) new_fit <- spc_fit
       if (new_fit$ICL > best_fit$ICL) {
         best_fit  <-  new_fit
@@ -67,7 +68,7 @@ MLVSBM$set(
         print(paste0("# blocks: ", best_fit$nb_clusters,
                      ", ICL = ", best_fit$ICL, " !" ))
       } else {
-        condition = FALSE
+        condition <- FALSE
       }
     }
     # Descending
@@ -93,9 +94,9 @@ MLVSBM$set(
                                              nb_cores = nb_cores,
                                              init = init)
         new_fit  <-  fits[[
-          which.max(sapply(1:length(fits), function(x) fits[[x]]$ICL))]]
+          which.max(sapply(seq_along(fits), function(x) fits[[x]]$ICL))]]
         # # spc_fit  <- self$estimate_sbm(level = level, init = init,
-        # #                               Q = max(best_fit$nb_clusters -1, Q_max))
+        # #                             Q = max(best_fit$nb_clusters -1, Q_max))
         # if (new_fit$ICL < spc_fit$ICL) new_fit <- spc_fit
         if (new_fit$ICL > best_fit$ICL) {
           best_fit  <-  new_fit
@@ -120,7 +121,7 @@ MLVSBM$set(
           #     print(paste0("# cluster : ", best_fit$nb_clusters,
           #                  ", ICL = ", best_fit$ICL, " !" ))
         } else {
-          condition = FALSE
+          condition <- FALSE
           # }
         }
       }
@@ -131,7 +132,7 @@ MLVSBM$set(
 #                      FUN = function(i) model_list[[i]]$nb_clusters)
 #     for (i in seq(length(models))) {
 #       if(length(bound[Q_list == i]) >0) {
-#         models[[i]] <- model_list[[which(bound == max(bound[Q_list == i]))[1]]]
+#       models[[i]] <- model_list[[which(bound == max(bound[Q_list == i]))[1]]]
 # #        ICL[i] <- models[[i]]$ICL
 #       }
 #     }
@@ -193,7 +194,7 @@ MLVSBM$set(
       fits <-
         fits[which(sapply( fits, function(x) ! is.null(x$bound)))]
       fits <-
-        fits[[which.max(sapply(1:length(fits), function(x) fits[[x]]$bound))]]
+        fits[[which.max(sapply(seq_along(fits), function(x) fits[[x]]$bound))]]
       models <- c(models, fits)
     }
     if (Q < Q_max) {
@@ -216,7 +217,7 @@ MLVSBM$set(
       fits <-
         fits[which(sapply( fits, function(x) ! is.null(x$bound)))]
       fits <-
-        fits[[which.max(sapply(1:length(fits), function(x) fits[[x]]$bound))]]
+        fits[[which.max(sapply(seq_along(fits), function(x) fits[[x]]$bound))]]
       models <- c(models, fits)
     }
     return(models)
@@ -285,7 +286,7 @@ MLVSBM$set(
     new_fits <-
       new_fits[which(sapply( new_fits, function(x) ! is.null(x$bound)))]
     new_fit <-
-      new_fits[[which.max(sapply(1:length(fits), function(x) fits[[x]]$bound))]]
+      new_fits[[which.max(sapply(seq_along(fits), function(x) fits[[x]]$bound))]]
     return(new_fit)
   }
   )
@@ -417,7 +418,7 @@ MLVSBM$set(
     new_models <- new_models[which(sapply( new_models,
                                            function(x) ! is.null(x$bound)))]
     new_ICL  <-  which.max(
-      sapply(1:length(new_models), function(x) new_models[[x]]$bound ))
+      sapply(seq_along(new_models), function(x) new_models[[x]]$bound ))
     new_model <- new_models[[new_ICL]]
     return(new_model)
   }
@@ -456,19 +457,19 @@ MLVSBM$set(
       }
     }
     models <- c(models,
-                self$mcestimate(Q = list(I = Q$I +1, O = Q$O), init = "spectral"))
+              self$mcestimate(Q = list(I = Q$I +1, O = Q$O), init = "spectral"))
     if (! is.null(Z_tmp$O$split[[1]])) {
       if (! is.null(Z_tmp$I$same[[1]])) {
-        fitted = self$mc_ms_estimate(
+        fitted <- self$mc_ms_estimate(
           Z = list("I" = Z_tmp$I$same,
                    "O" = Z_tmp$O$split),
           independent = independent,
           nb_cores = nb_cores)
-        models = c(models, list(fitted))
+        models <- c(models, list(fitted))
       }
     }
     models <- c(models,
-                self$mcestimate(Q = list(I = Q$I, O = Q$O+1), init = "spectral"))
+               self$mcestimate(Q = list(I = Q$I, O = Q$O+1), init = "spectral"))
     if (! is.null(Z_tmp$I$merge[[1]])) {
       if (! is.null(Z_tmp$O$same[[1]])) {
         fitted <- self$mc_ms_estimate(
@@ -481,7 +482,7 @@ MLVSBM$set(
     }
     if(Q$I != 1) {
       models <- c(models,
-                  self$mcestimate(Q = list(I = Q$I-1, O = Q$O), init = "spectral"))
+              self$mcestimate(Q = list(I = Q$I-1, O = Q$O), init = "spectral"))
     }
     if (! is.null(Z_tmp$O$merge[[1]])) {
       if (! is.null(Z_tmp$I$same[[1]])) {
@@ -495,7 +496,7 @@ MLVSBM$set(
     }
     if(Q$O != 1) {
       models <- c(models,
-                  self$mcestimate(Q = list(I = Q$I, O = Q$O-1), init = "spectral"))
+              self$mcestimate(Q = list(I = Q$I, O = Q$O-1), init = "spectral"))
     }
     models <- models[which(sapply( models, x <- function(x) ! is.null(x)))]
     models <- models[which(sapply( models, x <- function(x) ! is.null(x$ICL)))]
@@ -516,24 +517,24 @@ MLVSBM$set(
     Z$I$same  <-  list(fitted$Z$I)
     Z$O$same  <-  list(fitted$Z$O)
     if (estim_Q$I <= private$max_Q$I) {
-      Z$I$split = split_clust(fitted$adjacency_matrix$I, fitted$Z$I, estim_Q$I)
+      Z$I$split <- split_clust(fitted$adjacency_matrix$I, fitted$Z$I, estim_Q$I)
       } else {
-        Z$I$split = list(NULL)
+        Z$I$split <- list(NULL)
         }
     if (estim_Q$O <= private$max_Q$O) {
-      Z$O$split = split_clust(fitted$adjacency_matrix$O, fitted$Z$O, estim_Q$O)
+      Z$O$split <- split_clust(fitted$adjacency_matrix$O, fitted$Z$O, estim_Q$O)
       } else {
-        Z$O$split = list(NULL)
+        Z$O$split <- list(NULL)
         }
     if (estim_Q$I >= max(2, private$min_Q$I)) {
-      Z$I$merge = merge_clust(fitted$Z$I, estim_Q$I)
+      Z$I$merge <- merge_clust(fitted$Z$I, estim_Q$I)
       } else {
-        Z$I$merge = list(NULL)
+        Z$I$merge <- list(NULL)
         }
     if (estim_Q$O >= max(2, private$min_Q$O)) {
-      Z$O$merge = merge_clust(fitted$Z$O, estim_Q$O)
+      Z$O$merge <- merge_clust(fitted$Z$O, estim_Q$O)
       } else {
-        Z$O$merge = list(NULL)
+        Z$O$merge <- list(NULL)
         }
     return(Z)
     }
@@ -558,7 +559,7 @@ MLVSBM$set(
         nb_cores <-  1
       }
     }
-    nb_models = list("I" = length(Z$I), "O" = length(Z$O))
+    nb_models <- list("I" = length(Z$I), "O" = length(Z$O))
     models  <-  parallel::mclapply(
       seq(nb_models$O * nb_models$I),
       x <- function(x) {
@@ -577,11 +578,11 @@ MLVSBM$set(
           init    ="merge_split",
           independent = independent)
       }, mc.cores = nb_cores)
-    models = models[which(sapply( models, x <- function(x) ! is.null(x)))]
-    models = models[which(sapply( models, x <- function(x) ! is.null(x$bound)))]
-    private$tmp_fitted = c(private$tmp_fitted, models)
-    best_model = models[[which.max(
-      sapply(1:length(models), x <- function(x) {models[[x]]$bound}))]]
+    models <- models[which(sapply( models, x <- function(x) ! is.null(x)))]
+    models <- models[which(sapply( models, x <- function(x) ! is.null(x$bound)))]
+    private$tmp_fitted <- c(private$tmp_fitted, models)
+    best_model <- models[[which.max(
+      sapply(seq_along(models), x <- function(x) {models[[x]]$bound}))]]
     return(best_model)
     }
 )
@@ -680,16 +681,17 @@ MLVSBM$set(
           nb_cores = nb_cores)
         best  <- self$mc_ms_estimate(
           Z = list("I" = list(fitted$Z$I),
-                   "O" = split_clust(fitted$adjacency_matrix$O, fitted$Z$O, fitted$nb_clusters$O)),
+                   "O" = split_clust(fitted$adjacency_matrix$O,
+                                     fitted$Z$O, fitted$nb_clusters$O)),
           independent = independent,
           nb_cores = nb_cores)
         models <- c(models, list(best))
       }
     }
-    models <- models[which(sapply( models, x <- function(x) ! is.null(x)))]
-    models <- models[which(sapply( models, x <- function(x) ! is.null(x$bound)))]
-    best_ICL = which.max(
-      sapply(1:length(models), x <- function(x) {models[[x]]$bound}))
+    models <- models[which(sapply( models, function(x) ! is.null(x)))]
+    models <- models[which(sapply( models, function(x) ! is.null(x$bound)))]
+    best_ICL <- which.max(
+      sapply(seq_along(models), function(x) {models[[x]]$bound}))
     best_model <- models[[best_ICL]]
     self$addmodel(best_model)
     return(best_model)
@@ -731,7 +733,7 @@ MLVSBM$set(
                  " , # Organisation clusters ", best_model$nb_clusters$O,
                  ",  ICL : ", best_model$ICL, "========"))
     self$addmodel(best_model)
-    condition = TRUE
+    condition <- TRUE
     while (condition) {
       models <- self$estimate_neighbours(
         fit = best_model,
@@ -739,34 +741,34 @@ MLVSBM$set(
                  "O" = best_model$nb_clusters$O),
         nb_cores = nb_cores
         )
-                # Z   = self$merge_split_membership(best_model)
-                # models = parallel::mcmapply(rep(1:3, times = 3), rep(1:3, each = 3),
-                #                             FUN = function(i, j) {
-                #                               return(self$mc_ms_estimate(Z$I[[i]], Z$O[[j]], model = model))
-                #                             },
-                #                             mc.cores = nb_cores)
-                # models <-  models[which(sapply( models, x <- function(x) ! is.null(x)))]
-                # models <-  models[which(sapply( models, x <- function(x) ! is.null(x$ICL)))]
-                #      private$tmp_fitted = c(private$tmp_fitted, models)
+# Z   = self$merge_split_membership(best_model)
+# models = parallel::mcmapply(rep(1:3, times = 3), rep(1:3, each = 3),
+#                             FUN = function(i, j) {
+#                               return(self$mc_ms_estimate(Z$I[[i]], Z$O[[j]], model = model))
+#                             },
+#                             mc.cores = nb_cores)
+# models <-  models[which(sapply( models, x <- function(x) ! is.null(x)))]
+# models <-  models[which(sapply( models, x <- function(x) ! is.null(x$ICL)))]
+#      private$tmp_fitted = c(private$tmp_fitted, models)
       new_best_ICL <-  which.max(
-        sapply(1:length(models), x <- function(x) models[[x]]$ICL))
+        sapply(seq_along(models), function(x) models[[x]]$ICL))
       new_best_model <- models[[new_best_ICL]]
       # new_best_model <-  models[[which.max(sapply(1:length(models), x <- function(x) {models[[x]]$ICL}))]]
       if (new_best_model$ICL > best_model$ICL) {
         best_model  <-  new_best_model
         self$addmodel(new_best_model)
-                  # } else {
-                  #   print(paste0("Switching to neighbours mode!"))
-                  #   new_model <- self$estimate_from_neighbours(
-                  #     Q = best_model$nRClusters,
-                  #     S = best_model$nLClusters,
-                  #     models = models,
-                  #     type = type)
-                  #   if ((!is.null(new_model)) & (new_model$bound > best_model$bound)) {
-                  #     best_model  <-  new_model
-                  #     self$addmodel(new_model)
+      # } else {
+      #   print(paste0("Switching to neighbours mode!"))
+      #   new_model <- self$estimate_from_neighbours(
+      #     Q = best_model$nRClusters,
+      #     S = best_model$nLClusters,
+      #     models = models,
+      #     type = type)
+      #   if ((!is.null(new_model)) & (new_model$bound > best_model$bound)) {
+      #     best_model  <-  new_model
+      #     self$addmodel(new_model)
                 } else{
-                  condition = FALSE
+                  condition <- FALSE
                   # }
                 }
       print(paste0("======= # Individual blocks : ", best_model$nb_clusters$I,
