@@ -5,18 +5,18 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>A Stochastic Block Model for MultiLeVel Networks • MLVSBM</title>
+<title>A Stochastic Block Model for Multilevel Networks • MLVSBM</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
 <script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script><meta property="og:title" content="A Stochastic Block Model for MultiLeVel Networks">
-<meta property="og:description" content="Simulation, inference and clustering of multilevel network using a
-    Stochastic Block Model framework as described in the following paper: 
-    &lt;arXiv:1910.10512&gt;. A multilevel network is defined as the 
-    junction of two interaction networks, the upper level or inter-organizational  
-    level and the lower level or inter-individual level. 
+<script src="pkgdown.js"></script><meta property="og:title" content="A Stochastic Block Model for Multilevel Networks">
+<meta property="og:description" content="Simulation, inference and clustering of multilevel networks using a
+    Stochastic Block Model framework as described in Chabert-Liddell et al. 
+    (2020) &lt;arXiv:1910.10512&gt;. A multilevel network is defined as the 
+    junction of two interaction networks, the upper level or 
+    inter-organizational level and the lower level or inter-individual level. 
     The inter-level represents an affiliation relationship.">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -97,7 +97,7 @@
 <a href="#mlvsbm" class="anchor"></a>MLVSBM</h1></div>
 <!-- badges: start -->
 
-<p>This is an implementation of a Stochastic Block Model for Multilevel Network (MLVSBM) as described in the following preprint: <a href="https://arxiv.org/abs/1910.10512" class="uri">https://arxiv.org/abs/1910.10512</a></p>
+<p>This is an R package implementation of a Stochastic Block Model for Multilevel Network (MLVSBM) as described in Chabert-Liddell et al. (2020) <a href="https://arxiv.org/abs/1910.10512" class="uri">https://arxiv.org/abs/1910.10512</a>.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
@@ -105,15 +105,15 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"Chabert-Liddell/MLVSBM"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="tutorial" class="section level2">
+<div id="overview-and-examples" class="section level2">
 <h2 class="hasAnchor">
-<a href="#tutorial" class="anchor"></a>Tutorial</h2>
-<p>The package deals with multilevel network defined as the junction of two interaction network (adjacency matrices) linked by an affiliation relationship (affiliation matrix).</p>
-<p>First, we’re going to simulate a multilevel network with 100 individuals and 3 clusters of individuals for the lower level and 50 organizations and 3 clusters for the upper level. The inter-organizational level will have an assortative structure and will be undirected, the inter-individual’s one a core-periphery structure and will be directed. Affiliation matrix will be generated by a power law and the dependence between the stucture of the two levels will be strong.</p>
+<a href="#overview-and-examples" class="anchor"></a>Overview and examples</h2>
+<p>The package deals with multilevel network defined as the junction of two interaction networks (adjacency matrices) linked by an affiliation relationship (affiliation matrix).</p>
+<p>First, we’re going to simulate a multilevel network with 100 individuals and 3 clusters of individuals for the lower level and 50 organizations and 3 clusters for the upper level. The inter-organizational level will have an assortative structure and will be undirected, the inter-individual’s one a core-periphery structure and will be directed. Affiliation matrix will be generated by a power law and the dependence between the structure of the two levels will be strong.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
 <span class="va">my_mlvsbm</span> <span class="op">&lt;-</span> <span class="fu">MLVSBM</span><span class="fu">::</span><span class="fu"><a href="reference/mlvsbm_simulate_network.html">mlvsbm_simulate_network</a></span><span class="op">(</span>
-  n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>I <span class="op">=</span> <span class="fl">100</span>, O <span class="op">=</span> <span class="fl">50</span><span class="op">)</span>, <span class="co"># Number of nodes for the lower level and the upper level</span>
+  n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>I <span class="op">=</span> <span class="fl">60</span>, O <span class="op">=</span> <span class="fl">40</span><span class="op">)</span>, <span class="co"># Number of nodes for the lower level and the upper level</span>
   Q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>I <span class="op">=</span> <span class="fl">3</span>, O <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>, <span class="co"># Number of blocks for the lower level and the upper level</span>
   pi <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">.5</span>, <span class="fl">.3</span>, <span class="fl">.2</span><span class="op">)</span>, <span class="co"># Block proportion for the upper level, must sum to one</span>
   gamma <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">.8</span>, <span class="fl">.1</span>, <span class="fl">.1</span>,  <span class="co"># Block proportion for the lower level,</span>
@@ -130,9 +130,8 @@
                           nrow <span class="op">=</span> <span class="fl">3</span>, ncol <span class="op">=</span> <span class="fl">3</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>,<span class="co"># between blocks</span>
   directed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>I <span class="op">=</span> <span class="cn">TRUE</span>, O <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>, <span class="co"># Are the upper and lower level directed or not ?</span>
   affiliation <span class="op">=</span> <span class="st">"preferential"</span>, <span class="co"># How the affiliation matrix is generated</span>
-  no_empty_org <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># May the affiliation matrix have column suming to 0</span>
-<span class="co">#&gt; alpha[[1]] is not symmetric but level is directed!!!</span></code></pre></div>
-<p>The network is stocked in an R6 object of type MLVSBM.</p>
+  no_empty_org <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># May the affiliation matrix have column suming to 0</span></code></pre></div>
+<p>The network is stocked in an <code>R6</code> object of type <code>MLVSBM</code>.</p>
 <p>Now, we are going to create a multilevel network object from 2 existing adjacency matrix and an affiliation matrix :</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lower_level</span> <span class="op">&lt;-</span> <span class="va">my_mlvsbm</span><span class="op">$</span><span class="va">adjacency_matrix</span><span class="op">$</span><span class="va">I</span> <span class="co"># matrix of size nI x nI</span>
@@ -140,203 +139,142 @@
 <span class="va">affiliation</span> <span class="op">&lt;-</span> <span class="va">my_mlvsbm</span><span class="op">$</span><span class="va">affiliation_matrix</span> <span class="co"># matrix of size nI x nO</span>
 <span class="va">my_mlvsbm2</span> <span class="op">&lt;-</span> <span class="fu">MLVSBM</span><span class="fu">::</span><span class="fu"><a href="reference/mlvsbm_create_network.html">mlvsbm_create_network</a></span><span class="op">(</span>X <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>I <span class="op">=</span> <span class="va">lower_level</span>, O <span class="op">=</span> <span class="va">upper_level</span><span class="op">)</span>,
                                             A <span class="op">=</span> <span class="va">affiliation</span><span class="op">)</span></code></pre></div>
-<p>We can now infer the parameters, blocks and edge probabilities of our network by using the mlvlsbm_esimate_network function on an MLVSBM object. It will return the best model for this network as another R6 object of type FitMLVSBM.</p>
+<p>We can now infer the parameters, blocks and edge probabilities of our network by using the <code>mlvlsbm_estimate_network()</code> function on an <code>MLVSBM</code> object. It will return the best model for this network as another R6 object of type <code>FitMLVSBM</code>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">MLVSBM</span><span class="fu">:::</span><span class="fu"><a href="reference/mlvsbm_estimate_network.html">mlvsbm_estimate_network</a></span><span class="op">(</span><span class="va">my_mlvsbm</span><span class="op">)</span>
-<span class="co">#&gt; [1] "Infering lower level :"</span>
-<span class="co">#&gt; [1] "# cluster : 1, ICL = -4887.05674111248 !"</span>
-<span class="co">#&gt; [1] "# cluster : 2, ICL = -4804.99021954573 !"</span>
-<span class="co">#&gt; [1] "# cluster : 3, ICL = -4660.50928166488 !"</span>
-<span class="co">#&gt; [1] "# cluster : 2, ICL = -4598.95889897355 !"</span>
-<span class="co">#&gt; [1] "# cluster : 5, ICL = -4701.28622891318 !"</span>
-<span class="co">#&gt; [1] "# cluster : 4, ICL = -4587.60800963499 !"</span>
-<span class="co">#&gt; [1] "# cluster : 3, ICL = -4488.25919549706 !"</span>
-<span class="co">#&gt; [1] "Infering upper level :"</span>
-<span class="co">#&gt; [1] "# cluster : 1, ICL = -699.732829123695 !"</span>
-<span class="co">#&gt; [1] "# cluster : 2, ICL = -655.852064636327 !"</span>
-<span class="co">#&gt; [1] "# cluster : 3, ICL = -625.901870227343 !"</span>
-<span class="co">#&gt; [1] "# cluster : 2, ICL = -624.784594377997 !"</span>
-<span class="co">#&gt; [1] "# cluster : 3, ICL = -623.96254347691 !"</span>
-<span class="co">#&gt; [1] "# cluster : 5, ICL = -666.926581692393 !"</span>
-<span class="co">#&gt; [1] "# cluster : 4, ICL = -640.831005661602 !"</span>
-<span class="co">#&gt; [1] "# cluster : 3, ICL = -623.035833937817 !"</span>
-<span class="co">#&gt; [1] "======= # Individual clusters : 3 , # Organisation clusters 3,  ICL : -5002.74498144572========"</span>
-<span class="co">#&gt; [1] "======= # Individual clusters : 3 , # Organisation clusters 2,  ICL : -4995.34282943409========"</span>
-<span class="co">#&gt; [1] "======= # Individual clusters : 3 , # Organisation clusters 3,  ICL : -4976.33718935498========"</span>
-<span class="co">#&gt; [1] "======= # Individual clusters : 3 , # Organisation clusters 3,  ICL : -4976.33718935498========"</span>
-<span class="co">#&gt; [1] "ICL for independent levels : -5111.29502943488"</span>
-<span class="co">#&gt; [1] "ICL for interdependent levels : -4976.33718935498"</span>
-<span class="co">#&gt; [1] "=====Interdepence is detected between the two level====="</span></code></pre></div>
-</div>
-<div id="ploting-the-results" class="section level2">
-<h2 class="hasAnchor">
-<a href="#ploting-the-results" class="anchor"></a>Ploting the results</h2>
-<p>We can plot some synthetic view of the network :</p>
-<p>Plotting adjacency matrices reordered by block with the link probability of each observed link.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">ggdraw</span><span class="op">(</span><span class="op">)</span><span class="op">+</span>
-  <span class="fu">draw_plot</span><span class="op">(</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">X_hat</span><span class="op">$</span><span class="va">I</span> <span class="op">*</span> <span class="va">lower_level</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-      <span class="fu">as_tbl_graph</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-      <span class="fu">mutate</span><span class="op">(</span>group <span class="op">=</span> <span class="va">fit</span><span class="op">$</span><span class="va">Z</span><span class="op">$</span><span class="va">I</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-      <span class="fu">ggraph</span><span class="op">(</span><span class="st">'matrix'</span>, sort.by <span class="op">=</span> <span class="va">group</span><span class="op">)</span><span class="op">+</span>
-      <span class="fu">geom_edge_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>color <span class="op">=</span> <span class="va">weight</span><span class="op">)</span><span class="op">)</span><span class="op">+</span>
-      <span class="fu">scale_edge_color_gradient</span><span class="op">(</span>name <span class="op">=</span> <span class="st">'Prob'</span>, low <span class="op">=</span> <span class="st">"#deebf7"</span>, high <span class="op">=</span> <span class="st">"#08519c"</span><span class="op">)</span> <span class="op">+</span>
-      <span class="fu">geom_hline</span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html">cumsum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">Z</span><span class="op">$</span><span class="va">I</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="va">fit</span><span class="op">$</span><span class="va">nb_clusters</span><span class="op">$</span><span class="va">I</span><span class="op">]</span><span class="op">+</span><span class="fl">.5</span><span class="op">)</span> <span class="op">+</span>
-      <span class="fu">geom_vline</span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html">cumsum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">Z</span><span class="op">$</span><span class="va">I</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="va">fit</span><span class="op">$</span><span class="va">nb_clusters</span><span class="op">$</span><span class="va">I</span><span class="op">]</span><span class="op">+</span><span class="fl">.5</span><span class="op">)</span> <span class="op">+</span>
-      <span class="fu">scale_y_reverse</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-      <span class="fu">coord_fixed</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-      <span class="fu">theme_graph</span><span class="op">(</span><span class="op">)</span> , <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">.5</span>, <span class="fl">1</span>
-  <span class="op">)</span> <span class="op">+</span>
-  <span class="fu">draw_plot</span><span class="op">(</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">X_hat</span><span class="op">$</span><span class="va">O</span> <span class="op">*</span> <span class="va">upper_level</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-      <span class="fu">as_tbl_graph</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-      <span class="fu">ggraph</span><span class="op">(</span><span class="st">'matrix'</span>, sort.by <span class="op">=</span> <span class="va">fit</span><span class="op">$</span><span class="va">Z</span><span class="op">$</span><span class="va">O</span><span class="op">)</span> <span class="op">+</span>
-      <span class="fu">geom_edge_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>color <span class="op">=</span> <span class="va">weight</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-      <span class="fu">geom_hline</span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html">cumsum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">Z</span><span class="op">$</span><span class="va">O</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="va">fit</span><span class="op">$</span><span class="va">nb_clusters</span><span class="op">$</span><span class="va">O</span><span class="op">]</span><span class="op">+</span><span class="fl">.5</span><span class="op">)</span> <span class="op">+</span>
-      <span class="fu">geom_vline</span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html">cumsum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">Z</span><span class="op">$</span><span class="va">O</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="va">fit</span><span class="op">$</span><span class="va">nb_clusters</span><span class="op">$</span><span class="va">O</span><span class="op">]</span><span class="op">+</span><span class="fl">.5</span><span class="op">)</span> <span class="op">+</span>
-      <span class="fu">scale_edge_colour_gradient</span><span class="op">(</span>name <span class="op">=</span> <span class="st">'Prob'</span>,low <span class="op">=</span> <span class="st">"#fcbba1"</span>, high <span class="op">=</span> <span class="st">"#67000d"</span><span class="op">)</span> <span class="op">+</span>
-      <span class="fu">scale_y_reverse</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-      <span class="fu">coord_fixed</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
-      <span class="fu">theme_graph</span><span class="op">(</span><span class="op">)</span>, x <span class="op">=</span> <span class="fl">0.5</span>, y <span class="op">=</span> <span class="fl">0</span>, width <span class="op">=</span> <span class="fl">.5</span>, height <span class="op">=</span> <span class="fl">1</span>  
-    <span class="op">)</span> <span class="op">+</span>
-  <span class="fu">draw_plot_label</span><span class="op">(</span>label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Lower level"</span>, <span class="st">"Upper level"</span><span class="op">)</span>, x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">.5</span><span class="op">)</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">.9</span>, <span class="fl">.9</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="reference/figures/README-pressure-1.png" width="100%"></p>
-<p>To plot a synthetic view of the interaction between block and between the two levels :</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="va">tidy_clust_ind</span>  <span class="op">&lt;-</span> <span class="fu">tidygraph</span><span class="fu">::</span><span class="fu"><a href="https://tidygraph.data-imaginist.com/reference/tbl_graph.html">as_tbl_graph</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">parameters</span><span class="op">$</span><span class="va">alpha</span><span class="op">$</span><span class="va">I</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">mutate</span><span class="op">(</span>name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">nb_clusters</span><span class="op">$</span><span class="va">I</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">mutate</span><span class="op">(</span>A <span class="op">=</span> <span class="va">fit</span><span class="op">$</span><span class="va">parameters</span><span class="op">$</span><span class="va">gamma</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">mutate</span><span class="op">(</span>B <span class="op">=</span> <span class="va">fit</span><span class="op">$</span><span class="va">parameters</span><span class="op">$</span><span class="va">gamma</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">mutate</span><span class="op">(</span>C <span class="op">=</span> <span class="va">fit</span><span class="op">$</span><span class="va">parameters</span><span class="op">$</span><span class="va">gamma</span><span class="op">[</span>,<span class="fl">3</span><span class="op">]</span><span class="op">)</span>
-<span class="va">tidy_clust_org</span> <span class="op">&lt;-</span> <span class="fu">tidygraph</span><span class="fu">::</span><span class="fu"><a href="https://tidygraph.data-imaginist.com/reference/tbl_graph.html">as_tbl_graph</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">parameters</span><span class="op">$</span><span class="va">alpha</span><span class="op">$</span><span class="va">O</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">mutate</span><span class="op">(</span>name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">nb_clusters</span><span class="op">$</span><span class="va">O</span><span class="op">)</span><span class="op">)</span>
-
-<span class="va">ind_layout</span> <span class="op">&lt;-</span> <span class="fu">create_layout</span><span class="op">(</span><span class="va">tidy_clust_ind</span>, layout <span class="op">=</span> <span class="st">"circle"</span><span class="op">)</span>
-<span class="va">df_pie</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">nb_clusters</span><span class="op">$</span><span class="va">I</span><span class="op">)</span>, <span class="va">fit</span><span class="op">$</span><span class="va">nb_clusters</span><span class="op">$</span><span class="va">O</span><span class="op">)</span>,
-                 x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="va">ind_layout</span><span class="op">$</span><span class="va">x</span>, <span class="va">fit</span><span class="op">$</span><span class="va">nb_clusters</span><span class="op">$</span><span class="va">O</span><span class="op">)</span>,
-                 y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="va">ind_layout</span><span class="op">$</span><span class="va">y</span>, <span class="va">fit</span><span class="op">$</span><span class="va">nb_clusters</span><span class="op">$</span><span class="va">O</span><span class="op">)</span>,
-                 amount <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">Z</span><span class="op">$</span><span class="va">I</span>, 
-                                               <span class="va">fit</span><span class="op">$</span><span class="va">affiliation_matrix</span> <span class="op">%*%</span> <span class="va">fit</span><span class="op">$</span><span class="va">Z</span><span class="op">$</span><span class="va">O</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
-                 size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">Z</span><span class="op">$</span><span class="va">I</span><span class="op">)</span><span class="op">)</span>, <span class="va">fit</span><span class="op">$</span><span class="va">nb_clusters</span><span class="op">$</span><span class="va">O</span><span class="op">)</span>,
-                 affiliation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">nb_clusters</span><span class="op">$</span><span class="va">O</span><span class="op">)</span>, each<span class="op">=</span><span class="va">fit</span><span class="op">$</span><span class="va">nb_clusters</span><span class="op">$</span><span class="va">I</span><span class="op">)</span><span class="op">)</span>
-<span class="va">weight_ind</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">parameters</span><span class="op">$</span><span class="va">alpha</span><span class="op">$</span><span class="va">I</span><span class="op">)</span>
-<span class="va">weight_org</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">parameters</span><span class="op">$</span><span class="va">alpha</span><span class="op">$</span><span class="va">O</span><span class="op">)</span>
-
-<span class="va">p_clustind</span> <span class="op">&lt;-</span> <span class="fu">ggraph</span><span class="op">(</span><span class="va">ind_layout</span>, width <span class="op">=</span> <span class="va">weight</span>, alpha <span class="op">=</span> <span class="va">weight</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">ggforce</span><span class="fu">::</span><span class="fu"><a href="https://ggforce.data-imaginist.com/reference/geom_arc_bar.html">geom_arc_bar</a></span><span class="op">(</span>
-    <span class="fu">aes</span><span class="op">(</span>x0 <span class="op">=</span> <span class="va">x</span>, y0 <span class="op">=</span> <span class="va">y</span>, r0 <span class="op">=</span> <span class="fl">0.8</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">size</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">Z</span><span class="op">$</span><span class="va">I</span><span class="op">)</span>,r <span class="op">=</span> <span class="fl">1</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">size</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">Z</span><span class="op">$</span><span class="va">I</span><span class="op">)</span>,
-        fill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">affiliation</span><span class="op">)</span>, 
-        amount <span class="op">=</span> <span class="va">amount</span><span class="op">)</span>, stat <span class="op">=</span> <span class="st">"pie"</span>, data <span class="op">=</span> <span class="va">df_pie</span><span class="op">)</span><span class="op">+</span>
-  <span class="fu">geom_edge_loop</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>width <span class="op">=</span> <span class="op">(</span> <span class="va">weight_ind</span> <span class="op">&gt;</span> <span class="fl">0.05</span><span class="op">)</span> <span class="op">*</span> <span class="op">(</span><span class="va">weight_ind</span> <span class="op">+</span> <span class="fl">0.1</span><span class="op">)</span><span class="op">*</span><span class="fl">.8</span>, 
-                     alpha <span class="op">=</span> <span class="op">(</span> <span class="va">weight_ind</span> <span class="op">&gt;</span> <span class="fl">0.05</span><span class="op">)</span> <span class="op">*</span> <span class="op">(</span><span class="va">weight_ind</span> <span class="op">+</span> <span class="fl">0.1</span><span class="op">)</span> <span class="op">)</span><span class="op">)</span><span class="op">+</span>
-  <span class="fu">geom_edge_fan</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>
-    start_cap <span class="op">=</span> <span class="fu">circle</span><span class="op">(</span>radius <span class="op">=</span> <span class="va">df_pie</span><span class="op">$</span><span class="va">size</span><span class="op">[</span><span class="va">node1.name</span><span class="op">]</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">Z</span><span class="op">$</span><span class="va">I</span><span class="op">)</span><span class="op">*</span><span class="fl">25</span>, <span class="st">"mm"</span><span class="op">)</span>,
-    end_cap <span class="op">=</span> <span class="fu">circle</span><span class="op">(</span>radius <span class="op">=</span> <span class="va">df_pie</span><span class="op">$</span><span class="va">size</span><span class="op">[</span><span class="va">node2.name</span><span class="op">]</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">Z</span><span class="op">$</span><span class="va">I</span><span class="op">)</span><span class="op">*</span><span class="fl">25</span>, <span class="st">"mm"</span><span class="op">)</span>,
-    alpha <span class="op">=</span> <span class="va">..index..</span>, 
-    width <span class="op">=</span> <span class="op">(</span><span class="va">weight_ind</span><span class="op">&gt;</span><span class="fl">0.05</span><span class="op">)</span><span class="op">*</span><span class="op">(</span><span class="va">weight_ind</span><span class="op">+</span><span class="fl">0.1</span><span class="op">)</span><span class="op">)</span>, 
-    spread <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">+</span>
-  <span class="fu">geom_node_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>stroke <span class="op">=</span> <span class="fl">.35</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">Z</span><span class="op">$</span><span class="va">I</span><span class="op">)</span><span class="op">)</span>, 
-                      colour <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">nb_clusters</span><span class="op">$</span><span class="va">I</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_node_text</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>label <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">theme_graph</span><span class="op">(</span>foreground <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span><span class="op">+</span>
-  <span class="fu">coord_equal</span><span class="op">(</span><span class="op">)</span><span class="op">+</span>
-  <span class="fu">scale_fill_brewer</span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"YlOrRd"</span>, 
-                    name <span class="op">=</span> <span class="st">"Organisation"</span>, direction <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">scale_colour_brewer</span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Paired"</span>, name <span class="op">=</span> <span class="st">"Individual"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">scale_size_continuous</span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/range.html">range</a></span><span class="op">(</span><span class="va">df_pie</span><span class="op">$</span><span class="va">size</span><span class="op">)</span><span class="op">/</span><span class="va">fit</span><span class="op">$</span><span class="va">nb_clusters</span><span class="op">$</span><span class="va">I</span><span class="op">)</span><span class="op">+</span>
-  <span class="fu">scale_edge_alpha</span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span>, guide <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span><span class="op">+</span>
-  <span class="fu">scale_edge_width</span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">3</span><span class="op">)</span>, guide <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span><span class="op">+</span>
-  <span class="fu">guides</span><span class="op">(</span>size<span class="op">=</span><span class="cn">FALSE</span>, colour<span class="op">=</span><span class="cn">FALSE</span>, width<span class="op">=</span><span class="cn">FALSE</span>, fill <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-<span class="co">#&gt; Warning: The spread argument has been deprecated in favour of strength</span>
-
-
-<span class="va">p_clustorg</span> <span class="op">&lt;-</span> <span class="fu">ggraph</span><span class="op">(</span><span class="va">tidy_clust_org</span>, layout <span class="op">=</span> <span class="st">"circle"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_edge_link</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>
-    alpha <span class="op">=</span> <span class="op">(</span><span class="va">weight_org</span><span class="op">&gt;</span><span class="fl">0.05</span><span class="op">)</span><span class="op">*</span><span class="va">weight_org</span>, 
-    width <span class="op">=</span> <span class="op">(</span><span class="va">weight_org</span><span class="op">&gt;</span><span class="fl">0.05</span><span class="op">)</span><span class="op">*</span><span class="va">weight_org</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_edge_loop</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>width <span class="op">=</span> <span class="op">(</span><span class="va">weight_org</span><span class="op">&gt;</span><span class="fl">0.05</span><span class="op">)</span><span class="op">*</span><span class="op">(</span><span class="va">weight_org</span><span class="op">+</span><span class="fl">0.1</span><span class="op">)</span><span class="op">*</span><span class="fl">.8</span>, 
-                     alpha <span class="op">=</span> <span class="op">(</span><span class="va">weight_org</span><span class="op">&gt;</span><span class="fl">0.05</span><span class="op">)</span><span class="op">*</span><span class="op">(</span><span class="va">weight_org</span><span class="op">+</span><span class="fl">0.1</span><span class="op">)</span> <span class="op">)</span><span class="op">)</span><span class="op">+</span>
-  <span class="fu">geom_node_circle</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>r <span class="op">=</span> <span class="fl">.5</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">Z</span><span class="op">$</span><span class="va">O</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">Z</span><span class="op">$</span><span class="va">O</span><span class="op">)</span>,
-                     fill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">nb_clusters</span><span class="op">$</span><span class="va">O</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">+</span>
-  <span class="fu">geom_node_text</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>label <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">theme_graph</span><span class="op">(</span>foreground <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span><span class="op">+</span>
-  <span class="fu">coord_equal</span><span class="op">(</span><span class="op">)</span><span class="op">+</span>
-  <span class="fu">scale_fill_brewer</span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"YlOrRd"</span>, name <span class="op">=</span> <span class="st">"Organisation"</span>, direction <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">scale_colour_brewer</span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Paired"</span>, name <span class="op">=</span> <span class="st">"Individual"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">scale_edge_alpha</span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span>, guide <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span><span class="op">+</span>
-  <span class="fu">scale_edge_width</span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>, guide <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span><span class="op">+</span>
-  <span class="fu">guides</span><span class="op">(</span>size<span class="op">=</span><span class="cn">FALSE</span>, colour<span class="op">=</span><span class="cn">FALSE</span>, width<span class="op">=</span><span class="cn">FALSE</span>, fill <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-
-
-<span class="fu">ggdraw</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">draw_plot</span><span class="op">(</span>plot <span class="op">=</span> <span class="va">p_clustind</span>, x <span class="op">=</span> <span class="fl">0</span>, y <span class="op">=</span> <span class="fl">0</span>, width <span class="op">=</span> <span class="fl">.5</span>, height <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">+</span>
-  <span class="fu">draw_plot</span><span class="op">(</span>plot <span class="op">=</span> <span class="va">p_clustorg</span>, x <span class="op">=</span> <span class="fl">.5</span>, y <span class="op">=</span> <span class="fl">0</span>, width <span class="op">=</span> <span class="fl">.5</span>, height <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">+</span>
-  <span class="fu">draw_plot_label</span><span class="op">(</span>label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Individuals"</span>, <span class="st">"Organisations"</span><span class="op">)</span>, x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="reference/figures/README-union_multilevel-1.png" width="100%"></p>
-</div>
-<div id="some-useful-output" class="section level2">
-<h2 class="hasAnchor">
-<a href="#some-useful-output" class="anchor"></a>Some useful output</h2>
-<p>Output of the algorithm are stocked in the MLVSBM and FitMLVSBM objects. The MLVSBM object stocks information of the observed or simulated network and a list of all the fitted SBM and MLVSBM models.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">my_mlvsbm</span><span class="op">$</span><span class="va">ICL</span> <span class="co"># A data frame of the inferred models </span>
-<span class="co">#&gt; # A tibble: 3 x 4</span>
-<span class="co">#&gt;   index   Q_I   Q_O    ICL</span>
-<span class="co">#&gt;   &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;dbl&gt;</span>
-<span class="co">#&gt; 1     1     3     3 -5003.</span>
-<span class="co">#&gt; 2     2     3     2 -4995.</span>
-<span class="co">#&gt; 3     3     3     3 -4976.</span>
-<span class="va">my_fit</span> <span class="op">&lt;-</span> <span class="va">my_mlvsbm</span><span class="op">$</span><span class="va">fittedmodels</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/which.min.html">which.max</a></span><span class="op">(</span><span class="va">my_mlvsbm</span><span class="op">$</span><span class="va">ICL</span><span class="op">$</span><span class="va">ICL</span><span class="op">)</span><span class="op">]</span><span class="op">]</span> <span class="co"># The fitted model with index  the highest ICL</span>
-<span class="va">my_mlvsbm</span><span class="op">$</span><span class="va">ICL_sbm</span> <span class="co"># The ICL of the SBM</span>
-<span class="co">#&gt; $lower</span>
-<span class="co">#&gt;  [1] -4887.057 -4598.959 -4488.259 -4587.608 -4701.286      -Inf      -Inf</span>
-<span class="co">#&gt;  [8]      -Inf      -Inf      -Inf</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; $upper</span>
-<span class="co">#&gt;  [1] -699.7328 -624.7846 -623.0358 -640.8310 -666.9266      -Inf      -Inf</span>
-<span class="co">#&gt;  [8]      -Inf      -Inf      -Inf</span>
-<span class="va">my_sbm_lower</span> <span class="op">&lt;-</span> <span class="va">my_mlvsbm</span><span class="op">$</span><span class="va">fittedmodels_sbm</span><span class="op">$</span><span class="va">lower</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span> <span class="co"># A fitted SBM for the lower level with 3 blocks</span>
-<span class="va">my_sbm_upper</span> <span class="op">&lt;-</span> <span class="va">my_mlvsbm</span><span class="op">$</span><span class="va">fittedmodels_sbm</span><span class="op">$</span><span class="va">upper</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="co"># A fitted SBM for the upper level with 2 blocks</span></code></pre></div>
-<p>You can also get the parameters and the clustering of the fitted model from the FitMLVSBM object as follows:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fit</span><span class="op">$</span><span class="va">parameters</span> <span class="co"># The connectivity and membership parameters of the model</span>
+<span class="co">#&gt; [1] "Infering lower level :"</span>
+<span class="co">#&gt; [1] "# blocks: 3, ICL = -1752.99110620455 !"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [1] "Infering upper level :"</span>
+<span class="co">#&gt; [1] "# blocks: 3, ICL = -429.333753035444 !"</span>
+<span class="co">#&gt; [1] "======= # Individual clusters : 3 , # Organisation clusters 3,  ICL : -2161.21593501663========"</span>
+<span class="co">#&gt; [1] "======= # Individual blocks : 3 , # Organizational blocks 3,  ICL : -2161.21593501663========"</span>
+<span class="co">#&gt; [1] "ICL for independent levels : -2182.32485924"</span>
+<span class="co">#&gt; [1] "ICL for interdependent levels : -2161.21593501663"</span>
+<span class="co">#&gt; [1] "=====Interdependence is detected between the two levels!====="</span></code></pre></div>
+</div>
+<div id="exploring-the-results" class="section level2">
+<h2 class="hasAnchor">
+<a href="#exploring-the-results" class="anchor"></a>Exploring the results</h2>
+<p>Some generic functions allow an easy access to the most useful parameters:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span>
+<span class="co">#&gt; Multilevel Stochastic Block Model -- bernoulli variant</span>
+<span class="co">#&gt; =====================================================================</span>
+<span class="co">#&gt; Dimension = ( 60 40 ) - ( 3 3 ) blocks.</span>
+<span class="co">#&gt; =====================================================================</span>
+<span class="co">#&gt; * Useful fields </span>
+<span class="co">#&gt;   $independent, $distribution, $nb_nodes, $nb_clusters, $Z </span>
+<span class="co">#&gt;   $membership, $parameters, $ICL, $vbound, $X_hat</span></code></pre></div>
+<p>We can also plot a synthetic view of the network, with the fitted model:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span>
+<span class="co">#&gt; Joining, by = c("name", "group")</span>
+<span class="co">#&gt; Joining, by = "name"</span></code></pre></div>
+<p><img src="reference/figures/README-plot-1.png" width="100%"></p>
+<p>As well as obtain the model parameters:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span>
 <span class="co">#&gt; $alpha</span>
 <span class="co">#&gt; $alpha$I</span>
 <span class="co">#&gt;            [,1]      [,2]       [,3]</span>
-<span class="co">#&gt; [1,] 0.09481972 0.2988389 0.09540188</span>
-<span class="co">#&gt; [2,] 0.11121891 0.4610379 0.48386911</span>
-<span class="co">#&gt; [3,] 0.09402907 0.4897345 0.15806480</span>
+<span class="co">#&gt; [1,] 0.23076927 0.5384598 0.09440602</span>
+<span class="co">#&gt; [2,] 0.49679322 0.4545447 0.08333412</span>
+<span class="co">#&gt; [3,] 0.09615434 0.2840906 0.13419909</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $alpha$O</span>
 <span class="co">#&gt;            [,1]       [,2]       [,3]</span>
-<span class="co">#&gt; [1,] 0.51851781 0.09761996 0.05102242</span>
-<span class="co">#&gt; [2,] 0.09761996 0.46666478 0.05714401</span>
-<span class="co">#&gt; [3,] 0.05102242 0.05714401 0.52380278</span>
+<span class="co">#&gt; [1,] 0.66665873 0.09848632 0.05555697</span>
+<span class="co">#&gt; [2,] 0.09848632 0.48051884 0.11363719</span>
+<span class="co">#&gt; [3,] 0.05555697 0.11363719 0.53030085</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $pi</span>
 <span class="co">#&gt; $pi$O</span>
-<span class="co">#&gt; [1] 0.5599993 0.3000001 0.1400006</span>
+<span class="co">#&gt; [1] 0.1500005 0.5499994 0.3000001</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $gamma</span>
-<span class="co">#&gt;            [,1]       [,2]         [,3]</span>
-<span class="co">#&gt; [1,] 0.83018651 0.03125228 1.333362e-01</span>
-<span class="co">#&gt; [2,] 0.11320841 0.09375111 8.666608e-01</span>
-<span class="co">#&gt; [3,] 0.05660508 0.87499661 3.066647e-06</span>
-<span class="va">fit</span><span class="op">$</span><span class="va">Z</span> <span class="co"># The membership of each nodes</span>
+<span class="co">#&gt;            [,1]      [,2]         [,3]</span>
+<span class="co">#&gt; [1,] 0.09091169 0.1923087 8.695625e-01</span>
+<span class="co">#&gt; [2,] 0.72726867 0.0384628 1.304356e-01</span>
+<span class="co">#&gt; [3,] 0.18181964 0.7692285 1.956515e-06</span></code></pre></div>
+<p>And the prediction of the block clustering as well as the probability of a link between two individuals or two organizations:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span>
+<span class="va">pred</span><span class="op">$</span><span class="va">nodes</span>
 <span class="co">#&gt; $I</span>
-<span class="co">#&gt;   [1] 1 2 3 1 2 3 2 3 3 1 3 2 1 2 3 3 1 1 1 3 3 3 3 1 1 3 1 3 3 3 2 2 3 1 3 3 1</span>
-<span class="co">#&gt;  [38] 3 1 2 3 2 1 1 2 3 1 1 2 3 2 1 3 2 1 1 2 2 1 3 3 1 1 2 3 2 2 1 1 3 1 1 1 1</span>
-<span class="co">#&gt;  [75] 1 1 1 2 1 1 1 1 1 1 1 2 3 2 1 1 3 1 1 1 1 3 2 1 3 1</span>
+<span class="co">#&gt;  [1] 1 3 3 1 3 2 1 2 1 3 1 3 3 1 3 3 1 1 3 1 1 1 3 1 3 3 1 1 1 1 3 1 2 2 1 3 2 3</span>
+<span class="co">#&gt; [39] 3 3 2 1 1 1 2 2 1 3 3 1 2 1 3 1 2 2 2 1 3 3</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $O</span>
-<span class="co">#&gt;  [1] 1 3 1 1 1 2 2 3 2 2 2 2 3 2 3 1 1 1 1 1 3 1 1 1 1 2 3 1 1 1 1 1 2 1 1 1 2 1</span>
-<span class="co">#&gt; [39] 2 1 1 2 2 1 1 1 2 1 3 2</span>
+<span class="co">#&gt;  [1] 3 2 2 2 1 2 1 1 3 2 3 3 3 2 2 2 2 3 2 2 2 3 2 3 2 2 1 1 1 2 2 3 2 3 2 2 3 2</span>
+<span class="co">#&gt; [39] 2 3</span>
+<span class="va">pred</span><span class="op">$</span><span class="va">dyads</span><span class="op">$</span><span class="va">I</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span>
+<span class="co">#&gt;           [,1]       [,2]       [,3]      [,4]       [,5]</span>
+<span class="co">#&gt; [1,] 0.0000000 0.09440663 0.09440663 0.2307696 0.09440663</span>
+<span class="co">#&gt; [2,] 0.0961551 0.00000000 0.13419912 0.0961551 0.13419912</span>
+<span class="co">#&gt; [3,] 0.0961551 0.13419912 0.00000000 0.0961551 0.13419912</span>
+<span class="co">#&gt; [4,] 0.2307696 0.09440663 0.09440663 0.0000000 0.09440663</span>
+<span class="co">#&gt; [5,] 0.0961551 0.13419912 0.13419912 0.0961551 0.00000000</span></code></pre></div>
+</div>
+<div id="some-others-useful-output" class="section level2">
+<h2 class="hasAnchor">
+<a href="#some-others-useful-output" class="anchor"></a>Some others useful output</h2>
+<p>Output of the algorithm are stocked in the <code>MLVSBM</code> and <code>FitMLVSBM</code> objects. The <code>MLVSBM</code> object stocks information of the observed or simulated network and a list of all the fitted SBM and MLVSBM models.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">my_mlvsbm</span><span class="op">$</span><span class="va">ICL</span> <span class="co"># A data frame of the inferred models </span>
+<span class="co">#&gt;   index Q_I Q_O       ICL</span>
+<span class="co">#&gt; 1     1   3   3 -2161.216</span>
+<span class="va">my_fit</span> <span class="op">&lt;-</span> <span class="va">my_mlvsbm</span><span class="op">$</span><span class="va">fittedmodels</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/which.min.html">which.max</a></span><span class="op">(</span><span class="va">my_mlvsbm</span><span class="op">$</span><span class="va">ICL</span><span class="op">$</span><span class="va">ICL</span><span class="op">)</span><span class="op">]</span><span class="op">]</span> <span class="co"># The fitted model with index  the highest ICL</span>
+<span class="va">my_mlvsbm</span><span class="op">$</span><span class="va">ICL_sbm</span> <span class="co"># The ICL of the SBM</span>
+<span class="co">#&gt; $lower</span>
+<span class="co">#&gt;  [1]      -Inf      -Inf -1752.991      -Inf      -Inf      -Inf      -Inf</span>
+<span class="co">#&gt;  [8]      -Inf      -Inf      -Inf</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $upper</span>
+<span class="co">#&gt;  [1]      -Inf      -Inf -429.3338      -Inf      -Inf      -Inf      -Inf</span>
+<span class="co">#&gt;  [8]      -Inf      -Inf      -Inf</span>
+<span class="va">my_sbm_lower</span> <span class="op">&lt;-</span> <span class="va">my_mlvsbm</span><span class="op">$</span><span class="va">fittedmodels_sbm</span><span class="op">$</span><span class="va">lower</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span> <span class="co"># A fitted SBM for the lower level with 3 blocks</span>
+<span class="va">my_sbm_upper</span> <span class="op">&lt;-</span> <span class="va">my_mlvsbm</span><span class="op">$</span><span class="va">fittedmodels_sbm</span><span class="op">$</span><span class="va">upper</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="co"># A fitted SBM for the upper level with 2 blocks</span></code></pre></div>
+<p>You can also get the parameters and the clustering of the fitted model from the <code>FitMLVSBM</code> object as follows:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">fit</span><span class="op">$</span><span class="va">parameters</span> <span class="co"># The connectivity and membership parameters of the model</span>
+<span class="co">#&gt; $alpha</span>
+<span class="co">#&gt; $alpha$I</span>
+<span class="co">#&gt;            [,1]      [,2]       [,3]</span>
+<span class="co">#&gt; [1,] 0.23076927 0.5384598 0.09440602</span>
+<span class="co">#&gt; [2,] 0.49679322 0.4545447 0.08333412</span>
+<span class="co">#&gt; [3,] 0.09615434 0.2840906 0.13419909</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $alpha$O</span>
+<span class="co">#&gt;            [,1]       [,2]       [,3]</span>
+<span class="co">#&gt; [1,] 0.66665873 0.09848632 0.05555697</span>
+<span class="co">#&gt; [2,] 0.09848632 0.48051884 0.11363719</span>
+<span class="co">#&gt; [3,] 0.05555697 0.11363719 0.53030085</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $pi</span>
+<span class="co">#&gt; $pi$O</span>
+<span class="co">#&gt; [1] 0.1500005 0.5499994 0.3000001</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $gamma</span>
+<span class="co">#&gt;            [,1]      [,2]         [,3]</span>
+<span class="co">#&gt; [1,] 0.09091169 0.1923087 8.695625e-01</span>
+<span class="co">#&gt; [2,] 0.72726867 0.0384628 1.304356e-01</span>
+<span class="co">#&gt; [3,] 0.18181964 0.7692285 1.956515e-06</span>
+<span class="va">fit</span><span class="op">$</span><span class="va">Z</span> <span class="co"># The membership of each nodes</span>
+<span class="co">#&gt; $I</span>
+<span class="co">#&gt;  [1] 1 3 3 1 3 2 1 2 1 3 1 3 3 1 3 3 1 1 3 1 1 1 3 1 3 3 1 1 1 1 3 1 2 2 1 3 2 3</span>
+<span class="co">#&gt; [39] 3 3 2 1 1 1 2 2 1 3 3 1 2 1 3 1 2 2 2 1 3 3</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $O</span>
+<span class="co">#&gt;  [1] 3 2 2 2 1 2 1 1 3 2 3 3 3 2 2 2 2 3 2 2 2 3 2 3 2 2 1 1 1 2 2 3 2 3 2 2 3 2</span>
+<span class="co">#&gt; [39] 2 3</span>
 <span class="va">fit</span><span class="op">$</span><span class="va">vbound</span> <span class="co"># A vector of the varational bound of the VEM algorithm</span>
-<span class="co">#&gt; [1] -4895.876</span>
+<span class="co">#&gt; [1] -2088.49</span>
 <span class="va">tau</span> <span class="op">&lt;-</span> <span class="va">fit</span><span class="op">$</span><span class="va">membership</span> <span class="co"># The variational parameters of the model</span>
 <span class="va">pred</span> <span class="op">&lt;-</span> <span class="va">fit</span><span class="op">$</span><span class="va">X_hat</span> <span class="co"># The links predictions for each level</span></code></pre></div>
 </div>
@@ -360,6 +298,12 @@
 <li><small><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></small></li>
 </ul>
 </div>
+<div class="citation">
+<h2>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html">Citing MLVSBM</a></li>
+</ul>
+</div>
 <div class="developers">
 <h2>Developers</h2>
 <ul class="list-unstyled">
@@ -372,6 +316,7 @@
 <ul class="list-unstyled">
 <li><a href="https://travis-ci.org/Chabert-Liddell/MLVSBM"><img src="https://travis-ci.org/Chabert-Liddell/MLVSBM.svg?branch=master" alt="Travis build status"></a></li>
 <li><a href="https://codecov.io/gh/Chabert-Liddell/MLVSBM?branch=master"><img src="https://codecov.io/gh/Chabert-Liddell/MLVSBM/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li><a href="https://github.com/Chabert-Liddell/MLVSBM"><img src="https://img.shields.io/badge/devel%20version-0.2.0-blue.svg"></a></li>
 </ul>
 </div>
 </div>

@@ -443,12 +443,14 @@ FitMLVSBM <-
         }
         return(Z)
       },
-      #' @field X_hat Get the list of the matrices of probability conection
+      #' @field X_hat Get the list of the matrices of probability connection
       #' predictions
       X_hat = function(value) {
         list(
-          I = quad_form(private$param$alpha$I, private$tau$I),
-          O = quad_form(private$param$alpha$O, private$tau$O)
+          I = quad_form(private$param$alpha$I, private$tau$I) *
+            (1-diag(1, private$n$I)),
+          O = quad_form(private$param$alpha$O, private$tau$O)*
+            (1-diag(1, private$n$O))
           )
         },
       #' @field map Get the list of block memberships (matrix form)

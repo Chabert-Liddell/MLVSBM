@@ -124,7 +124,7 @@
   directed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>I <span class="op">=</span> <span class="cn">TRUE</span>, O <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>, <span class="co"># Are the upper and lower level directed or not ?</span>
   affiliation <span class="op">=</span> <span class="st">"preferential"</span>, <span class="co"># How the affiliation matrix is generated</span>
   no_empty_org <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># May the affiliation matrix have column suming to 0</span></code></pre></div>
-<p>The network is stocked in an R6 object of type MLVSBM.</p>
+<p>The network is stocked in an <code>R6</code> object of type <code>MLVSBM</code>.</p>
 <p>Now, we are going to create a multilevel network object from 2 existing adjacency matrix and an affiliation matrix :</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lower_level</span> <span class="op">&lt;-</span> <span class="va">my_mlvsbm</span><span class="op">$</span><span class="va">adjacency_matrix</span><span class="op">$</span><span class="va">I</span> <span class="co"># matrix of size nI x nI</span>
@@ -132,7 +132,7 @@
 <span class="va">affiliation</span> <span class="op">&lt;-</span> <span class="va">my_mlvsbm</span><span class="op">$</span><span class="va">affiliation_matrix</span> <span class="co"># matrix of size nI x nO</span>
 <span class="va">my_mlvsbm2</span> <span class="op">&lt;-</span> <span class="fu">MLVSBM</span><span class="fu">::</span><span class="fu"><a href="../reference/mlvsbm_create_network.html">mlvsbm_create_network</a></span><span class="op">(</span>X <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>I <span class="op">=</span> <span class="va">lower_level</span>, O <span class="op">=</span> <span class="va">upper_level</span><span class="op">)</span>,
                                             A <span class="op">=</span> <span class="va">affiliation</span><span class="op">)</span></code></pre></div>
-<p>We can now infer the parameters, blocks and edge probabilities of our network by using the mlvlsbm_esimate_network function on an MLVSBM object. It will return the best model for this network as another R6 object of type FitMLVSBM.</p>
+<p>We can now infer the parameters, blocks and edge probabilities of our network by using the <code>mlvlsbm_estimate_network()</code> function on an <code>MLVSBM</code> object. It will return the best model for this network as another R6 object of type <code>FitMLVSBM</code>.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>fit &lt;-<span class="st"> </span>MLVSBM<span class="op">::</span><span class="kw">mlvsbm_estimate_network</span>(my_mlvsbm, <span class="dt">nb_cores =</span> 1L)</span>
 <span id="cb4-2"><a href="#cb4-2"></a><span class="co">#&gt; </span></span>
 <span id="cb4-3"><a href="#cb4-3"></a><span class="co">#&gt; </span></span>
@@ -209,7 +209,7 @@
 <div id="other-useful-output" class="section level2">
 <h2 class="hasAnchor">
 <a href="#other-useful-output" class="anchor"></a>Other useful output</h2>
-<p>Output of the algorithm are stocked in the MLVSBM and FitMLVSBM objects. The MLVSBM object stocks information of the observed or simulated network and a list of all the fitted SBM and MLVSBM models.</p>
+<p>Output of the algorithm are stocked in the <code>MLVSBM</code> and <code>FitMLVSBM</code> objects. The <code>MLVSBM</code> object stocks information of the observed or simulated network and a list of all the fitted SBM and MLVSBM models.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">my_mlvsbm</span><span class="op">$</span><span class="va">ICL</span> <span class="co"># A data frame of the inferred models </span>
 <span class="co">#&gt;   index Q_I Q_O       ICL</span>
@@ -225,7 +225,7 @@
 <span class="co">#&gt;  [8]      -Inf      -Inf      -Inf</span>
 <span class="va">my_sbm_lower</span> <span class="op">&lt;-</span> <span class="va">my_mlvsbm</span><span class="op">$</span><span class="va">fittedmodels_sbm</span><span class="op">$</span><span class="va">lower</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span> <span class="co"># A fitted SBM for the lower level with 3 blocks</span>
 <span class="va">my_sbm_upper</span> <span class="op">&lt;-</span> <span class="va">my_mlvsbm</span><span class="op">$</span><span class="va">fittedmodels_sbm</span><span class="op">$</span><span class="va">upper</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="co"># A fitted SBM for the upper level with 2 blocks</span></code></pre></div>
-<p>You can also get the parameters and the clustering of the fitted model from the FitMLVSBM object as follows:</p>
+<p>You can also get the parameters and the clustering of the fitted model from the <code>FitMLVSBM</code> object as follows:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fit</span><span class="op">$</span><span class="va">parameters</span> <span class="co"># The connectivity and membership parameters of the model</span>
 <span class="co">#&gt; $alpha</span>

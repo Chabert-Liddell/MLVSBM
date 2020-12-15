@@ -19,40 +19,40 @@ mlvsbm_simulate_network(
 }
 \arguments{
 \item{n}{A list of 2 positive integers,
-the number of individuals and organisations}
+the number of individuals and organizations.}
 
 \item{Q}{A list of 2 positive integers,
-the number of clusters of individuals and organisations}
+the number of clusters of individuals and organizations.}
 
 \item{pi}{A vector of probabilities of length Q_O,
-the mixture parameter for the organisations}
+the mixture parameter for the organizations.}
 
-\item{gamma}{A Q_IxQ_O matrix with each column suming to one,
+\item{gamma}{A \eqn{Q_I \times Q_O} matrix with each column summing to one,
 the mixture parameters for the individuals}
 
-\item{alpha}{A list of 2 matrices, a Q_IxQ_I matrix giving the connectivity probabilities
-of the individuals and a Q_OxQ_O matrix giving the connectivity probabilities
-of the organisations}
+\item{alpha}{A list of 2 matrices, a \eqn{Q_I \times Q_I} matrix giving the
+connectivity probabilities of the individuals and a \eqn{Q_O \times Q_O}
+matrix giving the connectivity probabilities of the organizations.}
 
-\item{directed}{A list of 2 booleans. Is the individual level a directed network ?
-Is the organisational level a directed network ?}
+\item{directed}{A list of 2 logical. Is the individual level a directed
+network ? Is the inter-organizational level a directed network?}
 
 \item{affiliation}{The distribution under which the affiliation matrix is
-simulated in c("uniform", "preferential")}
+simulated in c("uniform", "preferential").}
 
 \item{distribution}{A list for the distribution of X,
-only "bernoulli" is implemented}
+only "bernoulli" is implemented.}
 
-\item{no_empty_org}{A boolean with FALSE as default, should
-every organisation have at least one affiliated individuals?
-Needs to have n_I >= n_O}
+\item{no_empty_org}{A logical with FALSE as default, should
+every organizations have at least one affiliated individual?
+Needs to have \eqn{n_I \geq n_O}.}
 
-\item{no_isolated_node}{A boolean, if TRUE then the network is resimulated
-until all nodes are connected}
+\item{no_isolated_node}{A logical, if TRUE then the network is simulated
+again until all nodes are connected.}
 }
 \value{
 An MLVSBM object, a simulated multilevel network with levels,
-affiliations and memberships
+affiliations and memberships.
 }
 \description{
 Create a simulated multilevel network (MLVSBM object)

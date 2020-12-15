@@ -182,9 +182,9 @@ plot_multilevel_matrix <- function(X, X_hat, A, Z) {
     tidygraph::graph_join(g_aff) %>%
     ggraph::ggraph('matrix', sort.by = group)+
     ggraph::geom_edge_point(ggplot2::aes(filter = (lvl == "aff")),
-                            edge_colour = "black",  edge_size = 1.5)+
+                            edge_colour = "black",  edge_size = 1.2)+
     ggraph::geom_edge_point(ggplot2::aes(filter = (lvl == "ind"),
-                                         edge_colour = weight),edge_size = 1.5)+
+                                         edge_colour = weight),edge_size = 1.2)+
     ggraph::geom_edge_point(ggplot2::aes(filter = (lvl == "org"), edge_fill = weight),
                     edge_size = 2, edge_shape = 22, stroke = 0)+
     ggplot2::geom_hline(yintercept = c( cumsum(table(Z_sup))[QI+seq(QO)]+.5)) +

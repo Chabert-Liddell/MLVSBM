@@ -157,61 +157,61 @@
     <tr>
       <th>n</th>
       <td><p>A list of 2 positive integers,
-the number of individuals and organisations</p></td>
+the number of individuals and organizations.</p></td>
     </tr>
     <tr>
       <th>Q</th>
       <td><p>A list of 2 positive integers,
-the number of clusters of individuals and organisations</p></td>
+the number of clusters of individuals and organizations.</p></td>
     </tr>
     <tr>
       <th>pi</th>
       <td><p>A vector of probabilities of length Q_O,
-the mixture parameter for the organisations</p></td>
+the mixture parameter for the organizations.</p></td>
     </tr>
     <tr>
       <th>gamma</th>
-      <td><p>A Q_IxQ_O matrix with each column suming to one,
+      <td><p>A \(Q_I \times Q_O\) matrix with each column summing to one,
 the mixture parameters for the individuals</p></td>
     </tr>
     <tr>
       <th>alpha</th>
-      <td><p>A list of 2 matrices, a Q_IxQ_I matrix giving the connectivity probabilities
-of the individuals and a Q_OxQ_O matrix giving the connectivity probabilities
-of the organisations</p></td>
+      <td><p>A list of 2 matrices, a \(Q_I \times Q_I\) matrix giving the
+connectivity probabilities of the individuals and a \(Q_O \times Q_O\)
+matrix giving the connectivity probabilities of the organizations.</p></td>
     </tr>
     <tr>
       <th>directed</th>
-      <td><p>A list of 2 booleans. Is the individual level a directed network ?
-Is the organisational level a directed network ?</p></td>
+      <td><p>A list of 2 logical. Is the individual level a directed
+network ? Is the inter-organizational level a directed network?</p></td>
     </tr>
     <tr>
       <th>affiliation</th>
       <td><p>The distribution under which the affiliation matrix is
-simulated in c("uniform", "preferential")</p></td>
+simulated in c("uniform", "preferential").</p></td>
     </tr>
     <tr>
       <th>distribution</th>
       <td><p>A list for the distribution of X,
-only "bernoulli" is implemented</p></td>
+only "bernoulli" is implemented.</p></td>
     </tr>
     <tr>
       <th>no_empty_org</th>
-      <td><p>A boolean with FALSE as default, should
-every organisation have at least one affiliated individuals?
-Needs to have n_I &gt;= n_O</p></td>
+      <td><p>A logical with FALSE as default, should
+every organizations have at least one affiliated individual?
+Needs to have \(n_I \geq n_O\).</p></td>
     </tr>
     <tr>
       <th>no_isolated_node</th>
-      <td><p>A boolean, if TRUE then the network is resimulated
-until all nodes are connected</p></td>
+      <td><p>A logical, if TRUE then the network is simulated
+again until all nodes are connected.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>An MLVSBM object, a simulated multilevel network with levels,
-affiliations and memberships</p>
+affiliations and memberships.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>my_mlvsbm</span> <span class='op'>&lt;-</span> <span class='fu'>MLVSBM</span><span class='fu'>::</span><span class='fu'>mlvsbm_simulate_network</span><span class='op'>(</span>

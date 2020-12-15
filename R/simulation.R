@@ -48,7 +48,7 @@ MLVSBM$set(
 #'
 #' @param Z A vector of integer of size n, the label
 #' @param n An integer, the number of rows or columbns of the matrix
-#' @param alpha A max(Z)xmax(Z) matrix, the connectivity parameters
+#' @param alpha A \eqn{\max(Z)\times \max(Z)} matrix, the connectivity parameters
 #' @param directed A boolean, Is the network directed or not ?
 #' @param distribution The distribution of the indices: only "bernoulli"
 #' @param no_isolated_node A boolean, may row and column of adjacency matrices sum to 0
@@ -83,11 +83,12 @@ simulate_adjacency <- function(Z, n, alpha, directed,
 #' Simulate of matrix of affiliation
 #'
 #' @param n An integer, the number of individuals
-#' @param m An integer, the number of organisations
+#' @param m An integer, the number of organizations
 #' @param affiliation The type of affiliation between c("uniform", "preferential")
-#' @param no_empty_org A Boolean. Force all column to have at least a 1. Need n>m
+#' @param no_empty_org A Boolean. Force all column to have at least a 1.
+#' Must have \eqn{n>m}.
 #'
-#' @return A nxm affiliation matrix, with a unique 1 on each rows
+#' @return A \eqn{n \times m} affiliation matrix, with a unique 1 on each rows
 simulate_affiliation <-
   function(n, m, affiliation = "uniform", no_empty_org = FALSE) {
   A <- matrix(0, n, m)

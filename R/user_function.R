@@ -77,30 +77,30 @@ mlvsbm_create_network <-
 #' Create a simulated multilevel network (MLVSBM object)
 #'
 #' @param n A list of 2 positive integers,
-#' the number of individuals and organisations
+#' the number of individuals and organizations.
 #' @param Q A list of 2 positive integers,
-#' the number of clusters of individuals and organisations
+#' the number of clusters of individuals and organizations.
 #' @param pi A vector of probabilities of length Q_O,
-#' the mixture parameter for the organisations
-#' @param alpha A list of 2 matrices, a Q_IxQ_I matrix giving the connectivity probabilities
-#' of the individuals and a Q_OxQ_O matrix giving the connectivity probabilities
-#' of the organisations
-#' @param directed A list of 2 booleans. Is the individual level a directed network ?
-#' Is the organisational level a directed network ?
-#' @param gamma A Q_IxQ_O matrix with each column suming to one,
+#' the mixture parameter for the organizations.
+#' @param alpha A list of 2 matrices, a \eqn{Q_I \times Q_I} matrix giving the
+#' connectivity probabilities of the individuals and a \eqn{Q_O \times Q_O}
+#' matrix giving the connectivity probabilities of the organizations.
+#' @param directed A list of 2 logical. Is the individual level a directed
+#' network ? Is the inter-organizational level a directed network?
+#' @param gamma A \eqn{Q_I \times Q_O} matrix with each column summing to one,
 #' the mixture parameters for the individuals
 #' @param affiliation The distribution under which the affiliation matrix is
-#' simulated in c("uniform", "preferential")
-#' @param no_empty_org A boolean with FALSE as default, should
-#' every organisation have at least one affiliated individuals?
-#' Needs to have n_I >= n_O
+#' simulated in c("uniform", "preferential").
+#' @param no_empty_org A logical with FALSE as default, should
+#' every organizations have at least one affiliated individual?
+#' Needs to have \eqn{n_I \geq n_O}.
 #' @param distribution  A list for the distribution of X,
-#' only "bernoulli" is implemented
-#' @param no_isolated_node A boolean, if TRUE then the network is resimulated
-#' until all nodes are connected
+#' only "bernoulli" is implemented.
+#' @param no_isolated_node A logical, if TRUE then the network is simulated
+#' again until all nodes are connected.
 #'
 #' @return An MLVSBM object, a simulated multilevel network with levels,
-#' affiliations and memberships
+#' affiliations and memberships.
 #' @export
 #'
 #' @examples
@@ -191,11 +191,11 @@ mlvsbm_simulate_network <-
 #' initial clustering with the \code{init_clustering}. Also, a given model size
 #' can be force by setting the parameters \code{nb_clusters} to a given value.
 #'
-#' @param mlv A MLVSBM object, the network to be inferred
+#' @param mlv A MLVSBM object, the network to be inferred.
 #' @param nb_clusters A list of 2 integers, the model size.
 #' If left to \code{NULL}, the algorithm
 #' will navigate freely. Otherwise it will navigate between the specified model
-#' size and its neighbours.
+#' size and its neighbors.
 #' @param init_clustering A list of 2 vectors of integers of the same length as
 #' the number of node of each level. If specified, the algorithm will start from
 #' this clustering, then navigate freely.
@@ -329,7 +329,7 @@ mlvsbm_estimate_network <-
 
 
 #' Compute the complete log likelihood of a multilevel network for a given
-#' clustering of the nodes
+#' clustering of the nodes.
 #'
 #' @description This function is useful to compute the likelihood for clusters
 #' obtained by different methods.
@@ -338,7 +338,7 @@ mlvsbm_estimate_network <-
 #' @param clustering A list of 2 vectors of integers of the same length as
 #' the number of node of each level.
 #' @return A numeric, the log likelihood of the multilevel network
-#' for the given clustering
+#' for the given clustering.
 #' @export
 #'
 #' @examples

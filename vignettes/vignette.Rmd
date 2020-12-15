@@ -49,7 +49,7 @@ my_mlvsbm <- MLVSBM::mlvsbm_simulate_network(
   no_empty_org = FALSE) # May the affiliation matrix have column suming to 0
 ```
 
-The network is stocked in an R6 object of type MLVSBM.
+The network is stocked in an `R6` object of type `MLVSBM`.
 
 Now, we are going to create a multilevel network object from 2 existing adjacency matrix 
 and an affiliation matrix :
@@ -62,8 +62,8 @@ my_mlvsbm2 <- MLVSBM::mlvsbm_create_network(X = list(I = lower_level, O = upper_
 ```
 
 We can now infer the parameters, blocks and edge probabilities of our network by
-using the mlvlsbm_esimate_network function on an MLVSBM object. It will return the 
-best model for this network as another R6 object of type FitMLVSBM. 
+using the `mlvlsbm_estimate_network()` function on an `MLVSBM` object. It will return the 
+best model for this network as another R6 object of type `FitMLVSBM`. 
 ```{r infer}
 fit <- MLVSBM::mlvsbm_estimate_network(my_mlvsbm, nb_cores = 1L)
 ```
@@ -81,8 +81,8 @@ pred <- predict(fit)
 
 
 ## Other useful output
-Output of the algorithm are stocked in the MLVSBM and FitMLVSBM objects.
-The MLVSBM object stocks information of the observed or simulated network and a
+Output of the algorithm are stocked in the `MLVSBM` and `FitMLVSBM` objects.
+The `MLVSBM` object stocks information of the observed or simulated network and a
 list of all the fitted SBM and MLVSBM models.
 ```{r output_MLVSBM}
 my_mlvsbm$ICL # A data frame of the inferred models 
@@ -93,7 +93,7 @@ my_sbm_upper <- my_mlvsbm$fittedmodels_sbm$upper[[2]] # A fitted SBM for the upp
 ```
 
 You can also get the parameters and the clustering of the fitted model from the
-FitMLVSBM object as follows:
+`FitMLVSBM` object as follows:
 ```{r output_Fit}
 fit$parameters # The connectivity and membership parameters of the model
 fit$Z # The block membership of each nodes

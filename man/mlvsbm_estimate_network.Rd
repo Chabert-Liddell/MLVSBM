@@ -13,12 +13,12 @@ mlvsbm_estimate_network(
 )
 }
 \arguments{
-\item{mlv}{A MLVSBM object, the network to be inferred}
+\item{mlv}{A MLVSBM object, the network to be inferred.}
 
 \item{nb_clusters}{A list of 2 integers, the model size.
 If left to \code{NULL}, the algorithm
 will navigate freely. Otherwise it will navigate between the specified model
-size and its neighbours.}
+size and its neighbors.}
 
 \item{init_clustering}{A list of 2 vectors of integers of the same length as
 the number of node of each level. If specified, the algorithm will start from

@@ -54,7 +54,7 @@ connection parameters}
 
 \item{\code{Z}}{Get the list of block memberships (vector form)}
 
-\item{\code{X_hat}}{Get the list of the matrices of probability conection
+\item{\code{X_hat}}{Get the list of the matrices of probability connection
 predictions}
 
 \item{\code{map}}{Get the list of block memberships (matrix form)}

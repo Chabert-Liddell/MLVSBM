@@ -9,14 +9,15 @@ simulate_affiliation(n, m, affiliation = "uniform", no_empty_org = FALSE)
 \arguments{
 \item{n}{An integer, the number of individuals}
 
-\item{m}{An integer, the number of organisations}
+\item{m}{An integer, the number of organizations}
 
 \item{affiliation}{The type of affiliation between c("uniform", "preferential")}
 
-\item{no_empty_org}{A Boolean. Force all column to have at least a 1. Need n>m}
+\item{no_empty_org}{A Boolean. Force all column to have at least a 1.
+Must have \eqn{n>m}.}
 }
 \value{
-A nxm affiliation matrix, with a unique 1 on each rows
+A \eqn{n \times m} affiliation matrix, with a unique 1 on each rows
 }
 \description{
 Simulate of matrix of affiliation

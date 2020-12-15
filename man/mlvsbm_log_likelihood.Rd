@@ -3,7 +3,7 @@
 \name{mlvsbm_log_likelihood}
 \alias{mlvsbm_log_likelihood}
 \title{Compute the complete log likelihood of a multilevel network for a given
-clustering of the nodes}
+clustering of the nodes.}
 \usage{
 mlvsbm_log_likelihood(mlv, clustering)
 }
@@ -15,7 +15,7 @@ the number of node of each level.}
 }
 \value{
 A numeric, the log likelihood of the multilevel network
-for the given clustering
+for the given clustering.
 }
 \description{
 This function is useful to compute the likelihood for clusters

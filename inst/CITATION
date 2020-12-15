@@ -1,0 +1,19 @@
+citHeader("To cite MLVSBM in publications use:")
+
+citEntry(
+  entry    = "Article",
+  title    = "A Stochastic Block Model for Multilevel Networks:
+  Application to the Sociology of Organizations",
+  author   = personList(as.person("Chabert-Liddell, Saint-Clair"),
+    as.person("Barbillon, Pierre"), as.person("Donnet, Sophie"),
+    as.person("Lazega, Emmanuel")),
+  journal  = "arXiv preprint arXiv:1910.10512",
+  year     = "2020",
+
+  textVersion  =
+  paste("Chabert-Liddell et al. (2020).",
+        "A Stochastic Block Model for Multilevel Networks:
+  Application to the Sociology of Organizations.",
+        "arXiv preprint arXiv:1910.10512")
+)
+

@@ -18,7 +18,7 @@ simulate_adjacency(
 
 \item{n}{An integer, the number of rows or columbns of the matrix}
 
-\item{alpha}{A max(Z)xmax(Z) matrix, the connectivity parameters}
+\item{alpha}{A \eqn{\max(Z)\times \max(Z)} matrix, the connectivity parameters}
 
 \item{directed}{A boolean, Is the network directed or not ?}
 
