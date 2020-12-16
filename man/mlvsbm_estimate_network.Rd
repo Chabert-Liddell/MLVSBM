@@ -61,5 +61,5 @@ my_mlvsbm <- MLVSBM::mlvsbm_simulate_network(
                           nrow = 2, ncol = 2, byrow = TRUE)),# between blocks
   directed = list(I = FALSE, O = FALSE), # Are the upper and lower level directed or not ?
   affiliation = "preferential") # How the affiliation matrix is generated
-fit <- MLVSBM::mlvsbm_estimate_network(mlv = my_mlvsbm, nb_cores = 1)
+\donttest{fit <- MLVSBM::mlvsbm_estimate_network(mlv = my_mlvsbm, nb_cores = 1)}
 }
