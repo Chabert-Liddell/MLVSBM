@@ -1,3 +1,5 @@
+# MLVSBM 0.2.1
+
 # MLVSBM 0.2.0
 * Added S3 generic function `print`, `plot`, `predict` and 
 `coef` for FitMLVSBM object.
