@@ -12,7 +12,7 @@ citEntry(
   doi = "10.1016/j.csda.2021.107179",
   year     = "2021",
   issn = "0167-9473",
-  url = "http://www.sciencedirect.com/science/article/pii/S016794732100013X",
+  url = "https://www.sciencedirect.com/science/article/pii/S016794732100013X",
   textVersion  =
   paste("Saint-Clair Chabert-Liddell, Pierre Barbillon, Sophie Donnet and Emmanuel Lazega  (2021).\n",
         "A stochastic block model approach for the analysis of multilevel networks: An application to the sociology of organizations.\n",

@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 `r badger::badge_devel("Chabert-Liddell/MLVSBM", "blue")`
 <!-- badges: end -->
 
-This is an R package implementation of a Stochastic Block Model for Multilevel Network (MLVSBM) as described in Chabert-Liddell et al. (2020)  [https://arxiv.org/abs/1910.10512](https://arxiv.org/abs/1910.10512).
+This is an R package implementation of a Stochastic Block Model for Multilevel Network (MLVSBM) as described in Chabert-Liddell, Barbillon, Donnet and Lazega (2021)  [https://doi.org/10.1016/j.csda.2021.107179](https://doi.org/10.1016/j.csda.2021.107179).
 
 ## Installation
 

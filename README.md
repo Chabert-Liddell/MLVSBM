@@ -13,8 +13,8 @@ coverage](https://codecov.io/gh/Chabert-Liddell/MLVSBM/branch/master/graph/badge
 <!-- badges: end -->
 
 This is an R package implementation of a Stochastic Block Model for
-Multilevel Network (MLVSBM) as described in Chabert-Liddell et
-al. (2020) <https://arxiv.org/abs/1910.10512>.
+Multilevel Network (MLVSBM) as described in Chabert-Liddell, Barbillon,
+Donnet and Lazega (2021) <https://doi.org/10.1016/j.csda.2021.107179>.
 
 ## Installation
 

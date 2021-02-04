@@ -343,7 +343,7 @@ mlvsbm_estimate_network <-
 #'
 #' @examples
 #' my_mlvsbm <- MLVSBM::mlvsbm_simulate_network(
-#'   n = list(I = 10, O = 20), # Number of nodes for the lower level and the upper level
+#'   n = list(I = 40, O = 20), # Number of nodes for the lower level and the upper level
 #'   Q = list(I = 2, O = 2), # Number of blocks for the lower level and the upper level
 #'   pi = c(.3, .7), # Block proportion for the upper level, must sum to one
 #'   gamma = matrix(c(.9, .2,   # Block proportion for the lower level,
@@ -357,8 +357,7 @@ mlvsbm_estimate_network <-
 #'                           nrow = 2, ncol = 2, byrow = TRUE)),# between blocks
 #'   directed = list(I = FALSE, O = FALSE), # Are the upper and lower level directed or not ?
 #'   affiliation = "preferential") # How the affiliation matrix is generated
-#' fit <- MLVSBM::mlvsbm_estimate_network(mlv = my_mlvsbm, nb_cores = 1)
-#' mlvsbm_log_likelihood(mlv = my_mlvsbm, clustering = fit$Z)
+#' mlvsbm_log_likelihood(mlv = my_mlvsbm, clustering = my_mlvsbm$memberships)
 mlvsbm_log_likelihood <- function(mlv, clustering) {
   fit <- FitMLVSBM$new(Q = list(I = max(clustering[[1]]),
                                 O = max(clustering[[2]])),
