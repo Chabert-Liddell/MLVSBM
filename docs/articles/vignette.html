@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MLVSBM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
     </div>
 
@@ -39,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a>
-    <span class="fa fa-home"></span>
+    <span class="fas fa-home"></span>
      
   </a>
 </li>
@@ -71,7 +71,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/Chabert-Liddell">
-    <span class="fa fa-github"></span>
+    <span class="fas fa-github"></span>
      
   </a>
 </li>
@@ -85,8 +85,7 @@
 
       
 
-      </header><script src="vignette_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="vignette_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
-<script src="vignette_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
+      </header><script src="vignette_files/header-attrs-2.6/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Tutorial</h1>
@@ -133,34 +132,34 @@
 <span class="va">my_mlvsbm2</span> <span class="op">&lt;-</span> <span class="fu">MLVSBM</span><span class="fu">::</span><span class="fu"><a href="../reference/mlvsbm_create_network.html">mlvsbm_create_network</a></span><span class="op">(</span>X <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>I <span class="op">=</span> <span class="va">lower_level</span>, O <span class="op">=</span> <span class="va">upper_level</span><span class="op">)</span>,
                                             A <span class="op">=</span> <span class="va">affiliation</span><span class="op">)</span></code></pre></div>
 <p>We can now infer the parameters, blocks and edge probabilities of our network by using the <code>mlvlsbm_estimate_network()</code> function on an <code>MLVSBM</code> object. It will return the best model for this network as another R6 object of type <code>FitMLVSBM</code>.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>fit &lt;-<span class="st"> </span>MLVSBM<span class="op">::</span><span class="kw">mlvsbm_estimate_network</span>(my_mlvsbm, <span class="dt">nb_cores =</span> 1L)</span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="co">#&gt; </span></span>
-<span id="cb4-3"><a href="#cb4-3"></a><span class="co">#&gt; </span></span>
-<span id="cb4-4"><a href="#cb4-4"></a></span>
-<span id="cb4-5"><a href="#cb4-5"></a></span>
-<span id="cb4-6"><a href="#cb4-6"></a></span>
-<span id="cb4-7"><a href="#cb4-7"></a></span>
-<span id="cb4-8"><a href="#cb4-8"></a></span>
-<span id="cb4-9"><a href="#cb4-9"></a></span>
-<span id="cb4-10"><a href="#cb4-10"></a></span>
-<span id="cb4-11"><a href="#cb4-11"></a>[<span class="dv">1</span>] <span class="st">"Infering lower level :"</span></span>
-<span id="cb4-12"><a href="#cb4-12"></a><span class="co">#&gt; [1] "# blocks: 3, ICL = -1752.99110620455 !"</span></span>
-<span id="cb4-13"><a href="#cb4-13"></a><span class="co">#&gt; </span></span>
-<span id="cb4-14"><a href="#cb4-14"></a><span class="co">#&gt; </span></span>
-<span id="cb4-15"><a href="#cb4-15"></a></span>
-<span id="cb4-16"><a href="#cb4-16"></a></span>
-<span id="cb4-17"><a href="#cb4-17"></a></span>
-<span id="cb4-18"><a href="#cb4-18"></a></span>
-<span id="cb4-19"><a href="#cb4-19"></a></span>
-<span id="cb4-20"><a href="#cb4-20"></a></span>
-<span id="cb4-21"><a href="#cb4-21"></a></span>
-<span id="cb4-22"><a href="#cb4-22"></a>[<span class="dv">1</span>] <span class="st">"Infering upper level :"</span></span>
-<span id="cb4-23"><a href="#cb4-23"></a><span class="co">#&gt; [1] "# blocks: 3, ICL = -429.333753035444 !"</span></span>
-<span id="cb4-24"><a href="#cb4-24"></a><span class="co">#&gt; [1] "======= # Individual clusters : 3 , # Organisation clusters 3,  ICL : -2161.21593501663========"</span></span>
-<span id="cb4-25"><a href="#cb4-25"></a><span class="co">#&gt; [1] "======= # Individual blocks : 3 , # Organizational blocks 3,  ICL : -2161.21593501663========"</span></span>
-<span id="cb4-26"><a href="#cb4-26"></a><span class="co">#&gt; [1] "ICL for independent levels : -2182.32485924"</span></span>
-<span id="cb4-27"><a href="#cb4-27"></a><span class="co">#&gt; [1] "ICL for interdependent levels : -2161.21593501663"</span></span>
-<span id="cb4-28"><a href="#cb4-28"></a><span class="co">#&gt; [1] "=====Interdependence is detected between the two levels!====="</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> MLVSBM<span class="sc">::</span><span class="fu">mlvsbm_estimate_network</span>(my_mlvsbm, <span class="at">nb_cores =</span> 1L)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">"Infering lower level :"</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] "# blocks: 3, ICL = -1752.99110620455 !"</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">"Infering upper level :"</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] "# blocks: 3, ICL = -429.333753035444 !"</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] "======= # Individual clusters : 3 , # Organisation clusters 3,  ICL : -2161.21593501663========"</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] "======= # Individual blocks : 3 , # Organizational blocks 3,  ICL : -2161.21593501663========"</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] "ICL for independent levels : -2182.32485924"</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] "ICL for interdependent levels : -2161.21593501663"</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] "=====Interdependence is detected between the two levels!====="</span></span></code></pre></div>
 <div id="generic-functions" class="section level2">
 <h2 class="hasAnchor">
 <a href="#generic-functions" class="anchor"></a>Generic functions</h2>

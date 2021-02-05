@@ -1,8 +1,8 @@
-pandoc: 2.7.3
+pandoc: 2.11.2
 pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
   articles/hard_to_infer: hard_to_infer.html
   vignette: vignette.html
-last_built: 2020-12-15T11:49Z
+last_built: 2021-02-05T17:10Z
 
