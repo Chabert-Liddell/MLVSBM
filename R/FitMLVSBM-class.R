@@ -229,6 +229,13 @@ FitMLVSBM <-
                 (private$M$I * (1 - private$X$I)) %*%
                 tcrossprod(tau_old$I, log(1 - private$param$alpha$I)) +
                 private$A %*% tcrossprod(tau_old$O, log(private$param$gamma))
+              if (private$directed_$I) {
+                tau$I <- tau$I +
+                  t(private$M$I * private$X$I) %*%
+                  tcrossprod(tau_old$I, t(log(private$param$alpha$I))) +
+                  t(private$M$I * (1 - private$X$I)) %*%
+                  tcrossprod(tau_old$I, t(log(1 - private$param$alpha$I)))
+              }
               if (private$Q$I == 1) {
                 tau$I  <-
                   as.matrix(exp( apply(X = tau$I,
@@ -250,6 +257,13 @@ FitMLVSBM <-
                 (private$M$O * (1 - private$X$O)) %*%
                 tcrossprod(tau_old$O,  log(1 - private$param$alpha$O)) +
                 crossprod(private$A, tau_old$I) %*% log(private$param$gamma)
+              if (private$directed_$O) {
+                tau$O <- tau$O +
+                  t(private$M$O * private$X$O) %*%
+                  tcrossprod(tau_old$O, t(log(private$param$alpha$O))) +
+                  t(private$M$O * (1 - private$X$O)) %*%
+                  tcrossprod(tau_old$O, t(log(1 - private$param$alpha$O)))
+              }
               if (private$Q$O == 1) {
                 tau$O <- as.matrix(exp(apply(X = tau$O,
                                              MARGIN = 1,

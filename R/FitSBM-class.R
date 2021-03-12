@@ -143,6 +143,12 @@ FitSBM <-
                                                      log(private$alpha)) +
               (private$M * (1 - private$X)) %*% tcrossprod(tau_old,
                                                            log(1 - private$alpha))
+            if (private$directed_) {
+              tau <- tau +
+                t(private$M * private$X) %*% tcrossprod(tau_old, t(log(private$alpha))) +
+                t(private$M * (1 - private$X)) %*%
+                tcrossprod(tau_old, t(log(1 - private$alpha)))
+            }
             if (private$Q == 1) {
               tau  <- as.matrix(exp(apply(tau, 1, function(x) x - max(x))), ncol = 1 )
             } else {

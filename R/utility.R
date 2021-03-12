@@ -17,7 +17,7 @@ spcClust <- function(X, K){
   X[is.na(X)] <- mean(X, na.rm=TRUE)
   Labs <- D_moins1_2 %*% X %*% D_moins1_2
   specabs <- eigen(Labs, symmetric = TRUE)
-  index <- order(abs(specabs$values))[1:K]
+  index <- rev(order(abs(specabs$values)))[1:K]
   U <- specabs$vectors[,index]
   U <- U / rowSums(U**2)**(1/2)
   U[is.na(U)] <- 0
@@ -37,11 +37,12 @@ spcClust <- function(X, K){
 #' @return A vector : The clusters labels
 hierarClust <- function(X, K){
   if (K == 1) return (rep(1L, nrow(X)))
-  distance <- stats::dist(x = X, method = "manhattan")
-  X[X == -1] <- NA
+  # distance <- stats::dist(x = X, method = "manhattan")
+  # X[X == -1] <- NA
   # distance[which(A == 1)] <- distance[which(A == 1)] - 2
-  distance <- stats::as.dist(ape::additive(distance))
-  clust    <- stats::hclust(d = distance , method = "ward.D")
+  # distance <- stats::as.dist(ape::additive(distance))
+  clust <- cluster::agnes(x = X, metric = "manhattan", method = "ward")
+  # clust    <- stats::hclust(d = distance , method = "ward.D2")
   return(stats::cutree(tree = clust, k = K))
 }
 

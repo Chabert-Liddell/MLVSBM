@@ -10,6 +10,7 @@ status](https://travis-ci.org/Chabert-Liddell/MLVSBM.svg?branch=master)](https:/
 [![Codecov test
 coverage](https://codecov.io/gh/Chabert-Liddell/MLVSBM/branch/master/graph/badge.svg)](https://codecov.io/gh/Chabert-Liddell/MLVSBM?branch=master)
 [![](https://img.shields.io/badge/devel%20version-0.2.1-blue.svg)](https://github.com/Chabert-Liddell/MLVSBM)
+[![](https://www.r-pkg.org/badges/version/MLVSBM?color=green)](https://cran.r-project.org/package=MLVSBM)
 [![](https://img.shields.io/badge/doi-10.1016/j.csda.2021.107179-yellow.svg)](https://doi.org/10.1016/j.csda.2021.107179)
 <!-- badges: end -->
 
@@ -19,8 +20,14 @@ Donnet and Lazega (2021) <https://doi.org/10.1016/j.csda.2021.107179>.
 
 ## Installation
 
-You can install the released version of MLVSBM from
-[github](https://github.com) with:
+You can install the latest released version of MLVSBM from
+[cran](https://cran.r-project.org/package=MLVSBM)
+
+``` r
+install.packages("MLVSBM")
+```
+
+or the latest dev version from [github](https://github.com) with:
 
 ``` r
 devtools::install_github("Chabert-Liddell/MLVSBM")
@@ -85,14 +92,14 @@ another R6 object of type `FitMLVSBM`.
 fit <- MLVSBM:::mlvsbm_estimate_network(my_mlvsbm)
 #> 
 #> [1] "Infering lower level :"
-#> [1] "# blocks: 3, ICL = -1752.99110620455 !"
+#> [1] "# blocks: 3, ICL = -1753.45290053552 !"
 #> 
 #> [1] "Infering upper level :"
 #> [1] "# blocks: 3, ICL = -429.333753035444 !"
-#> [1] "======= # Individual clusters : 3 , # Organisation clusters 3,  ICL : -2161.21593501663========"
-#> [1] "======= # Individual blocks : 3 , # Organizational blocks 3,  ICL : -2161.21593501663========"
-#> [1] "ICL for independent levels : -2182.32485924"
-#> [1] "ICL for interdependent levels : -2161.21593501663"
+#> [1] "======= # Individual clusters : 3 , # Organisation clusters 3,  ICL : -2161.44453717678========"
+#> [1] "======= # Individual blocks : 3 , # Organizational blocks 3,  ICL : -2161.44453717678========"
+#> [1] "ICL for independent levels : -2182.78665357096"
+#> [1] "ICL for interdependent levels : -2161.44453717678"
 #> [1] "=====Interdependence is detected between the two levels!====="
 ```
 
@@ -129,27 +136,27 @@ coef(fit)
 #> $alpha
 #> $alpha$I
 #>            [,1]      [,2]       [,3]
-#> [1,] 0.23076927 0.5384598 0.09440602
-#> [2,] 0.49679322 0.4545447 0.08333412
-#> [3,] 0.09615434 0.2840906 0.13419909
+#> [1,] 0.23072817 0.5382933 0.09444543
+#> [2,] 0.49659089 0.4545821 0.08339372
+#> [3,] 0.09614086 0.2840693 0.13421325
 #> 
 #> $alpha$O
-#>            [,1]       [,2]       [,3]
-#> [1,] 0.66665873 0.09848632 0.05555697
-#> [2,] 0.09848632 0.48051884 0.11363719
-#> [3,] 0.05555697 0.11363719 0.53030085
+#>            [,1]       [,2]      [,3]
+#> [1,] 0.66670837 0.09845986 0.0557177
+#> [2,] 0.09845986 0.48056388 0.1137974
+#> [3,] 0.05571770 0.11379738 0.5299402
 #> 
 #> 
 #> $pi
 #> $pi$O
-#> [1] 0.1500005 0.5499994 0.3000001
+#> [1] 0.1499768 0.5496535 0.3003697
 #> 
 #> 
 #> $gamma
-#>            [,1]      [,2]         [,3]
-#> [1,] 0.09091169 0.1923087 8.695625e-01
-#> [2,] 0.72726867 0.0384628 1.304356e-01
-#> [3,] 0.18181964 0.7692285 1.956515e-06
+#>            [,1]       [,2]         [,3]
+#> [1,] 0.09064248 0.19243672 8.692712e-01
+#> [2,] 0.72734754 0.03843131 1.307266e-01
+#> [3,] 0.18200998 0.76913196 2.105228e-06
 ```
 
 And the prediction of the block clustering as well as the probability of
@@ -159,19 +166,25 @@ a link between two individuals or two organizations:
 pred <- predict(fit)
 pred$nodes
 #> $I
-#>  [1] 1 3 3 1 3 2 1 2 1 3 1 3 3 1 3 3 1 1 3 1 1 1 3 1 3 3 1 1 1 1 3 1 2 2 1 3 2 3
-#> [39] 3 3 2 1 1 1 2 2 1 3 3 1 2 1 3 1 2 2 2 1 3 3
+#>  I1  I2  I3  I4  I5  I6  I7  I8  I9 I10 I11 I12 I13 I14 I15 I16 I17 I18 I19 I20 
+#>   1   3   3   1   3   2   1   2   1   3   1   3   3   1   3   3   1   1   3   1 
+#> I21 I22 I23 I24 I25 I26 I27 I28 I29 I30 I31 I32 I33 I34 I35 I36 I37 I38 I39 I40 
+#>   1   1   3   1   3   3   1   1   1   1   3   1   2   2   1   3   2   3   3   3 
+#> I41 I42 I43 I44 I45 I46 I47 I48 I49 I50 I51 I52 I53 I54 I55 I56 I57 I58 I59 I60 
+#>   2   1   1   1   2   2   1   3   3   1   2   1   3   1   2   2   2   1   3   3 
 #> 
 #> $O
-#>  [1] 3 2 2 2 1 2 1 1 3 2 3 3 3 2 2 2 2 3 2 2 2 3 2 3 2 2 1 1 1 2 2 3 2 3 2 2 3 2
-#> [39] 2 3
+#>  O1  O2  O3  O4  O5  O6  O7  O8  O9 O10 O11 O12 O13 O14 O15 O16 O17 O18 O19 O20 
+#>   3   2   2   2   1   2   1   1   3   2   3   3   3   2   2   2   2   3   2   2 
+#> O21 O22 O23 O24 O25 O26 O27 O28 O29 O30 O31 O32 O33 O34 O35 O36 O37 O38 O39 O40 
+#>   2   3   2   3   2   2   1   1   1   2   2   3   2   3   2   2   3   2   2   3
 pred$dyads$I[1:5, 1:5]
-#>           [,1]       [,2]       [,3]      [,4]       [,5]
-#> [1,] 0.0000000 0.09440663 0.09440663 0.2307696 0.09440663
-#> [2,] 0.0961551 0.00000000 0.13419912 0.0961551 0.13419912
-#> [3,] 0.0961551 0.13419912 0.00000000 0.0961551 0.13419912
-#> [4,] 0.2307696 0.09440663 0.09440663 0.0000000 0.09440663
-#> [5,] 0.0961551 0.13419912 0.13419912 0.0961551 0.00000000
+#>            I1         I2         I3         I4         I5
+#> I1 0.00000000 0.09444600 0.09444600 0.23073017 0.09444714
+#> I2 0.09614226 0.00000000 0.13421327 0.09614210 0.13421295
+#> I3 0.09614226 0.13421327 0.00000000 0.09614210 0.13421295
+#> I4 0.23073020 0.09444601 0.09444601 0.00000000 0.09444714
+#> I5 0.09614339 0.13421294 0.13421294 0.09614322 0.00000000
 ```
 
 ## Some others useful output
@@ -183,11 +196,11 @@ simulated network and a list of all the fitted SBM and MLVSBM models.
 ``` r
 my_mlvsbm$ICL # A data frame of the inferred models 
 #>   index Q_I Q_O       ICL
-#> 1     1   3   3 -2161.216
+#> 1     1   3   3 -2161.445
 my_fit <- my_mlvsbm$fittedmodels[[which.max(my_mlvsbm$ICL$ICL)]] # The fitted model with index  the highest ICL
 my_mlvsbm$ICL_sbm # The ICL of the SBM
 #> $lower
-#>  [1]      -Inf      -Inf -1752.991      -Inf      -Inf      -Inf      -Inf
+#>  [1]      -Inf      -Inf -1753.453      -Inf      -Inf      -Inf      -Inf
 #>  [8]      -Inf      -Inf      -Inf
 #> 
 #> $upper
@@ -205,37 +218,43 @@ fit$parameters # The connectivity and membership parameters of the model
 #> $alpha
 #> $alpha$I
 #>            [,1]      [,2]       [,3]
-#> [1,] 0.23076927 0.5384598 0.09440602
-#> [2,] 0.49679322 0.4545447 0.08333412
-#> [3,] 0.09615434 0.2840906 0.13419909
+#> [1,] 0.23072817 0.5382933 0.09444543
+#> [2,] 0.49659089 0.4545821 0.08339372
+#> [3,] 0.09614086 0.2840693 0.13421325
 #> 
 #> $alpha$O
-#>            [,1]       [,2]       [,3]
-#> [1,] 0.66665873 0.09848632 0.05555697
-#> [2,] 0.09848632 0.48051884 0.11363719
-#> [3,] 0.05555697 0.11363719 0.53030085
+#>            [,1]       [,2]      [,3]
+#> [1,] 0.66670837 0.09845986 0.0557177
+#> [2,] 0.09845986 0.48056388 0.1137974
+#> [3,] 0.05571770 0.11379738 0.5299402
 #> 
 #> 
 #> $pi
 #> $pi$O
-#> [1] 0.1500005 0.5499994 0.3000001
+#> [1] 0.1499768 0.5496535 0.3003697
 #> 
 #> 
 #> $gamma
-#>            [,1]      [,2]         [,3]
-#> [1,] 0.09091169 0.1923087 8.695625e-01
-#> [2,] 0.72726867 0.0384628 1.304356e-01
-#> [3,] 0.18181964 0.7692285 1.956515e-06
+#>            [,1]       [,2]         [,3]
+#> [1,] 0.09064248 0.19243672 8.692712e-01
+#> [2,] 0.72734754 0.03843131 1.307266e-01
+#> [3,] 0.18200998 0.76913196 2.105228e-06
 fit$Z # The membership of each nodes
 #> $I
-#>  [1] 1 3 3 1 3 2 1 2 1 3 1 3 3 1 3 3 1 1 3 1 1 1 3 1 3 3 1 1 1 1 3 1 2 2 1 3 2 3
-#> [39] 3 3 2 1 1 1 2 2 1 3 3 1 2 1 3 1 2 2 2 1 3 3
+#>  I1  I2  I3  I4  I5  I6  I7  I8  I9 I10 I11 I12 I13 I14 I15 I16 I17 I18 I19 I20 
+#>   1   3   3   1   3   2   1   2   1   3   1   3   3   1   3   3   1   1   3   1 
+#> I21 I22 I23 I24 I25 I26 I27 I28 I29 I30 I31 I32 I33 I34 I35 I36 I37 I38 I39 I40 
+#>   1   1   3   1   3   3   1   1   1   1   3   1   2   2   1   3   2   3   3   3 
+#> I41 I42 I43 I44 I45 I46 I47 I48 I49 I50 I51 I52 I53 I54 I55 I56 I57 I58 I59 I60 
+#>   2   1   1   1   2   2   1   3   3   1   2   1   3   1   2   2   2   1   3   3 
 #> 
 #> $O
-#>  [1] 3 2 2 2 1 2 1 1 3 2 3 3 3 2 2 2 2 3 2 2 2 3 2 3 2 2 1 1 1 2 2 3 2 3 2 2 3 2
-#> [39] 2 3
+#>  O1  O2  O3  O4  O5  O6  O7  O8  O9 O10 O11 O12 O13 O14 O15 O16 O17 O18 O19 O20 
+#>   3   2   2   2   1   2   1   1   3   2   3   3   3   2   2   2   2   3   2   2 
+#> O21 O22 O23 O24 O25 O26 O27 O28 O29 O30 O31 O32 O33 O34 O35 O36 O37 O38 O39 O40 
+#>   2   3   2   3   2   2   1   1   1   2   2   3   2   3   2   2   3   2   2   3
 fit$vbound # A vector of the varational bound of the VEM algorithm
-#> [1] -2088.49
+#> [1] -2088.490 -2088.447 -2088.447 -2088.447
 tau <- fit$membership # The variational parameters of the model
 pred <- fit$X_hat # The links predictions for each level
 ```

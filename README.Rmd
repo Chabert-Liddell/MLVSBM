@@ -18,6 +18,7 @@ knitr::opts_chunk$set(
 [![Travis build status](https://travis-ci.org/Chabert-Liddell/MLVSBM.svg?branch=master)](https://travis-ci.org/Chabert-Liddell/MLVSBM)
 [![Codecov test coverage](https://codecov.io/gh/Chabert-Liddell/MLVSBM/branch/master/graph/badge.svg)](https://codecov.io/gh/Chabert-Liddell/MLVSBM?branch=master)
 `r badger::badge_devel("Chabert-Liddell/MLVSBM", "blue")`
+`r badger::badge_cran_release(color = "green")`
 `r badger::badge_doi("10.1016/j.csda.2021.107179", "yellow")`
 <!-- badges: end -->
 
@@ -25,7 +26,12 @@ This is an R package implementation of a Stochastic Block Model for Multilevel N
 
 ## Installation
 
-You can install the released version of MLVSBM from [github](https://github.com) with:
+You can install the latest released version of MLVSBM from [cran](https://cran.r-project.org/package=MLVSBM)
+```{r eval = FALSE}
+install.packages("MLVSBM")
+```
+
+or the latest dev version from [github](https://github.com) with:
 
 ```{r eval=FALSE}
 devtools::install_github("Chabert-Liddell/MLVSBM")

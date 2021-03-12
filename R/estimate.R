@@ -28,6 +28,7 @@ MLVSBM$set(
     } else {
       model_list <-  vector("list", max(max(Z), Q_max))
     }
+    did_spectral <- rep(FALSE, Q_max)
     ICL <- rep(-Inf, length(model_list))
     bound <- rep(-Inf, length(model_list))
     print(paste0("Infering ", level, " level :"))
@@ -36,12 +37,19 @@ MLVSBM$set(
       init <- "merge_split"
       best_fit <- self$estimate_sbm(level = level, Z = Z,
                                     Q = max(Z), init = init)
-      model_list[[max(Z)]] <- best_fit
-      ICL[max(Z)] <- best_fit$ICL
-      bound[max(Z)] <- best_fit$bound
+      model_list[[best_fit$nb_clusters]] <- best_fit
+      ICL[best_fit$nb_clusters] <- best_fit$ICL
+      bound[best_fit$nb_clusters] <- best_fit$bound
     } else {
       best_fit <- self$estimate_sbm(level = level, Z = Z,
                                       Q = Q_min, init = init)
+      # if (! did_spectral[Q_min]) {
+      #   spc_fit <- self$estimate_sbm(level = level, Z = Z,
+      #                                Q = Q_min, init = "")
+      #   if (spc_fit$ICL > best_fit$ICL) {
+      #
+      #   }
+      # }
       model_list[[Q_min]] <- best_fit
       ICL[Q_min] <- best_fit$ICL
       bound[Q_min] <- best_fit$bound
@@ -141,6 +149,7 @@ MLVSBM$set(
     return(list("models" = model_list, "ICL" = ICL))
   }
 )
+
 #-------------------------------------------------------------------------------
 # Estimation neighbours for SBM
 #-------------------------------------------------------------------------------
@@ -562,7 +571,7 @@ MLVSBM$set(
     nb_models <- list("I" = length(Z$I), "O" = length(Z$O))
     models  <-  parallel::mclapply(
       seq(nb_models$O * nb_models$I),
-      x <- function(x) {
+      function(x) {
         self$mcestimate(
           Q = list(
             I = max(Z$I[[
@@ -578,11 +587,11 @@ MLVSBM$set(
           init    ="merge_split",
           independent = independent)
       }, mc.cores = nb_cores)
-    models <- models[which(sapply( models, x <- function(x) ! is.null(x)))]
-    models <- models[which(sapply( models, x <- function(x) ! is.null(x$bound)))]
+    models <- models[which(sapply( models, function(x) ! is.null(x)))]
+    models <- models[which(sapply( models, function(x) ! is.null(x$bound)))]
     private$tmp_fitted <- c(private$tmp_fitted, models)
     best_model <- models[[which.max(
-      sapply(seq_along(models), x <- function(x) {models[[x]]$bound}))]]
+      sapply(seq_along(models), function(x) {models[[x]]$bound}))]]
     return(best_model)
     }
 )
@@ -638,6 +647,10 @@ MLVSBM$set(
                    "O" = list(fitted$Z$O)),
           independent = independent,
           nb_cores = nb_cores)
+        print(paste0("====== Searching neighbours...",
+                     " # Individual clusters : ", best$nb_clusters$I,
+                     " , # Organisation clusters ", best$nb_clusters$O,
+                     ",  ICL : ", best$ICL, "========"))
         models <-  c(models, list(best))
       }
     }
@@ -654,6 +667,10 @@ MLVSBM$set(
           independent = independent,
           nb_cores = nb_cores)
         models <-  c(models, list(best))
+        print(paste0("====== Searching neighbours...",
+                     " # Individual clusters : ", best$nb_clusters$I,
+                     " , # Organisation clusters ", best$nb_clusters$O,
+                     ",  ICL : ", best$ICL, "========"))
       }
     }
     if (! is.null(Z_tmp$I$merge[[1]])) {
@@ -670,6 +687,10 @@ MLVSBM$set(
           independent = independent,
           nb_cores = nb_cores)
         models <- c(models, list(best))
+        print(paste0("====== Searching neighbours...",
+                     " # Individual clusters : ", best$nb_clusters$I,
+                     " , # Organisation clusters ", best$nb_clusters$O,
+                     ",  ICL : ", best$ICL, "========"))
       }
     }
     if (! is.null(Z_tmp$O$merge[[1]])) {
@@ -686,6 +707,10 @@ MLVSBM$set(
           independent = independent,
           nb_cores = nb_cores)
         models <- c(models, list(best))
+        print(paste0("====== Searching neighbours...",
+                     " # Individual clusters : ", best$nb_clusters$I,
+                     " , # Organisation clusters ", best$nb_clusters$O,
+                     ",  ICL : ", best$ICL, "========"))
       }
     }
     models <- models[which(sapply( models, function(x) ! is.null(x)))]
@@ -693,6 +718,9 @@ MLVSBM$set(
     best_ICL <- which.max(
       sapply(seq_along(models), function(x) {models[[x]]$bound}))
     best_model <- models[[best_ICL]]
+    print(paste0("======= # Individual clusters : ", best_model$nb_clusters$I,
+                 " , # Organisation clusters ", best_model$nb_clusters$O,
+                 ",  ICL : ", best_model$ICL, "========"))
     self$addmodel(best_model)
     return(best_model)
   }
