@@ -27,7 +27,8 @@ Imports:
     R6,
     blockmodels,
     ape,
-    magrittr
+    magrittr,
+    cluster
 Suggests: 
     testthat (>= 2.1.0),
     covr,
