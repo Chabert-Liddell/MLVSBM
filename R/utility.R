@@ -16,7 +16,7 @@ spcClust <- function(X, K){
   D_moins1_2 <- diag(1/sqrt(rowSums(X, na.rm = TRUE) + 1e-3))
   X[is.na(X)] <- mean(X, na.rm=TRUE)
   Labs <- D_moins1_2 %*% X %*% D_moins1_2
-  specabs <- eigen(Labs, symmetric = TRUE)
+  specabs <- eigen(Labs)
   index <- rev(order(abs(specabs$values)))[1:K]
   U <- specabs$vectors[,index]
   U <- U / rowSums(U**2)**(1/2)
