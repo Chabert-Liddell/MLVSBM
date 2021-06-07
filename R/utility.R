@@ -13,10 +13,13 @@ spcClust <- function(X, K){
   isolated <- which(rowSums(X, na.rm = TRUE) == 0)
   connected <- setdiff(seq(n), isolated)
   X <- X[connected, connected]
+  if (! isSymmetric(X)) {
+    X <- 1*((X+t(X)) >0)
+  }
   D_moins1_2 <- diag(1/sqrt(rowSums(X, na.rm = TRUE) + 1e-3))
   X[is.na(X)] <- mean(X, na.rm=TRUE)
   Labs <- D_moins1_2 %*% X %*% D_moins1_2
-  specabs <- eigen(Labs)
+  specabs <- eigen(Labs, symmetric = TRUE)
   index <- rev(order(abs(specabs$values)))[1:K]
   U <- specabs$vectors[,index]
   U <- U / rowSums(U**2)**(1/2)
