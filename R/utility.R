@@ -44,7 +44,12 @@ hierarClust <- function(X, K){
   # X[X == -1] <- NA
   # distance[which(A == 1)] <- distance[which(A == 1)] - 2
   # distance <- stats::as.dist(ape::additive(distance))
-  clust <- cluster::agnes(x = X, metric = "manhattan", method = "ward")
+  diss <- cluster::daisy(x = X, metric = "manhattan", warnType = FALSE)
+  if (! any(is.na(diss))) {
+    clust <- cluster::agnes(x = X, metric = "manhattan", method = "ward")
+  } else {
+    return (rep(1L, nrow(X)))
+  }
   # clust    <- stats::hclust(d = distance , method = "ward.D2")
   return(stats::cutree(tree = clust, k = K))
 }
