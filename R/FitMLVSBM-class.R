@@ -350,18 +350,22 @@ FitMLVSBM <-
       #' @description Plot of FitMLVSBM objects
       #' @param type A string for the type of plot, just "matrix" for now
       #' @return a ggplot2 object
-      plot = function(type = c('matrix')) {
+      plot = function(type = c('matrix'), ...) {
         if(type == "matrix") {
           if (! requireNamespace("ggplot2", quietly = TRUE)) {
             stop("Please install ggplot2: install.packages('ggplot2')")
           }
-          if (! requireNamespace("ggraph", quietly = TRUE)) {
-            stop("Please install ggraph: install.packages('ggraph')")
+          if (! requireNamespace("cowplot", quietly = TRUE)) {
+            stop("Please install cowplot: install.packages('cowplot')")
           }
-          if (! requireNamespace("tidygraph", quietly = TRUE)) {
-            stop("Please install tidygraph: install.packages('tidygraph')")
-          }
-          p <- plot_multilevel_matrix(private$X, self$X_hat, private$A, self$Z)
+          # if (! requireNamespace("ggraph", quietly = TRUE)) {
+          #   stop("Please install ggraph: install.packages('ggraph')")
+          # }
+          # if (! requireNamespace("tidygraph", quietly = TRUE)) {
+          #   stop("Please install tidygraph: install.packages('tidygraph')")
+          # }
+          # p <- plot_multilevel_matrix(private$X, self$X_hat, private$A, self$Z)
+          p <- plot_multilevel_graphon(self, ...)
         }
         p
       },
@@ -561,12 +565,13 @@ predict.FitMLVSBM <- function(object, ...) {
 #' @description basic matrix plot method for a FitMLVSBM object
 #' @param x an R6 object of class \code{\link[=FitMLVSBM]{FitMLVSBM}}
 #' @param type A string for the type of plot, just "matrix" for now
-#' @param ... additional parameters for S3 compatibility. Not used
+#' @param ... additional parameters. block ordering with
+#' order = c("affiliation", "degree", "natural")
 #' @return a ggplot2 object
 #' @export
 plot.FitMLVSBM <- function(x, type = c('matrix'), ...){
   stopifnot(inherits(x, "FitMLVSBM"))
-  p <- x$plot(type)
+  p <- x$plot(type, ...)
   p
 }
 

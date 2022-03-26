@@ -1,3 +1,6 @@
+# MLVSBM 0.2.3
+* Changed `plot` function and method of FitMLVSBM object to graphon view type.
+
 # MLVSBM 0.2.2
 * Improved initialization for networks with missing data.
 * Fixed a bug for directed networks.

@@ -11,7 +11,8 @@
 
 \item{type}{A string for the type of plot, just "matrix" for now}
 
-\item{...}{additional parameters for S3 compatibility. Not used}
+\item{...}{additional parameters. block ordering with
+order = c("affiliation", "degree", "natural")}
 }
 \value{
 a ggplot2 object

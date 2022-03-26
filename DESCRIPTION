@@ -1,12 +1,12 @@
 Package: MLVSBM
 Type: Package
 Title: A Stochastic Block Model for Multilevel Networks
-Version: 0.2.2
+Version: 0.2.3
 Authors@R: 
     person(given = "Saint-Clair",
            family = "Chabert-Liddell",
            role = c("aut", "cre"),
-           email = "saint-clair.chabert-liddell@agroparistech.fr",
+           email = "academic@chabert-liddell.com",
            comment = c(ORCID = "0000-0001-5604-7308"))
 Description: Simulation, inference and clustering of multilevel networks using a
     Stochastic Block Model framework as described in Chabert-Liddell, Barbillon,
@@ -20,7 +20,7 @@ Encoding: UTF-8
 LazyData: true
 URL: https://github.com/Chabert-Liddell/MLVSBM
 BugReports: https://github.com/Chabert-Liddell/MLVSBM/issues
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Depends:
     R (>= 3.5.0)
 Imports: 
@@ -35,9 +35,8 @@ Suggests:
     knitr,
     rmarkdown,
     ggplot2 (>= 3.3.2),
-    tidygraph (>= 1.2.0),
-    ggraph (>= 2.0.3),
     ggforce,
-    spelling
+    spelling,
+    cowplot
 VignetteBuilder: knitr
 Language: en-US

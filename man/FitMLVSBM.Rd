@@ -301,7 +301,7 @@ permute_empty_class Put empty blocks numbers at the end
 \subsection{Method \code{plot()}}{
 Plot of FitMLVSBM objects
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FitMLVSBM$plot(type = c("matrix"))}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FitMLVSBM$plot(type = c("matrix"), ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
