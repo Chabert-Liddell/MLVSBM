@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MLVSBM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.3</span>
       </span>
     </div>
 
@@ -50,7 +52,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -60,7 +62,7 @@
       <a href="../articles/vignette.html">Introduction</a>
     </li>
     <li>
-      <a href="../articles/hard_to_infer.html">Hard Inference</a>
+      <a href="../articles/articles/hard_to_infer.html">Hard Inference</a>
     </li>
   </ul>
 </li>
@@ -70,7 +72,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/Chabert-Liddell">
+  <a href="https://github.com/Chabert-Liddell" class="external-link">
     <span class="fa fa-github"></span>
      
   </a>
@@ -85,117 +87,155 @@
 
       
 
-      </header><script src="hard_to_infer_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Hard to Infer Levels</h1>
-            <h3 class="subtitle">Benefits of the Multilevel Modeling</h3>
+            <h3 data-toc-skip class="subtitle">Benefits of the
+Multilevel Modeling</h3>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/Chabert-Liddell/MLVSBM/blob/master/vignettes/hard_to_infer.Rmd"><code>vignettes/hard_to_infer.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Chabert-Liddell/MLVSBM/blob/HEAD/vignettes/articles/hard_to_infer.Rmd" class="external-link"><code>vignettes/articles/hard_to_infer.Rmd</code></a></small>
       <div class="hidden name"><code>hard_to_infer.Rmd</code></div>
 
     </div>
 
     
     
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">MLVSBM</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">aricode</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">dplyr</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ggplot2</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">tidyr</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">pbmcapply</span>)</pre></body></html></div>
-<div id="simulation-scenario" class="section level2">
-<h2 class="hasAnchor">
-<a href="#simulation-scenario" class="anchor"></a>Simulation Scenario</h2>
-<p>In this vignette we are interested in the behavior of our inference algorithm when both level of our multilevel network are hard to infer.</p>
-<p>For a standard Stochastic Block Model, a well known result is the detectability threshold when the mesoscale structure is the one of a planted partition, i.e. the connectivity parameter matrix has the following shape: <span class="math display">\[\begin{pmatrix} 
-p &amp; q \\ 
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Chabert-Liddell/MLVSBM" class="external-link">MLVSBM</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jchiquet/aricode" class="external-link">aricode</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/kvnkuang/pbmcapply" class="external-link">pbmcapply</a></span><span class="op">)</span></code></pre></div>
+<div class="section level2">
+<h2 id="simulation-scenario">Simulation Scenario<a class="anchor" aria-label="anchor" href="#simulation-scenario"></a>
+</h2>
+<p>In this vignette we are interested in the behavior of our inference
+algorithm when both level of our multilevel network are hard to
+infer.</p>
+<p>For a standard Stochastic Block Model, a well known result is the
+detectability threshold when the mesoscale structure is the one of a
+planted partition, i.e. the connectivity parameter matrix has the
+following shape: <span class="math display">\[\begin{pmatrix}
+p &amp; q \\
 q &amp; p
-\end{pmatrix},\]</span> where <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span> are the connection probabilities for respectively an intra-block interaction and an extra-block interaction.</p>
-<p>Let define a multilevel network with 120 individuals belonging to one of 2 blocks of individuals and 40 organizations belonging to one of 2 blocks of organizations of equal size on average.</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">Q</span>     <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">I</span> <span class="kw">=</span> <span class="fl">2</span>, <span class="kw">O</span> <span class="kw">=</span> <span class="fl">2</span>)
-<span class="no">n</span>     <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">I</span> <span class="kw">=</span> <span class="fl">60</span>*<span class="no">Q</span>$<span class="no">I</span>, <span class="kw">O</span> <span class="kw">=</span> <span class="fl">20</span>*<span class="no">Q</span>$<span class="no">O</span>)
-<span class="no">pi</span>      <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="fl">1</span>/<span class="no">Q</span>$<span class="no">O</span>, <span class="no">Q</span>$<span class="no">O</span>)
-<span class="no">gamma</span>   <span class="kw">&lt;-</span> <span class="fl">.1</span> * (<span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="fl">8</span>, <span class="no">Q</span>$<span class="no">I</span>, <span class="no">Q</span>$<span class="no">O</span>) + <span class="fl">2</span>/<span class="no">Q</span>$<span class="no">I</span>)</pre></body></html></div>
+\end{pmatrix},\]</span> where <span class="math inline">\(p\)</span> and
+<span class="math inline">\(q\)</span> are the connection probabilities
+for respectively an intra-block interaction and an extra-block
+interaction.</p>
+<p>Let define a multilevel network with 120 individuals belonging to one
+of 2 blocks of individuals and 40 organizations belonging to one of 2
+blocks of organizations of equal size on average.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">Q</span>     <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>I <span class="op">=</span> <span class="fl">2</span>, O <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
+<span class="va">n</span>     <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>I <span class="op">=</span> <span class="fl">60</span><span class="op">*</span><span class="va">Q</span><span class="op">$</span><span class="va">I</span>, O <span class="op">=</span> <span class="fl">20</span><span class="op">*</span><span class="va">Q</span><span class="op">$</span><span class="va">O</span><span class="op">)</span>
+<span class="va">pi</span>      <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="va">Q</span><span class="op">$</span><span class="va">O</span>, <span class="va">Q</span><span class="op">$</span><span class="va">O</span><span class="op">)</span>
+<span class="va">gamma</span>   <span class="op">&lt;-</span> <span class="fl">.1</span> <span class="op">*</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="fl">8</span>, <span class="va">Q</span><span class="op">$</span><span class="va">I</span>, <span class="va">Q</span><span class="op">$</span><span class="va">O</span><span class="op">)</span> <span class="op">+</span> <span class="fl">2</span><span class="op">/</span><span class="va">Q</span><span class="op">$</span><span class="va">I</span><span class="op">)</span></code></pre></div>
 <p>Then the detectability threshold for each level is given by:</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">detect_threshold</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">n</span>, <span class="no">q</span>) {
-  <span class="fu"><a href="https://rdrr.io/r/base/polyroot.html">polyroot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="no">n</span>*<span class="no">q</span>*(<span class="no">n</span>*<span class="no">q</span>-<span class="fl">2</span>),-<span class="fl">2</span>*<span class="no">n</span>*(<span class="no">n</span>*<span class="no">q</span>+<span class="fl">1</span>),<span class="no">n</span>**<span class="fl">2</span> ))
-}</pre></body></html></div>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/complex.html">Re</a></span>(<span class="fu">detect_threshold</span>(<span class="fl">120</span>, <span class="fl">.1</span>))
-<span class="co">#&gt; [1] 0.0500000 0.1666667</span></pre></body></html></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">detect_threshold</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">n</span>, <span class="va">q</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/polyroot.html" class="external-link">polyroot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">n</span><span class="op">*</span><span class="va">q</span><span class="op">*</span><span class="op">(</span><span class="va">n</span><span class="op">*</span><span class="va">q</span><span class="op">-</span><span class="fl">2</span><span class="op">)</span>,<span class="op">-</span><span class="fl">2</span><span class="op">*</span><span class="va">n</span><span class="op">*</span><span class="op">(</span><span class="va">n</span><span class="op">*</span><span class="va">q</span><span class="op">+</span><span class="fl">1</span><span class="op">)</span>,<span class="va">n</span><span class="op">**</span><span class="fl">2</span> <span class="op">)</span><span class="op">)</span>
+<span class="op">}</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/complex.html" class="external-link">Re</a></span><span class="op">(</span><span class="fu">detect_threshold</span><span class="op">(</span><span class="fl">120</span>, <span class="fl">.1</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; [1] 0.0500000 0.1666667</span></code></pre></div>
 <p>for the inter-individual level and</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/complex.html">Re</a></span>(<span class="fu">detect_threshold</span>(<span class="fl">40</span>, <span class="fl">.1</span>))
-<span class="co">#&gt; [1] 0.02192236 0.22807764</span></pre></body></html></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/complex.html" class="external-link">Re</a></span><span class="op">(</span><span class="fu">detect_threshold</span><span class="op">(</span><span class="fl">40</span>, <span class="fl">.1</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; [1] 0.02192236 0.22807764</span></code></pre></div>
 <p>for the inter-organizational level.</p>
-<p>So we will fix the connectivity parameters a little bit above the detectability threshold in order to get a very challenging inference for a single level SBM and to see how the information in each level of the MLVSBM might help to recover the structure of the other level, and how does it vary with the strength of the inter-level dependence.</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">alpha</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>()
-<span class="no">alpha</span>$<span class="no">I</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">.1</span>, <span class="fl">.21</span>, <span class="fl">.21</span>, <span class="fl">.1</span>), <span class="fl">2</span>, <span class="fl">2</span>)
-<span class="no">alpha</span>$<span class="no">O</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">.29</span>, <span class="fl">.1</span>, <span class="fl">.1</span>, <span class="fl">.29</span>), <span class="fl">2</span>, <span class="fl">2</span>)</pre></body></html></div>
-<p>Then simulate 50 networks for each value of <span class="math inline">\(\gamma\)</span>. Let recall that <span class="math inline">\(\gamma\)</span> is the mixture parameter for the block membership of the individuals given the one of their respective organizations, for <span class="math inline">\(g \in [.5, 1]\)</span>, <span class="math display">\[\begin{pmatrix} 
-g &amp; 1-g \\ 
+<p>So we will fix the connectivity parameters a little bit above the
+detectability threshold in order to get a very challenging inference for
+a single level SBM and to see how the information in each level of the
+MLVSBM might help to recover the structure of the other level, and how
+does it vary with the strength of the inter-level dependence.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">alpha</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">alpha</span><span class="op">$</span><span class="va">I</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.1</span>, <span class="fl">.21</span>, <span class="fl">.21</span>, <span class="fl">.1</span><span class="op">)</span>, <span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span>
+<span class="va">alpha</span><span class="op">$</span><span class="va">O</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.29</span>, <span class="fl">.1</span>, <span class="fl">.1</span>, <span class="fl">.29</span><span class="op">)</span>, <span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span></code></pre></div>
+<p>Then simulate 50 networks for each value of <span class="math inline">\(\gamma\)</span>. Let recall that <span class="math inline">\(\gamma\)</span> is the mixture parameter for the
+block membership of the individuals given the one of their respective
+organizations, for <span class="math inline">\(g \in [.5, 1]\)</span>,
+<span class="math display">\[\begin{pmatrix}
+g &amp; 1-g \\
 1-g &amp; g
-\end{pmatrix}.\]</span> So the two levels are independent when <span class="math inline">\(g = .5\)</span> and the block membership of an individual is entirely determine by the block membership of his/her organization when <span class="math inline">\(g = 1\)</span>.</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="fl">42</span>)
-<span class="no">res_detect_thresh</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/reexports.html">tibble</a></span>()
-<span class="kw">for</span> (<span class="no">g</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">.5</span>, <span class="fl">1</span>, <span class="fl">.05</span>)) {
-  <span class="no">gamma</span> <span class="kw">&lt;-</span>   <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="no">g</span>, <span class="fl">1</span>-<span class="no">g</span>, <span class="fl">1</span>-<span class="no">g</span>, <span class="no">g</span>), <span class="fl">2</span>, <span class="fl">2</span>)
-  <span class="no">res</span> <span class="kw">&lt;-</span> <span class="kw pkg">pbmcapply</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/pbmcapply/man/pbmclapply.html">pbmclapply</a></span>(
-    <span class="kw">X</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">50L</span>),
-    <span class="kw">FUN</span> <span class="kw">=</span> <span class="kw">function</span>(<span class="no">i</span>) {
-      <span class="no">mlvl</span> <span class="kw">&lt;-</span>
-        <span class="kw pkg">MLVSBM</span><span class="kw ns">::</span><span class="fu"><a href="../reference/mlvsbm_simulate_network.html">mlvsbm_simulate_network</a></span>(
-          <span class="kw">n</span> <span class="kw">=</span> <span class="no">n</span>, <span class="kw">Q</span> <span class="kw">=</span> <span class="no">Q</span>, <span class="kw">pi</span> <span class="kw">=</span> <span class="no">pi</span>, <span class="kw">gamma</span> <span class="kw">=</span> <span class="no">gamma</span>, <span class="kw">alpha</span> <span class="kw">=</span> <span class="no">alpha</span>,
-          <span class="kw">directed</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">I</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">O</span> <span class="kw">=</span> <span class="fl">FALSE</span>))
-      <span class="no">fit</span> <span class="kw">&lt;-</span> <span class="kw pkg">MLVSBM</span><span class="kw ns">::</span><span class="fu"><a href="../reference/mlvsbm_estimate_network.html">mlvsbm_estimate_network</a></span>(<span class="no">mlvl</span>, <span class="kw">nb_cores</span> <span class="kw">=</span> <span class="fl">2L</span>)
-      <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span>(<span class="fu"><a href="https://dplyr.tidyverse.org/reference/reexports.html">tibble</a></span>(<span class="st">"SBM_ARI_I"</span> <span class="kw">=</span>
-                      <span class="kw pkg">aricode</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/aricode/man/ARI.html">ARI</a></span>(
-                        <span class="kw">c1</span> <span class="kw">=</span> <span class="no">mlvl</span>$<span class="no">memberships</span>$<span class="no">I</span>,
-                        <span class="kw">c2</span> <span class="kw">=</span> <span class="no">mlvl</span>$<span class="no">fittedmodels_sbm</span>$<span class="no">lower</span><span class="kw">[[</span><span class="fu"><a href="https://rdrr.io/r/base/which.min.html">which.max</a></span>(<span class="no">mlvl</span>$<span class="no">ICL_sbm</span>$<span class="no">lower</span>)]]$<span class="no">Z</span>),
-                    <span class="st">"SBM_ARI_O"</span> <span class="kw">=</span>
-                     <span class="kw pkg">aricode</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/aricode/man/ARI.html">ARI</a></span>(
-                       <span class="kw">c1</span> <span class="kw">=</span> <span class="no">mlvl</span>$<span class="no">memberships</span>$<span class="no">O</span>,
-                       <span class="kw">c2</span> <span class="kw">=</span> <span class="no">mlvl</span>$<span class="no">fittedmodels_sbm</span>$<span class="no">upper</span><span class="kw">[[</span><span class="fu"><a href="https://rdrr.io/r/base/which.min.html">which.max</a></span>(<span class="no">mlvl</span>$<span class="no">ICL_sbm</span>$<span class="no">upper</span>)]]$<span class="no">Z</span>),
-                    <span class="st">"MLVL_ARI_I"</span> <span class="kw">=</span> <span class="kw pkg">aricode</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/aricode/man/ARI.html">ARI</a></span>(
-                      <span class="kw">c1</span> <span class="kw">=</span> <span class="no">mlvl</span>$<span class="no">memberships</span>$<span class="no">I</span>,
-                      <span class="kw">c2</span> <span class="kw">=</span> <span class="no">fit</span>$<span class="no">Z</span>$<span class="no">I</span>),
-                    <span class="st">"MLVL_ARI_O"</span> <span class="kw">=</span> <span class="kw pkg">aricode</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/aricode/man/ARI.html">ARI</a></span>(
-                      <span class="kw">c1</span> <span class="kw">=</span> <span class="no">mlvl</span>$<span class="no">memberships</span>$<span class="no">O</span>,
-                      <span class="kw">c2</span> <span class="kw">=</span> <span class="no">fit</span>$<span class="no">Z</span>$<span class="no">O</span>)))
-    },
-    <span class="kw">mc.cores</span> <span class="kw">=</span> <span class="fl">6L</span>)
-  <span class="no">res</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html">bind_rows</a></span>(<span class="no">res</span>)
-  <span class="no">res</span>$<span class="no">g</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span>(<span class="no">g</span>)
-  <span class="no">res_detect_thresh</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html">bind_rows</a></span>(<span class="no">res_detect_thresh</span>, <span class="no">res</span>)
-}</pre></body></html></div>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">res_detect_thresh</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span>(<span class="kw">file</span> <span class="kw">=</span> <span class="st">"res_detect_thresh.rds"</span>)</pre></body></html></div>
+\end{pmatrix}.\]</span> So the two levels are independent when <span class="math inline">\(g = .5\)</span> and the block membership of an
+individual is entirely determine by the block membership of his/her
+organization when <span class="math inline">\(g = 1\)</span>.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span>
+<span class="va">res_detect_thresh</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span><span class="op">)</span>
+<span class="kw">for</span> <span class="op">(</span><span class="va">g</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">.5</span>, <span class="fl">1</span>, <span class="fl">.05</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+  <span class="va">gamma</span> <span class="op">&lt;-</span>   <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">g</span>, <span class="fl">1</span><span class="op">-</span><span class="va">g</span>, <span class="fl">1</span><span class="op">-</span><span class="va">g</span>, <span class="va">g</span><span class="op">)</span>, <span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span>
+  <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">pbmcapply</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pbmcapply/man/pbmclapply.html" class="external-link">pbmclapply</a></span><span class="op">(</span>
+    X <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">50L</span><span class="op">)</span>,
+    FUN <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span>
+      <span class="va">mlvl</span> <span class="op">&lt;-</span>
+        <span class="fu">MLVSBM</span><span class="fu">::</span><span class="fu"><a href="../reference/mlvsbm_simulate_network.html">mlvsbm_simulate_network</a></span><span class="op">(</span>
+          n <span class="op">=</span> <span class="va">n</span>, Q <span class="op">=</span> <span class="va">Q</span>, pi <span class="op">=</span> <span class="va">pi</span>, gamma <span class="op">=</span> <span class="va">gamma</span>, alpha <span class="op">=</span> <span class="va">alpha</span>,
+          directed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>I <span class="op">=</span> <span class="cn">FALSE</span>, O <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span>
+      <span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">MLVSBM</span><span class="fu">::</span><span class="fu"><a href="../reference/mlvsbm_estimate_network.html">mlvsbm_estimate_network</a></span><span class="op">(</span><span class="va">mlvl</span>, nb_cores <span class="op">=</span> <span class="fl">2L</span><span class="op">)</span>
+      <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span><span class="st">"SBM_ARI_I"</span> <span class="op">=</span>
+                      <span class="fu">aricode</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/aricode/man/ARI.html" class="external-link">ARI</a></span><span class="op">(</span>
+                        c1 <span class="op">=</span> <span class="va">mlvl</span><span class="op">$</span><span class="va">memberships</span><span class="op">$</span><span class="va">I</span>,
+                        c2 <span class="op">=</span> <span class="va">mlvl</span><span class="op">$</span><span class="va">fittedmodels_sbm</span><span class="op">$</span><span class="va">lower</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/which.min.html" class="external-link">which.max</a></span><span class="op">(</span><span class="va">mlvl</span><span class="op">$</span><span class="va">ICL_sbm</span><span class="op">$</span><span class="va">lower</span><span class="op">)</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">Z</span><span class="op">)</span>,
+                    <span class="st">"SBM_ARI_O"</span> <span class="op">=</span>
+                     <span class="fu">aricode</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/aricode/man/ARI.html" class="external-link">ARI</a></span><span class="op">(</span>
+                       c1 <span class="op">=</span> <span class="va">mlvl</span><span class="op">$</span><span class="va">memberships</span><span class="op">$</span><span class="va">O</span>,
+                       c2 <span class="op">=</span> <span class="va">mlvl</span><span class="op">$</span><span class="va">fittedmodels_sbm</span><span class="op">$</span><span class="va">upper</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/which.min.html" class="external-link">which.max</a></span><span class="op">(</span><span class="va">mlvl</span><span class="op">$</span><span class="va">ICL_sbm</span><span class="op">$</span><span class="va">upper</span><span class="op">)</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">Z</span><span class="op">)</span>,
+                    <span class="st">"MLVL_ARI_I"</span> <span class="op">=</span> <span class="fu">aricode</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/aricode/man/ARI.html" class="external-link">ARI</a></span><span class="op">(</span>
+                      c1 <span class="op">=</span> <span class="va">mlvl</span><span class="op">$</span><span class="va">memberships</span><span class="op">$</span><span class="va">I</span>,
+                      c2 <span class="op">=</span> <span class="va">fit</span><span class="op">$</span><span class="va">Z</span><span class="op">$</span><span class="va">I</span><span class="op">)</span>,
+                    <span class="st">"MLVL_ARI_O"</span> <span class="op">=</span> <span class="fu">aricode</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/aricode/man/ARI.html" class="external-link">ARI</a></span><span class="op">(</span>
+                      c1 <span class="op">=</span> <span class="va">mlvl</span><span class="op">$</span><span class="va">memberships</span><span class="op">$</span><span class="va">O</span>,
+                      c2 <span class="op">=</span> <span class="va">fit</span><span class="op">$</span><span class="va">Z</span><span class="op">$</span><span class="va">O</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+    <span class="op">}</span>,
+    mc.cores <span class="op">=</span> <span class="fl">6L</span><span class="op">)</span>
+  <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span>
+  <span class="va">res</span><span class="op">$</span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">g</span><span class="op">)</span>
+  <span class="va">res_detect_thresh</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="va">res_detect_thresh</span>, <span class="va">res</span><span class="op">)</span>
+<span class="op">}</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">res_detect_thresh</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"res_detect_thresh.rds"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="results" class="section level2">
-<h2 class="hasAnchor">
-<a href="#results" class="anchor"></a>Results</h2>
-<p>With <span class="math inline">\(g\)</span>, the diagonal entry of the mixture dependency parameter <span class="math inline">\(\gamma\)</span>, we notice that the greater the interdependence the better the levels are able to help each other in the recovery of the clustering. This is obvious from the beginning for the inter-organizational level which is slightly harder to infer. For the inter-individual we notice a great improvement when <span class="math inline">\(g \geq .9\)</span>. In all case, the problem is hard so we do not obtain a perfect recovery of the blocks every time.</p>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">res_detect_thresh</span> <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span>(-<span class="no">g</span>, <span class="kw">names_to</span> <span class="kw">=</span> <span class="st">"Model"</span>, <span class="kw">values_to</span> <span class="kw">=</span> <span class="st">"ARI"</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">g</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="no">ARI</span>, <span class="kw">group</span> <span class="kw">=</span> <span class="no">Model</span>, <span class="kw">fill</span> <span class="kw">=</span> <span class="no">Model</span>)) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/stat_summary.html">stat_summary</a></span>(<span class="kw">geom</span> <span class="kw">=</span> <span class="st">"ribbon"</span>, <span class="kw">fun.data</span> <span class="kw">=</span> <span class="st">"mean_se"</span>, <span class="kw">alpha</span> <span class="kw">=</span> <span class="fl">.3</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/stat_summary.html">stat_summary</a></span>(<span class="kw">geom</span> <span class="kw">=</span> <span class="st">"line"</span>, <span class="kw">fun</span> <span class="kw">=</span> <span class="st">"mean"</span>, <span class="kw">col</span> <span class="kw">=</span> <span class="st">"black"</span>, <span class="kw">size</span> <span class="kw">=</span> <span class="fl">1.1</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span>(~ <span class="no">Model</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>()</pre></body></html></div>
+<div class="section level2">
+<h2 id="results">Results<a class="anchor" aria-label="anchor" href="#results"></a>
+</h2>
+<p>With <span class="math inline">\(g\)</span>, the diagonal entry of
+the mixture dependency parameter <span class="math inline">\(\gamma\)</span>, we notice that the greater the
+interdependence the better the levels are able to help each other in the
+recovery of the clustering. This is obvious from the beginning for the
+inter-organizational level which is slightly harder to infer. For the
+inter-individual we notice a great improvement when <span class="math inline">\(g \geq .9\)</span>. In all case, the problem is
+hard so we do not obtain a perfect recovery of the blocks every
+time.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">res_detect_thresh</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span><span class="op">-</span><span class="va">g</span>, names_to <span class="op">=</span> <span class="st">"Model"</span>, values_to <span class="op">=</span> <span class="st">"ARI"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">g</span>, y <span class="op">=</span> <span class="va">ARI</span>, group <span class="op">=</span> <span class="va">Model</span>, fill <span class="op">=</span> <span class="va">Model</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/stat_summary.html" class="external-link">stat_summary</a></span><span class="op">(</span>geom <span class="op">=</span> <span class="st">"ribbon"</span>, fun.data <span class="op">=</span> <span class="st">"mean_se"</span>, alpha <span class="op">=</span> <span class="fl">.3</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/stat_summary.html" class="external-link">stat_summary</a></span><span class="op">(</span>geom <span class="op">=</span> <span class="st">"line"</span>, fun <span class="op">=</span> <span class="st">"mean"</span>, col <span class="op">=</span> <span class="st">"black"</span>, size <span class="op">=</span> <span class="fl">1.1</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">Model</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><img src="hard_to_infer_files/figure-html/plot-1.png" width="700"></p>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">res_detect_thresh</span> <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(<span class="no">g</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span>(<span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html">across</a></span>(<span class="kw">.cols</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/reexports.html">everything</a></span>(),  ~<span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">.x</span> <span class="kw">==</span> <span class="fl">1</span>)), <span class="kw">.groups</span> <span class="kw">=</span> <span class="st">"keep"</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span>(-<span class="no">g</span>, <span class="kw">names_to</span> <span class="kw">=</span> <span class="st">"Model"</span>, <span class="kw">values_to</span> <span class="kw">=</span> <span class="st">"Perfect Recovery"</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">g</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="no">`Perfect Recovery`</span>, <span class="kw">group</span> <span class="kw">=</span> <span class="no">Model</span>, <span class="kw">col</span> <span class="kw">=</span> <span class="no">Model</span>, <span class="kw">linetype</span> <span class="kw">=</span> <span class="no">Model</span>)) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>(<span class="kw">size</span> <span class="kw">=</span> <span class="fl">1.1</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>()</pre></body></html></div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">res_detect_thresh</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">g</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html" class="external-link">across</a></span><span class="op">(</span>.cols <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>,  <span class="op">~</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">.x</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"keep"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span><span class="op">-</span><span class="va">g</span>, names_to <span class="op">=</span> <span class="st">"Model"</span>, values_to <span class="op">=</span> <span class="st">"Perfect Recovery"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">g</span>, y <span class="op">=</span> <span class="va">`Perfect Recovery`</span>, group <span class="op">=</span> <span class="va">Model</span>, col <span class="op">=</span> <span class="va">Model</span>, linetype <span class="op">=</span> <span class="va">Model</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">1.1</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><img src="hard_to_infer_files/figure-html/perfect-1.png" width="700"></p>
-<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">res_detect_thresh</span> <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span>(-<span class="no">g</span>, <span class="kw">names_to</span> <span class="kw">=</span> <span class="st">"Model"</span>, <span class="kw">values_to</span> <span class="kw">=</span> <span class="st">"ARI"</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">g</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="no">ARI</span>, <span class="kw">group</span> <span class="kw">=</span> <span class="no">g</span>, <span class="kw">fill</span> <span class="kw">=</span> <span class="no">Model</span>)) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span>() +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span>(~ <span class="no">Model</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>()</pre></body></html></div>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">res_detect_thresh</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span><span class="op">-</span><span class="va">g</span>, names_to <span class="op">=</span> <span class="st">"Model"</span>, values_to <span class="op">=</span> <span class="st">"ARI"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">g</span>, y <span class="op">=</span> <span class="va">ARI</span>, group <span class="op">=</span> <span class="va">g</span>, fill <span class="op">=</span> <span class="va">Model</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html" class="external-link">geom_boxplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">Model</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><img src="hard_to_infer_files/figure-html/boxplot-1.png" width="700"></p>
 </div>
   </div>
@@ -211,11 +251,14 @@ g &amp; 1-g \\
 
 
       <footer><div class="copyright">
-  <p>Developed by Saint-Clair Chabert-Liddell.</p>
+  <p></p>
+<p>Developed by Saint-Clair Chabert-Liddell.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
 </div>
 
       </footer>
@@ -223,6 +266,8 @@ g &amp; 1-g \\
 
   
 
+
+  
 
   </body>
 </html>

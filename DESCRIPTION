@@ -37,6 +37,8 @@ Suggests:
     ggplot2 (>= 3.3.2),
     ggforce,
     spelling,
-    cowplot
+    cowplot,
+    reshape2,
+    dplyr
 VignetteBuilder: knitr
 Language: en-US

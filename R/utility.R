@@ -167,69 +167,70 @@ ARI <- function (x, y)
 }
 
 
-plot_multilevel_matrix <- function(X, X_hat, A, Z) {
-  nodes <- group <- lvl <- edges <- weight <- NULL
-  Z_sup <- c(Z$I, Z$O + max(Z$I))
-  QI <- max(Z$I)
-  QO <- max(Z$O)
-  g_ind <- tidygraph::as_tbl_graph(t(X_hat$I * X$I ))  %>%
-    tidygraph::activate(nodes) %>%
-    tidygraph::mutate(group = Z$I) %>%
-    tidygraph::activate(edges) %>%
-    tidygraph::mutate(lvl = "ind")
-  g_org <-
-    tidygraph::as_tbl_graph(X_hat$O * X$O )  %>%
-    tidygraph::activate(nodes) %>%
-    tidygraph::mutate(group = Z$O + QI) %>%
-    tidygraph::activate(edges) %>%
-    tidygraph::mutate(lvl = "org")
-  g_aff <-
-    tidygraph::as_tbl_graph(A) %>%
-    tidygraph::activate(edges) %>%
-    tidygraph::mutate(lvl = "aff")
-
-  p_mat <-  tidygraph::graph_join(g_ind, g_org) %>%
-    tidygraph::graph_join(g_aff) %>%
-    ggraph::ggraph('matrix', sort.by = group)+
-    ggraph::geom_edge_point(ggplot2::aes(filter = (lvl == "aff")),
-                            edge_colour = "black",  edge_size = 1.2)+
-    ggraph::geom_edge_point(ggplot2::aes(filter = (lvl == "ind"),
-                                         edge_colour = weight),edge_size = 1.2)+
-    ggraph::geom_edge_point(ggplot2::aes(filter = (lvl == "org"), edge_fill = weight),
-                    edge_size = 2, edge_shape = 22, stroke = 0)+
-    ggplot2::geom_hline(yintercept = c( cumsum(table(Z_sup))[QI+seq(QO)]+.5)) +
-    ggplot2::geom_hline(yintercept = cumsum(table(Z_sup))[QI]+.5, size = 1.1) +
-    ggplot2::geom_vline(xintercept = cumsum(table(Z_sup))[QI]+.5, size = 1.1) +
-    ggplot2::geom_vline(xintercept = c(0, cumsum(table(Z_sup))[seq(QI)]+.5)) +
-    ggplot2::annotate(geom = "segment",
-                      x = c(0, cumsum(table(Z_sup))[QI+seq(QO)]+.5),
-                      y = cumsum(table(Z_sup))[QI]+.5,
-                      xend = c(0,cumsum(table(Z_sup))[QI+seq(QO)]+.5),
-                      yend = cumsum(table(Z_sup))[QI+QO]+.5) +
-    ggplot2::annotate(geom = "segment",
-                      y = c(0, cumsum(table(Z_sup))[seq(QI)]+.5),
-                      x = cumsum(table(Z_sup))[QI]+.5,
-                      yend = c(0, cumsum(table(Z_sup))[seq(QI)]+.5),
-                      xend = 0) +
-    ggraph::scale_edge_fill_gradient(
-      name = 'Organizations',
-      low = "#fcbba1",
-      high = "#67000d",
-      guide = ggraph::guide_edge_colorbar(order = 2,title.position = "top")) +
-    ggraph::scale_edge_color_gradient(
-      name = 'Individuals',
-      low = "#deebf7",
-      high = "#08519c",
-      guide = ggraph::guide_edge_colorbar(order = 1,
-                                          title.position = "top",
-                                          title.hjust = 1)) +
-    ggplot2::coord_fixed(xlim = c(-1, sum(dim(A)+1)), ylim = c(-1, sum(dim(A)+1))) +
-    ggraph::theme_graph()
-    return(p_mat)
-}
+# plot_multilevel_matrix <- function(X, X_hat, A, Z) {
+#   nodes <- group <- lvl <- edges <- weight <- NULL
+#   Z_sup <- c(Z$I, Z$O + max(Z$I))
+#   QI <- max(Z$I)
+#   QO <- max(Z$O)
+#   g_ind <- tidygraph::as_tbl_graph(t(X_hat$I * X$I ))  %>%
+#     tidygraph::activate(nodes) %>%
+#     tidygraph::mutate(group = Z$I) %>%
+#     tidygraph::activate(edges) %>%
+#     tidygraph::mutate(lvl = "ind")
+#   g_org <-
+#     tidygraph::as_tbl_graph(X_hat$O * X$O )  %>%
+#     tidygraph::activate(nodes) %>%
+#     tidygraph::mutate(group = Z$O + QI) %>%
+#     tidygraph::activate(edges) %>%
+#     tidygraph::mutate(lvl = "org")
+#   g_aff <-
+#     tidygraph::as_tbl_graph(A) %>%
+#     tidygraph::activate(edges) %>%
+#     tidygraph::mutate(lvl = "aff")
+#
+#   p_mat <-  tidygraph::graph_join(g_ind, g_org) %>%
+#     tidygraph::graph_join(g_aff) %>%
+#     ggraph::ggraph('matrix', sort.by = group)+
+#     ggraph::geom_edge_point(ggplot2::aes(filter = (lvl == "aff")),
+#                             edge_colour = "black",  edge_size = 1.2)+
+#     ggraph::geom_edge_point(ggplot2::aes(filter = (lvl == "ind"),
+#                                          edge_colour = weight),edge_size = 1.2)+
+#     ggraph::geom_edge_point(ggplot2::aes(filter = (lvl == "org"), edge_fill = weight),
+#                     edge_size = 2, edge_shape = 22, stroke = 0)+
+#     ggplot2::geom_hline(yintercept = c( cumsum(table(Z_sup))[QI+seq(QO)]+.5)) +
+#     ggplot2::geom_hline(yintercept = cumsum(table(Z_sup))[QI]+.5, size = 1.1) +
+#     ggplot2::geom_vline(xintercept = cumsum(table(Z_sup))[QI]+.5, size = 1.1) +
+#     ggplot2::geom_vline(xintercept = c(0, cumsum(table(Z_sup))[seq(QI)]+.5)) +
+#     ggplot2::annotate(geom = "segment",
+#                       x = c(0, cumsum(table(Z_sup))[QI+seq(QO)]+.5),
+#                       y = cumsum(table(Z_sup))[QI]+.5,
+#                       xend = c(0,cumsum(table(Z_sup))[QI+seq(QO)]+.5),
+#                       yend = cumsum(table(Z_sup))[QI+QO]+.5) +
+#     ggplot2::annotate(geom = "segment",
+#                       y = c(0, cumsum(table(Z_sup))[seq(QI)]+.5),
+#                       x = cumsum(table(Z_sup))[QI]+.5,
+#                       yend = c(0, cumsum(table(Z_sup))[seq(QI)]+.5),
+#                       xend = 0) +
+#     ggraph::scale_edge_fill_gradient(
+#       name = 'Organizations',
+#       low = "#fcbba1",
+#       high = "#67000d",
+#       guide = ggraph::guide_edge_colorbar(order = 2,title.position = "top")) +
+#     ggraph::scale_edge_color_gradient(
+#       name = 'Individuals',
+#       low = "#deebf7",
+#       high = "#08519c",
+#       guide = ggraph::guide_edge_colorbar(order = 1,
+#                                           title.position = "top",
+#                                           title.hjust = 1)) +
+#     ggplot2::coord_fixed(xlim = c(-1, sum(dim(A)+1)), ylim = c(-1, sum(dim(A)+1))) +
+#     ggraph::theme_graph()
+#     return(p_mat)
+# }
 
 
 plot_multilevel_graphon <- function(fit, order = "degree") {
+  xmin <- xmax <- ymin <- ymax <- value <- NULL
   ord <- list()
   ord$O <- seq(fit$nb_clusters$O)
   ord$I <- seq(fit$nb_clusters$I)

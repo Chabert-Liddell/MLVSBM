@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../../index.html">MLVSBM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.3</span>
       </span>
     </div>
 
@@ -39,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a>
-    <span class="fas fa-home"></span>
+    <span class="fa fa-home"></span>
      
   </a>
 </li>
@@ -71,7 +71,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/Chabert-Liddell">
-    <span class="fas fa-github"></span>
+    <span class="fa fa-github"></span>
      
   </a>
 </li>
@@ -85,11 +85,12 @@
 
       
 
-      </header><script src="hard_to_infer_files/header-attrs-2.8/header-attrs.js"></script><div class="row">
+      </header><script src="hard_to_infer_files/header-attrs-2.10/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Hard to Infer Levels</h1>
-            <h3 class="subtitle">Benefits of the Multilevel Modeling</h3>
+            <h3 class="subtitle">Benefits of the Multilevel
+Modeling</h3>
             
       
       <small class="dont-index">Source: <a href="https://github.com/Chabert-Liddell/MLVSBM/blob/master/vignettes/articles/hard_to_infer.Rmd"><code>vignettes/articles/hard_to_infer.Rmd</code></a></small>
@@ -109,12 +110,22 @@
 <div id="simulation-scenario" class="section level2">
 <h2 class="hasAnchor">
 <a href="#simulation-scenario" class="anchor"></a>Simulation Scenario</h2>
-<p>In this vignette we are interested in the behavior of our inference algorithm when both level of our multilevel network are hard to infer.</p>
-<p>For a standard Stochastic Block Model, a well known result is the detectability threshold when the mesoscale structure is the one of a planted partition, i.e. the connectivity parameter matrix has the following shape: <span class="math display">\[\begin{pmatrix} 
-p &amp; q \\ 
+<p>In this vignette we are interested in the behavior of our inference
+algorithm when both level of our multilevel network are hard to
+infer.</p>
+<p>For a standard Stochastic Block Model, a well known result is the
+detectability threshold when the mesoscale structure is the one of a
+planted partition, i.e. the connectivity parameter matrix has the
+following shape: <span class="math display">\[\begin{pmatrix}
+p &amp; q \\
 q &amp; p
-\end{pmatrix},\]</span> where <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span> are the connection probabilities for respectively an intra-block interaction and an extra-block interaction.</p>
-<p>Let define a multilevel network with 120 individuals belonging to one of 2 blocks of individuals and 40 organizations belonging to one of 2 blocks of organizations of equal size on average.</p>
+\end{pmatrix},\]</span> where <span class="math inline">\(p\)</span> and
+<span class="math inline">\(q\)</span> are the connection probabilities
+for respectively an intra-block interaction and an extra-block
+interaction.</p>
+<p>Let define a multilevel network with 120 individuals belonging to one
+of 2 blocks of individuals and 40 organizations belonging to one of 2
+blocks of organizations of equal size on average.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">Q</span>     <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>I <span class="op">=</span> <span class="fl">2</span>, O <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
 <span class="va">n</span>     <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>I <span class="op">=</span> <span class="fl">60</span><span class="op">*</span><span class="va">Q</span><span class="op">$</span><span class="va">I</span>, O <span class="op">=</span> <span class="fl">20</span><span class="op">*</span><span class="va">Q</span><span class="op">$</span><span class="va">O</span><span class="op">)</span>
@@ -133,15 +144,24 @@ q &amp; p
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/complex.html">Re</a></span><span class="op">(</span><span class="fu">detect_threshold</span><span class="op">(</span><span class="fl">40</span>, <span class="fl">.1</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; [1] 0.02192236 0.22807764</span></code></pre></div>
 <p>for the inter-organizational level.</p>
-<p>So we will fix the connectivity parameters a little bit above the detectability threshold in order to get a very challenging inference for a single level SBM and to see how the information in each level of the MLVSBM might help to recover the structure of the other level, and how does it vary with the strength of the inter-level dependence.</p>
+<p>So we will fix the connectivity parameters a little bit above the
+detectability threshold in order to get a very challenging inference for
+a single level SBM and to see how the information in each level of the
+MLVSBM might help to recover the structure of the other level, and how
+does it vary with the strength of the inter-level dependence.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">alpha</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span>
 <span class="va">alpha</span><span class="op">$</span><span class="va">I</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">.1</span>, <span class="fl">.21</span>, <span class="fl">.21</span>, <span class="fl">.1</span><span class="op">)</span>, <span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span>
 <span class="va">alpha</span><span class="op">$</span><span class="va">O</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">.29</span>, <span class="fl">.1</span>, <span class="fl">.1</span>, <span class="fl">.29</span><span class="op">)</span>, <span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span></code></pre></div>
-<p>Then simulate 50 networks for each value of <span class="math inline">\(\gamma\)</span>. Let recall that <span class="math inline">\(\gamma\)</span> is the mixture parameter for the block membership of the individuals given the one of their respective organizations, for <span class="math inline">\(g \in [.5, 1]\)</span>, <span class="math display">\[\begin{pmatrix} 
-g &amp; 1-g \\ 
+<p>Then simulate 50 networks for each value of <span class="math inline">\(\gamma\)</span>. Let recall that <span class="math inline">\(\gamma\)</span> is the mixture parameter for the
+block membership of the individuals given the one of their respective
+organizations, for <span class="math inline">\(g \in [.5, 1]\)</span>,
+<span class="math display">\[\begin{pmatrix}
+g &amp; 1-g \\
 1-g &amp; g
-\end{pmatrix}.\]</span> So the two levels are independent when <span class="math inline">\(g = .5\)</span> and the block membership of an individual is entirely determine by the block membership of his/her organization when <span class="math inline">\(g = 1\)</span>.</p>
+\end{pmatrix}.\]</span> So the two levels are independent when <span class="math inline">\(g = .5\)</span> and the block membership of an
+individual is entirely determine by the block membership of his/her
+organization when <span class="math inline">\(g = 1\)</span>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span>
 <span class="va">res_detect_thresh</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span><span class="op">)</span>
@@ -181,7 +201,14 @@ g &amp; 1-g \\
 <div id="results" class="section level2">
 <h2 class="hasAnchor">
 <a href="#results" class="anchor"></a>Results</h2>
-<p>With <span class="math inline">\(g\)</span>, the diagonal entry of the mixture dependency parameter <span class="math inline">\(\gamma\)</span>, we notice that the greater the interdependence the better the levels are able to help each other in the recovery of the clustering. This is obvious from the beginning for the inter-organizational level which is slightly harder to infer. For the inter-individual we notice a great improvement when <span class="math inline">\(g \geq .9\)</span>. In all case, the problem is hard so we do not obtain a perfect recovery of the blocks every time.</p>
+<p>With <span class="math inline">\(g\)</span>, the diagonal entry of
+the mixture dependency parameter <span class="math inline">\(\gamma\)</span>, we notice that the greater the
+interdependence the better the levels are able to help each other in the
+recovery of the clustering. This is obvious from the beginning for the
+inter-organizational level which is slightly harder to infer. For the
+inter-individual we notice a great improvement when <span class="math inline">\(g \geq .9\)</span>. In all case, the problem is
+hard so we do not obtain a perfect recovery of the blocks every
+time.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">res_detect_thresh</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span><span class="op">-</span><span class="va">g</span>, names_to <span class="op">=</span> <span class="st">"Model"</span>, values_to <span class="op">=</span> <span class="st">"ARI"</span><span class="op">)</span> <span class="op">%&gt;%</span>
