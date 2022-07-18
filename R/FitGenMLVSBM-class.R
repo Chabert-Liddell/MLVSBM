@@ -68,7 +68,7 @@ FitGenMLVSBM <-
             private$X[[m]][is.na(private$X[[m]])] <- -1
           }
         }
-        if (is.null(no_aff)) {
+        if (is.null(no_affiliation)) {
           private$no_aff <- c(FALSE, vapply(
             seq_along(A),
             function(m) {
@@ -77,6 +77,8 @@ FitGenMLVSBM <-
         } else {
           private$no_aff <- no_affiliation
         }
+        private$emqr <- lapply(seq(private$L), function(m) matrix(NA, Q[m], Q[m]))
+        private$nmqr <- lapply(seq(private$L), function(m) matrix(NA, Q[m], Q[m]))
       },
       #' @field vbound The vector of variational bound for monitoring convergence
       vbound = NULL,
@@ -106,7 +108,7 @@ FitGenMLVSBM <-
       update_pi =
         function(m, safeguard = 1e-3) {
           ## rho
-          if (m == 1 || private$no_aff == FALSE) {
+          if (m == 1 | private$no_aff[m]) {
             if (private$Q[m] == 1) {
               private$param$pi[m] <- 1
             } else {
@@ -133,7 +135,7 @@ FitGenMLVSBM <-
               gamma <-
                 t(t(gamma)/colSums(private$A[[m]] %*% private$tau[[m]]))
               gamma[gamma < safeguard] <- safeguard
-              private$param$gamma <- t(t(gamma)/colSums(gamma))
+              private$param$gamma[[m]] <- t(t(gamma)/colSums(gamma))
             }
             return(private$param$gamma)
           }
@@ -153,7 +155,7 @@ FitGenMLVSBM <-
         function(safeguard = 2*.Machine$double.eps,
                  method = "hierarchical",
                  Z = NULL) {
-          for (m in private$L) {
+          for (m in seq(private$L)) {
             if (private$Q[m] == 1) {
               private$tau[[m]] <-
                 matrix(1, nrow = private$n[m], ncol = 1)
@@ -184,7 +186,8 @@ FitGenMLVSBM <-
       m_step =
         function(m, safeguard = 1e-6){
           self$update_alpha(m, safeguard = safeguard)
-          self$update_pi(m, safeguard = safeguard)
+          if (m == 1 | private$no_aff[m])
+            self$update_pi(m, safeguard = safeguard)
           if (m > 1) {
             self$update_gamma(m-1, safeguard = safeguard)
           }
@@ -216,7 +219,7 @@ FitGenMLVSBM <-
                     t(.logit(private$param$alpha[[m]], eps = 1e-9)) +
                     private$M[[m]] %*%
                     tau_old %*%
-                    t(.log(1-private$param$alpha, eps = 1e-9))
+                    t(.log(1-private$param$alpha[[m]], eps = 1e-9))
                   if (private$directed_[m]) {
                     tau_new <- tau_new +
                       crossprod(private$M[[m]]*private$X[[m]],
@@ -253,7 +256,7 @@ FitGenMLVSBM <-
             #                         tau_old,
             #                         private$direction_[m],
             #                         private$distribution_[m])
-            if (private$no_aff[m] == FALSE) {
+            if (private$no_aff[m]) {
               tau <- tau +
                 matrix(log(private$param$pi[[m]]),
                        private$n[m],
@@ -283,9 +286,9 @@ FitGenMLVSBM <-
 
       update_mqr = function(m) {
         tau_tmp <- private$tau[[m]]
-        self$emqr[m,,] <-
+        private$emqr[[m]] <-
           .tquadform(tau_tmp, private$X[[m]] * private$M[[m]])
-        self$nmqr[m,,] <-
+        private$nmqr[[m]] <-
           .tquadform(tau_tmp, private$M[[m]])
       },
 
@@ -303,6 +306,7 @@ FitGenMLVSBM <-
                  safeguard = 1e-6, Z = NULL) {
           self$init_clustering(method = init, safeguard = safeguard, Z = Z)
           lapply(seq(private$L), function(m) self$m_step(m, safeguard = safeguard))
+          lapply(seq(private$L), function(m) self$update_mqr(m))
           self$vbound <-  c(self$vbound, self$bound)
           condition   <-  TRUE
           it          <-  0
@@ -321,6 +325,7 @@ FitGenMLVSBM <-
                 self$ve_step(m, safeguard = safeguard)
                 self$m_step(m, safeguard = safeguard)
               }
+              lapply(seq(private$L), function(m) self$update_mqr(m))
              ## Calculer la vbound par morceau de maniere a ne regarder que la
              ## difference entre les update pour un niveau donné
               if (bound_old > self$bound) {
@@ -341,7 +346,8 @@ FitGenMLVSBM <-
                      it <= maxIter)
               }
             }
-            self$permute_empty_class()
+            invisible(lapply(seq(private$L), self$permute_empty_class))
+            self$show()
           }
         },
       #' @description permute_empty_class Put empty blocks numbers at the end
@@ -371,13 +377,13 @@ FitGenMLVSBM <-
           "bernoulli" = {
             alpha <- private$param$alpha[[m]]
             factor * sum(
-              .xlogy(emqr, alpha, eps = 1e-12) +
-                .xlogy(nmqr - emqr, 1 - alpha, eps = 1e-12))
+              .xlogy(private$emqr[[m]], alpha, eps = 1e-12) +
+                .xlogy(private$nmqr[[m]] - private$emqr[[m]], 1 - alpha, eps = 1e-12))
           },
           "poisson" = {
             alpha <- private$param$alpha[[m]]
-            factor * (sum(.xlogy(emqr, alpha, eps = 1e-12)) -
-                              sum(nmqr  * alpha ))
+            factor * (sum(.xlogy(private$emqr[[m]], alpha, eps = 1e-12)) -
+                              sum(private$nmqr[[m]]  * alpha ))
           }
         )
       },
@@ -385,7 +391,7 @@ FitGenMLVSBM <-
       za_loglikelihood = function(m) {
         sum(private$A[[m]] * private$tau[[m+1]] %*%
               tcrossprod(log(private$param$gamma[[m]]), private$tau[[m]]))
-      }
+      },
 
 
     #'   #' @description Plot of FitMLVSBM objects
@@ -406,20 +412,20 @@ FitGenMLVSBM <-
     #'     }
     #'     p
     #'   },
-    #'   #' @description print method
-    #'   #' @param type character to tune the displayed name
-    #'   show = function(type = "Multilevel Stochastic Block Model") {
-    #'     cat(type, "--", self$distribution[[1]], "variant\n")
-    #'     cat("=====================================================================\n")
-    #'     cat("Dimension = (", dim(private$A), ") - (",
-    #'         self$nb_clusters$I, self$nb_clusters$O,  ") blocks.\n")
-    #'     cat("=====================================================================\n")
-    #'     cat("* Useful fields \n")
-    #'     cat("  $independent, $distribution, $nb_nodes, $nb_clusters, $Z \n")
-    #'     cat("  $membership, $parameters, $ICL, $vbound, $X_hat \n")
-    #'   },
-    #'   #' @description print method
-    #'   print = function() self$show()
+      #' @description print method
+      #' @param type character to tune the displayed name
+      show = function(type = "Multilevel Stochastic Block Model") {
+        cat(type, "--", self$distribution, "variant\n")
+        cat("=====================================================================\n")
+        cat("Dimension = (", self$nb_nodes, ") - (",
+            self$nb_clusters,  ") blocks.\n")
+        cat("=====================================================================\n")
+        cat("* Useful fields \n")
+        cat("  $independent, $distribution, $nb_nodes, $nb_clusters, $Z \n")
+        cat("  $membership, $parameters, $ICL, $vbound, $X_hat \n")
+      },
+      #' @description print method
+      print = function() self$show()
      ),
     ##
     ## Active fields
@@ -453,9 +459,10 @@ FitGenMLVSBM <-
       ## other functions
       #' @field entropy Get the entropy of the model
       entropy     = function(value) {
-        - sum(vapply(seq(private$L)),
-              function(m) .xlogx(private$tau[[m]]),
-              FUN.VALUE = .1)
+        - sum(vapply(
+          X = seq(private$L),
+          FUN = function(m) sum(.xlogx(private$tau[[m]])),
+              FUN.VALUE = .1))
       },
       #' @field bound Get the variational bound of the model
       bound      = function(value) self$complete_likelihood + self$entropy,
@@ -480,7 +487,7 @@ FitGenMLVSBM <-
       connect    = function(value) {
         vapply(seq(private$L),
                function(m) {
-                 ifelse(private$directed_[m], 1, .5) * sum(private$M[[l]])
+                 ifelse(private$directed_[m], 1, .5) * sum(private$M[[m]])
                },
                FUN.VALUE = 1)
       },
@@ -533,7 +540,7 @@ FitGenMLVSBM <-
       ##------------------------------------------------------------------------
       #' @field penalty Get the ICL penalty
       penalty = function(value) {
-        vapply(seq(private$L),
+        penalty <- vapply(seq(private$L),
                function(m) {
                  if (m == 1) {
                    .5 * self$df_mixture[m] * log(private$n[m]) +
@@ -554,13 +561,15 @@ FitGenMLVSBM <-
             vapply(
               seq(private$L),
               function(m) {
-                ll <-  xz_loglikelihood(m)
+                ll <-  self$xz_loglikelihood(m)
                 if (m == 1) {
                   ll <- ll + sum(private$tau[[m]]%*%log(private$param$pi[[m]]))
                 } else {
-                  ll <-  ll + za_loglikelihood(m-1) +
-                    private$no_aff[m]*
-                    (sum(private$tau[[m]]%*%log(private$param$pi[[m]])))
+                  ll <-  ll + self$za_loglikelihood(m-1)
+                  if (private$no_aff[m]) {
+                    ll <- ll + sum(private$tau[[m]]%*%log(private$param$pi[[m]]))
+                  }
+
                 }
                 return(ll)
               },

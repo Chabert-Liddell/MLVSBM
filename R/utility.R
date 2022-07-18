@@ -133,11 +133,58 @@ build_fold_matrix <- function(X, K) {
 }
 
 
-xlogx      <- function(x) ifelse(x < 2*.Machine$double.eps, 0, x*log(x))
+.xlogx      <- function(x) ifelse(x < 2*.Machine$double.eps, 0, x*log(x))
+
 quad_form  <- function(X, tau) tau %*% tcrossprod(X, tau)
 logistic   <- function(x) 1/(1 + exp(-x))
 logit      <- function(x) log(x/(1 - x))
 
+
+
+.xlogy     <- function(x, y, eps = NULL) {
+  ifelse(x < 2*.Machine$double.eps, 0, x*.log(y, eps = eps))
+}
+.quadform  <- function(x, y)  tcrossprod(x %*% y, x)
+.tquadform  <- function(x, y)  crossprod(x, y %*% x)
+logistic   <- function(x) 1/(1 + exp(-x))
+logit      <- function(x) log(x/(1 - x))
+.logit <- function(x, eps = NULL) {
+  if(is.null(eps)) {
+    res <- log(x/(1-x))
+  } else {
+    res <- log(pmax(pmin(x, 1-eps), eps)/pmax(pmin(1-x, 1-eps), eps))
+  }
+  return (res)
+}
+
+
+.threshold <- function(x, eps = 1e-9) {
+  #  x <- .softmax(x)
+  x[x < eps] <- eps
+  x[x > 1-eps] <- 1-eps
+  x <- x/.rowSums(x, nrow(x), ncol(x))
+  x
+}
+
+.softmax <- function(x) {
+  x_max <- apply(x, 1, max)
+  x <- exp(x - x_max)
+  x <- x/.rowSums(x, nrow(x), ncol(x))
+  x
+}
+.log <- function(x, eps = NULL) {
+  if(is.null(eps)) {
+    res <- log(x)
+  } else {
+    res <- log(pmax(pmin(x, 1-eps), eps))
+  }
+  return (res)
+}
+.one_hot <- function(x, Q) {
+  O <- matrix(0, length(x),Q)
+  O[cbind(seq.int(length(x)), x)] <- 1
+  return(O)
+}
 #' Compare two clustering with the Adjusted Rand Index
 #'
 #' @param x A vector of integers, the clusters labels
