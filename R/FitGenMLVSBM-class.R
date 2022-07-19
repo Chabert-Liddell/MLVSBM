@@ -33,6 +33,8 @@ FitGenMLVSBM <-
       #' @param directed Vector of boolean
       #' @param distribution Vector of string
       #' @param independent Boolean
+      #' @param no_affiliation A vector of boolean.
+      #' For each level, are there any nodes with no affiliations?
       #'
       #' @return A FitGenMLVSBM object
       initialize = function(Q = NULL,
@@ -72,13 +74,14 @@ FitGenMLVSBM <-
           private$no_aff <- c(FALSE, vapply(
             seq_along(A),
             function(m) {
-              any(rowSums(A[[m]])) == 0
+              any(rowSums(A[[m]]) == 0)
             }, FUN.VALUE = TRUE))
         } else {
           private$no_aff <- no_affiliation
         }
         private$emqr <- lapply(seq(private$L), function(m) matrix(NA, Q[m], Q[m]))
         private$nmqr <- lapply(seq(private$L), function(m) matrix(NA, Q[m], Q[m]))
+        private$param$pi <- vector("list", private$L)
       },
       #' @field vbound The vector of variational bound for monitoring convergence
       vbound = NULL,
@@ -108,13 +111,23 @@ FitGenMLVSBM <-
       update_pi =
         function(m, safeguard = 1e-3) {
           ## rho
-          if (m == 1 | private$no_aff[m]) {
+          if (m == 1) {
             if (private$Q[m] == 1) {
-              private$param$pi[m] <- 1
+              private$param$pi[[m]] <- 1
             } else {
               pi <- colMeans(private$tau[[m]])
               pi[pi < safeguard] <- safeguard
               private$param$pi[[m]] <- pi/sum(pi)
+            }
+          } else {
+            if (private$no_aff[m]) {
+              if (private$Q[m] == 1) {
+                private$param$pi[[m]] <- 1
+              } else {
+                pi <- colMeans(private$tau[[m]][rowMeans(private$A[[m-1]]) == 0,])
+                pi[pi < safeguard] <- safeguard
+                private$param$pi[[m]] <- pi/sum(pi)
+              }
             }
           }
           return(private$param$pi[[m]])
@@ -186,8 +199,9 @@ FitGenMLVSBM <-
       m_step =
         function(m, safeguard = 1e-6){
           self$update_alpha(m, safeguard = safeguard)
-          if (m == 1 | private$no_aff[m])
+          if (m == 1 | private$no_aff[m]) {
             self$update_pi(m, safeguard = safeguard)
+          }
           if (m > 1) {
             self$update_gamma(m-1, safeguard = safeguard)
           }
@@ -268,7 +282,7 @@ FitGenMLVSBM <-
                 tcrossprod(private$tau[[m-1]], log(private$param$gamma[[m-1]]))
             }
             if (m < private$L) {
-              tau <- tau + crossprod(private$A[[m]], tau_old) %*%
+              tau <- tau + crossprod(private$A[[m]], private$tau[[m+1]]) %*%
                 log(private$param$gamma[[m]])
             }
             tau  <- exp(t(apply(X = tau,
@@ -347,7 +361,7 @@ FitGenMLVSBM <-
               }
             }
             invisible(lapply(seq(private$L), self$permute_empty_class))
-            self$show()
+            #self$show()
           }
         },
       #' @description permute_empty_class Put empty blocks numbers at the end
@@ -540,18 +554,28 @@ FitGenMLVSBM <-
       ##------------------------------------------------------------------------
       #' @field penalty Get the ICL penalty
       penalty = function(value) {
-        penalty <- vapply(seq(private$L),
-               function(m) {
-                 if (m == 1) {
-                   .5 * self$df_mixture[m] * log(private$n[m]) +
-                     .5 * self$df_connect[m] * log(self$connect[m])
-                 } else {
-                 .5 * private$Q[m-1] * self$df_mixture[m] * log(private$n[m]) +
-                   .5 * self$df_connect[m] * log(self$connect[m]) +
-                    .5 * private$no_aff[m] * log(private$n[m])
-               }
-                 },
-                 FUN.VALUE = .1)
+        penalty <- vapply(
+          seq(private$L),
+          function(m) {
+            if (m == 1) {
+              pen <- .5 * self$df_mixture[m] * log(private$n[m]) +
+                .5 * self$df_connect[m] * log(self$connect[m])
+            } else {
+              pen <-  .5 * self$df_connect[m] * log(self$connect[m])
+              pen <-
+                if (private$no_aff[m]) {
+                  nb_noaff <- sum(rowSums(private$A[[m-1]]) == 0)
+                  pen <- pen + .5 * self$df_mixture[m] * log(nb_noaff)
+                  + .5 * private$Q[m-1] * self$df_mixture[m] *
+                    log(private$n[m] - nb_noaff)
+                } else {
+                  pen <- pen + .5 * private$Q[m-1] * self$df_mixture[m] *
+                    log(private$n[m])
+                }
+            }
+            return(pen)
+          },
+          FUN.VALUE = .1)
         return(penalty)
       },
       #' @field likelihood Compute the likelihood of both levels
@@ -569,7 +593,6 @@ FitGenMLVSBM <-
                   if (private$no_aff[m]) {
                     ll <- ll + sum(private$tau[[m]]%*%log(private$param$pi[[m]]))
                   }
-
                 }
                 return(ll)
               },

@@ -247,7 +247,7 @@ FitSBM <-
       },
       ## other functions
       #' @field entropy Get the entropy of the model
-      entropy    = function(value) - sum( xlogx(private$tau)),
+      entropy    = function(value) - sum( .xlogx(private$tau)),
       #' @field bound Get the variational bound of the model
       bound     = function(value) self$likelihood + self$entropy,
       #' @field df_mixture Get the degree of freedom of the block proportion

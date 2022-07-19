@@ -70,25 +70,25 @@ predictions}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{FitMLVSBM$new()}}
-\item \href{#method-update_alpha}{\code{FitMLVSBM$update_alpha()}}
-\item \href{#method-update_pi}{\code{FitMLVSBM$update_pi()}}
-\item \href{#method-update_gamma}{\code{FitMLVSBM$update_gamma()}}
-\item \href{#method-init_clustering}{\code{FitMLVSBM$init_clustering()}}
-\item \href{#method-clear}{\code{FitMLVSBM$clear()}}
-\item \href{#method-m_step}{\code{FitMLVSBM$m_step()}}
-\item \href{#method-ve_step}{\code{FitMLVSBM$ve_step()}}
-\item \href{#method-do_vem}{\code{FitMLVSBM$do_vem()}}
-\item \href{#method-permute_empty_class}{\code{FitMLVSBM$permute_empty_class()}}
-\item \href{#method-plot}{\code{FitMLVSBM$plot()}}
-\item \href{#method-show}{\code{FitMLVSBM$show()}}
-\item \href{#method-print}{\code{FitMLVSBM$print()}}
-\item \href{#method-clone}{\code{FitMLVSBM$clone()}}
+\item \href{#method-FitMLVSBM-new}{\code{FitMLVSBM$new()}}
+\item \href{#method-FitMLVSBM-update_alpha}{\code{FitMLVSBM$update_alpha()}}
+\item \href{#method-FitMLVSBM-update_pi}{\code{FitMLVSBM$update_pi()}}
+\item \href{#method-FitMLVSBM-update_gamma}{\code{FitMLVSBM$update_gamma()}}
+\item \href{#method-FitMLVSBM-init_clustering}{\code{FitMLVSBM$init_clustering()}}
+\item \href{#method-FitMLVSBM-clear}{\code{FitMLVSBM$clear()}}
+\item \href{#method-FitMLVSBM-m_step}{\code{FitMLVSBM$m_step()}}
+\item \href{#method-FitMLVSBM-ve_step}{\code{FitMLVSBM$ve_step()}}
+\item \href{#method-FitMLVSBM-do_vem}{\code{FitMLVSBM$do_vem()}}
+\item \href{#method-FitMLVSBM-permute_empty_class}{\code{FitMLVSBM$permute_empty_class()}}
+\item \href{#method-FitMLVSBM-plot}{\code{FitMLVSBM$plot()}}
+\item \href{#method-FitMLVSBM-show}{\code{FitMLVSBM$show()}}
+\item \href{#method-FitMLVSBM-print}{\code{FitMLVSBM$print()}}
+\item \href{#method-FitMLVSBM-clone}{\code{FitMLVSBM$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-FitMLVSBM-new"></a>}}
+\if{latex}{\out{\hypertarget{method-FitMLVSBM-new}{}}}
 \subsection{Method \code{new()}}{
 Constructor for the FitMLVSBM class
 \subsection{Usage}{
@@ -127,8 +127,8 @@ A FitMLVSBM object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-update_alpha"></a>}}
-\if{latex}{\out{\hypertarget{method-update_alpha}{}}}
+\if{html}{\out{<a id="method-FitMLVSBM-update_alpha"></a>}}
+\if{latex}{\out{\hypertarget{method-FitMLVSBM-update_alpha}{}}}
 \subsection{Method \code{update_alpha()}}{
 Update the connection parameters for the M step
 \subsection{Usage}{
@@ -144,8 +144,8 @@ Update the connection parameters for the M step
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-update_pi"></a>}}
-\if{latex}{\out{\hypertarget{method-update_pi}{}}}
+\if{html}{\out{<a id="method-FitMLVSBM-update_pi"></a>}}
+\if{latex}{\out{\hypertarget{method-FitMLVSBM-update_pi}{}}}
 \subsection{Method \code{update_pi()}}{
 Update the upper level mixture parameter for the M step
 \subsection{Usage}{
@@ -161,8 +161,8 @@ Update the upper level mixture parameter for the M step
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-update_gamma"></a>}}
-\if{latex}{\out{\hypertarget{method-update_gamma}{}}}
+\if{html}{\out{<a id="method-FitMLVSBM-update_gamma"></a>}}
+\if{latex}{\out{\hypertarget{method-FitMLVSBM-update_gamma}{}}}
 \subsection{Method \code{update_gamma()}}{
 Update the lower level mixture parameter for the M step
 \subsection{Usage}{
@@ -178,8 +178,8 @@ Update the lower level mixture parameter for the M step
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-init_clustering"></a>}}
-\if{latex}{\out{\hypertarget{method-init_clustering}{}}}
+\if{html}{\out{<a id="method-FitMLVSBM-init_clustering"></a>}}
+\if{latex}{\out{\hypertarget{method-FitMLVSBM-init_clustering}{}}}
 \subsection{Method \code{init_clustering()}}{
 init_clustering Initial clustering for VEM algorithm
 \subsection{Usage}{
@@ -204,8 +204,8 @@ init_clustering Initial clustering for VEM algorithm
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clear"></a>}}
-\if{latex}{\out{\hypertarget{method-clear}{}}}
+\if{html}{\out{<a id="method-FitMLVSBM-clear"></a>}}
+\if{latex}{\out{\hypertarget{method-FitMLVSBM-clear}{}}}
 \subsection{Method \code{clear()}}{
 Reset all parameters
 \subsection{Usage}{
@@ -214,8 +214,8 @@ Reset all parameters
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-m_step"></a>}}
-\if{latex}{\out{\hypertarget{method-m_step}{}}}
+\if{html}{\out{<a id="method-FitMLVSBM-m_step"></a>}}
+\if{latex}{\out{\hypertarget{method-FitMLVSBM-m_step}{}}}
 \subsection{Method \code{m_step()}}{
 m_step Compute the M step of the VEM algorithm
 \subsection{Usage}{
@@ -231,8 +231,8 @@ m_step Compute the M step of the VEM algorithm
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-ve_step"></a>}}
-\if{latex}{\out{\hypertarget{method-ve_step}{}}}
+\if{html}{\out{<a id="method-FitMLVSBM-ve_step"></a>}}
+\if{latex}{\out{\hypertarget{method-FitMLVSBM-ve_step}{}}}
 \subsection{Method \code{ve_step()}}{
 Compute the VE step of the VEM algorithm
 \subsection{Usage}{
@@ -252,8 +252,8 @@ Compute the VE step of the VEM algorithm
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-do_vem"></a>}}
-\if{latex}{\out{\hypertarget{method-do_vem}{}}}
+\if{html}{\out{<a id="method-FitMLVSBM-do_vem"></a>}}
+\if{latex}{\out{\hypertarget{method-FitMLVSBM-do_vem}{}}}
 \subsection{Method \code{do_vem()}}{
 Launch a Variational EM algorithm
 \subsection{Usage}{
@@ -286,8 +286,8 @@ Launch a Variational EM algorithm
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-permute_empty_class"></a>}}
-\if{latex}{\out{\hypertarget{method-permute_empty_class}{}}}
+\if{html}{\out{<a id="method-FitMLVSBM-permute_empty_class"></a>}}
+\if{latex}{\out{\hypertarget{method-FitMLVSBM-permute_empty_class}{}}}
 \subsection{Method \code{permute_empty_class()}}{
 permute_empty_class Put empty blocks numbers at the end
 \subsection{Usage}{
@@ -296,8 +296,8 @@ permute_empty_class Put empty blocks numbers at the end
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-plot"></a>}}
-\if{latex}{\out{\hypertarget{method-plot}{}}}
+\if{html}{\out{<a id="method-FitMLVSBM-plot"></a>}}
+\if{latex}{\out{\hypertarget{method-FitMLVSBM-plot}{}}}
 \subsection{Method \code{plot()}}{
 Plot of FitMLVSBM objects
 \subsection{Usage}{
@@ -316,8 +316,8 @@ a ggplot2 object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-show"></a>}}
-\if{latex}{\out{\hypertarget{method-show}{}}}
+\if{html}{\out{<a id="method-FitMLVSBM-show"></a>}}
+\if{latex}{\out{\hypertarget{method-FitMLVSBM-show}{}}}
 \subsection{Method \code{show()}}{
 print method
 \subsection{Usage}{
@@ -333,8 +333,8 @@ print method
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\if{latex}{\out{\hypertarget{method-print}{}}}
+\if{html}{\out{<a id="method-FitMLVSBM-print"></a>}}
+\if{latex}{\out{\hypertarget{method-FitMLVSBM-print}{}}}
 \subsection{Method \code{print()}}{
 print method
 \subsection{Usage}{
@@ -343,8 +343,8 @@ print method
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-FitMLVSBM-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-FitMLVSBM-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

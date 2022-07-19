@@ -20,7 +20,7 @@ Encoding: UTF-8
 LazyData: true
 URL: https://github.com/Chabert-Liddell/MLVSBM
 BugReports: https://github.com/Chabert-Liddell/MLVSBM/issues
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0
 Depends:
     R (>= 3.5.0)
 Imports: 
@@ -28,7 +28,8 @@ Imports:
     blockmodels,
     ape,
     magrittr,
-    cluster
+    cluster,
+    bettermc
 Suggests: 
     testthat (>= 2.1.0),
     covr,

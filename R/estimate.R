@@ -507,8 +507,8 @@ MLVSBM$set(
       models <- c(models,
               self$mcestimate(Q = list(I = Q$I, O = Q$O-1), init = "spectral"))
     }
-    models <- models[which(sapply( models, x <- function(x) ! is.null(x)))]
-    models <- models[which(sapply( models, x <- function(x) ! is.null(x$ICL)))]
+    models <- models[which(sapply( models,function(x) ! is.null(x)))]
+    models <- models[which(sapply( models, function(x) ! is.null(x$ICL)))]
     return(models)
   }
 )
