@@ -49,40 +49,43 @@ GenMLVSBM$set(
   function() {
     if (is.null(private$A)) {
       if(private$sim_param$affiliation == "diagonal") {
-        private$A <- lapply(seq(private$L), function(l) diag(1, n[l]))
+        private$A <- lapply(seq(private$L), function(l) diag(1, private$n[l]))
       } else {
-        private$A <- simulate_affiliation(private$n,
-                                          m = NULL,
-                                          m = NULL,
-                                          affiliation = private$sim_param$affiliation,
-                                          no_empty_org = private$sim_param$no_empty_org)
+        private$A <-
+          lapply(seq(private$L -1),
+            function(l) {
+              simulate_affiliation(n = private$n[l+1],
+                                   m = private$n[l],
+                                   affiliation = private$sim_param$affiliation,
+                                   no_empty_org = private$sim_param$no_empty_org)
+            }
+          )
       }
     }
-
     private$Z    <-  vector("list", private$L)
     private$Z[[1]] <-  sample(
       x = seq(private$sim_param$Q[1]),
       size = private$n[1],
       replace = TRUE,
       prob = private$sim_param$pi[[1]]) # Variables latentes L
-    for (m in seq(private$L)) {
+    for (l in seq(2, private$L)) {
       private$Z[[l]] <-  numeric(private$n[l])
       ind          <- private$A[[l-1]] %*% private$Z[[l-1]]
-      for (i in seq(private$n$I)) {
+      for (i in seq(private$n[l])) {
         if (ind[i,] > 0) {
           private$Z[[l]][i] <- sample(seq(private$sim_param$Q[l]),
                                       size = 1,
-                                      prob = private$sim_param$gamma[, ind[i, ]])
+                                      prob = private$sim_param$gamma[[l-1]][, ind[i, ]])
         } else {
           private$Z[[l]][i] <- sample(seq(private$sim_param$Q[l]),
                                       size = 1,
-                                      prob = private$sim_param$pi[[m]])
+                                      prob = private$sim_param$pi[[l]])
         }
       }
     }
     private$X <- vector("list", private$L)
-    private$L <- lapply(
-      X = seq_along(private$L),
+    private$X <- lapply(
+      X = seq(private$L),
       FUN = function(l) {
         simulate_adjacency(Z = private$Z[[l]],
                            n = private$n[l],

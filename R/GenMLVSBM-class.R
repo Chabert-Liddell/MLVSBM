@@ -13,7 +13,7 @@ GenMLVSBM <-
       n            = NULL, # Number of nodes
       sim_param    = NULL, # parameters used for simulation
       X            = NULL, # List of adjacency matrices
-      A            = NULL, # Affiliation matrix
+      A            = NULL, # Lis of affiliation matrices
       Z            = NULL, # List of latent variables vectors
       L            = NULL, # The number of layers
       fitted       = NULL, # List of fitted model for this network

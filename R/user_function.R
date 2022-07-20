@@ -74,112 +74,111 @@ mlvsbm_create_network <-
     return (new_mlvsbm)
   }
 
-#' Create a simulated multilevel network (GenMLVSBM object)
+#' Create a simulated multilevel network (MLVSBM object)
 #'
-#' @param n A vector of L positive integers where L is the number of levels from
-#' the upper level to the lower level.
-#' @param Q A vector of L positive integers,
-#' the number of clusters for each level.
-#' @param pi A list of length L, with vectors of probabilities of length Q[l],
-#' the mixture parameters. pi[[1]] must be a probability, pi[[l]] can be set to
-#' \code{NULL} for a given level if all nodes of this level have an affiliation.
-#' @param alpha A list of L matrices, of size \eqn{Q[l] \times Q[l]} matrix
-#' giving the connectivity probabilities.
-#' @param directed A vector of L logical. Is level l a directed
-#' network ?
-#' @param gamma A list of size \eqn{L-1} of \eqn{Q[l+1] \times Q[l]} matrix with
-#' each column summing to one, the mixture parameters given the affiliation
+#' @param n A list of 2 positive integers,
+#' the number of individuals and organizations.
+#' @param Q A list of 2 positive integers,
+#' the number of clusters of individuals and organizations.
+#' @param pi A vector of probabilities of length Q_O,
+#' the mixture parameter for the organizations.
+#' @param alpha A list of 2 matrices, a \eqn{Q_I \times Q_I} matrix giving the
+#' connectivity probabilities of the individuals and a \eqn{Q_O \times Q_O}
+#' matrix giving the connectivity probabilities of the organizations.
+#' @param directed A list of 2 logical. Is the individual level a directed
+#' network ? Is the inter-organizational level a directed network?
+#' @param gamma A \eqn{Q_I \times Q_O} matrix with each column summing to one,
+#' the mixture parameters for the individuals
 #' @param affiliation The distribution under which the affiliation matrix is
-#' simulated in c("uniform", "preferential", "diagonal").
-#' "diagonal" is a special case where all affiliation matrix are diagonal
-#' (individuals are the same on each levels). It requires \code{n} to be
-#' constant.
+#' simulated in c("uniform", "preferential").
 #' @param no_empty_org A logical with FALSE as default, should
-#' every nodes  have at least one affiliated node on the level below?
-#' Needs to have \eqn{n[l] \geq n[l+1]}.
+#' every organizations have at least one affiliated individual?
+#' Needs to have \eqn{n_I \geq n_O}.
 #' @param distribution  A list for the distribution of X,
 #' only "bernoulli" is implemented.
 #' @param no_isolated_node A logical, if TRUE then the network is simulated
 #' again until all nodes are connected.
 #'
-#' @return An GenMLVSBM object, a simulated multilevel network with levels,
+#' @return An MLVSBM object, a simulated multilevel network with levels,
 #' affiliations and memberships.
 #' @export
 #'
 #' @examples
-#' my_genmlvsbm <- MLVSBM::mlvsbm_simulate_generalized_network(
-#'   n = c(10, 20), # Number of nodes for each level
-#'   Q = c(2, 2), # Number of blocks for each level
-#'   pi = list(c(.3, .7), NULL), # Block proportion for the upper level, must sum to one
-#'   gamma = list(matrix(c(.9, .2,   # Block proportion for the lower level,
-#'                    .1, .8),      # each column must sum to one
-#'                  nrow = 2, ncol = 2, byrow = TRUE)),
-#'   alpha = list(matrix(c(.8, .2,
+#' my_mlvsbm <- MLVSBM::mlvsbm_simulate_network(
+#'   n = list(I = 10, O = 20), # Number of nodes for the lower level and the upper level
+#'   Q = list(I = 2, O = 2), # Number of blocks for the lower level and the upper level
+#'   pi = c(.3, .7), # Block proportion for the upper level, must sum to one
+#'   gamma = matrix(c(.9, .2,   # Block proportion for the lower level,
+#'                    .1, .8), # each column must sum to one
+#'                  nrow = 2, ncol = 2, byrow = TRUE),
+#'   alpha = list(I = matrix(c(.8, .2,
 #'                             .2, .1),
 #'                           nrow = 2, ncol = 2, byrow = TRUE), # Connection matrix
-#'                matrix(c(.99, .3,
+#'                O = matrix(c(.99, .3,
 #'                             .3, .1),
 #'                           nrow = 2, ncol = 2, byrow = TRUE)),# between blocks
-#'   directed = c(FALSE, FALSE)) # Are the upper and lower level directed
-mlvsbm_simulate_generalized_network <-
+#'   directed = list(I = FALSE, O = FALSE)) # Are the upper and lower level directed
+mlvsbm_simulate_network <-
   function (n, Q, pi, gamma, alpha,
             directed, affiliation = "uniform",
-            distribution,
+            distribution = list("bernoulli", "bernoulli"),
             no_empty_org = FALSE,
             no_isolated_node = FALSE) {
-    if (any(n <= 0)) {
-      stop(paste0("n must be positive integers!!!"))
+    if (n[[1]] < 1 | n[[2]] < 1 | n[[1]]%%1 != 0 | n[[2]] %% 1 != 0) {
+      stop(paste0("n[[1]] and n[[2]] must be positive integers!!!"))
     }
-    if(any(! vapply(alpha, is.matrix, TRUE)) |
-       any(! vapply(gamma, is.matrix, TRUE))) {
-      stop(paste0("element of gamma and alpha must be matrices!!!"))
+    if (! is.matrix(gamma) | ! is.matrix(alpha[[1]]) | ! is.matrix(alpha[[2]])) {
+      stop(paste0("gamma, alpha[[1]] and alpha[[2]] must be matrices!!!"))
     }
-    if (any(pi[[1]] > 1) | any(pi[[1]] < 0) | sum(pi[[1]]) != 1) {
-      warning(paste0("pi[[1]] is a probability vector,
+    if (any(pi > 1) | any(pi < 0) | sum(pi) != 1) {
+      warning(paste0("pi is a probability vector,
                  its coefficients must sum to one!!!"))
     }
-    L <- length(n)
-    if ( Q[1] != length(pi) |
-         any(vapply(gamma, ncol, 1) != Q[1:(L-1)]) |
-         any(vapply(gamma, nrow, 1) != Q[2:L]) |
-         any(vapply(alpha, ncol, 1) != Q) |
-         any(vapply(alpha, nrow, 1) != Q)) {
+    if ( Q[[2]] != length(pi) |
+         Q[[2]] != ncol(gamma) |
+         Q[[2]] != nrow(alpha[[2]]) |
+         Q[[2]] != ncol(alpha[[2]]) |
+         Q[[1]] != nrow(alpha[[1]]) |
+         Q[[1]] != ncol(alpha[[1]]) |
+         Q[[1]] != nrow(gamma)) {
       stop(paste0("Number of clusters and parameters dimension are
                  not compatible!!!"))
     }
-    for (l in seq(L-1)) {
-      if (any(gamma[[l]] > 1) | any(gamma[[l]] < 0) |
-          any(colSums(gamma[[l]]) != 1)) {
-        stop(paste0("Any column of gamma must be a probability vector!!!"))
-      }
+    if (any(gamma > 1) | any(gamma < 0) | any(colSums(gamma) != 1)) {
+      stop(paste0("Any column of gamma must be a probability vector!!!"))
     }
-    # if (any(alpha[[1]] > 1) | any(alpha[[1]] < 0)) {
-    #   stop(paste0("Any coefficient of alpha[[1]] must be between 0 and 1!!!"))
-    # }
-    # if (any(alpha[[2]] > 1) | any(alpha[[2]] < 0)) {
-    #   stop(paste0("Any coefficient of alpha[[1]] must be between 0 and 1!!!"))
-    # }
-    # if (! directed[[1]] & !isSymmetric(alpha[[1]])) {
-    #   stop(paste0("alpha[[1]] is not symmetric but level is undirected!!!"))
-    # }
-    # if (! directed[[2]] & ! isSymmetric(alpha[[2]])) {
-    #   stop(paste0("alpha[[2]] is not symmetric but level is undirected!!!"))
-    # }
+    if (any(alpha[[1]] > 1) | any(alpha[[1]] < 0)) {
+      stop(paste0("Any coefficient of alpha[[1]] must be between 0 and 1!!!"))
+    }
+    if (any(alpha[[2]] > 1) | any(alpha[[2]] < 0)) {
+      stop(paste0("Any coefficient of alpha[[1]] must be between 0 and 1!!!"))
+    }
+    if (! directed[[1]] & !isSymmetric(alpha[[1]])) {
+      stop(paste0("alpha[[1]] is not symmetric but level is undirected!!!"))
+    }
+    if (! directed[[2]] & ! isSymmetric(alpha[[2]])) {
+      stop(paste0("alpha[[2]] is not symmetric but level is undirected!!!"))
+    }
     new_mlvsbm <-
-      GenMLVSBM$new(n = n,
-                 directed = directed,
-                 sim_param = list(alpha = alpha,
+      MLVSBM$new(n = list(I = n[[1]],
+                          O = n[[2]]),
+                 directed = list(I = directed[[1]],
+                                 O = directed[[2]]),
+                 L = L,
+                 sim_param = list(alpha = list(I = alpha[[1]],
+                                               O = alpha[[2]]),
                                   gamma = gamma,
-                                  pi = pi,
-                                  Q = Q,
+                                  pi = list(O = pi),
+                                  Q = list(I = Q[[1]],
+                                           O = Q[[2]]),
                                   affiliation = affiliation,
                                   no_empty_org = no_empty_org,
                                   no_isolated_node = no_isolated_node),
-                 distribution = rep("bernoulli", L))
+                 distribution = list(I = distribution[[1]],
+                                     O = distribution[[2]]))
     new_mlvsbm$simulate()
     return(new_mlvsbm)
   }
-
 #' Infer a multilevel network (MLVSBM object), the original object is modified
 #'
 #' @description The inference use a greedy algorithm to navigate between model

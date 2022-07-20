@@ -18,6 +18,21 @@ pi <- list(rep(1, 3)/3, NULL, c(.1, .3, .6), NULL)
 
 directed = c(FALSE, FALSE, FALSE, TRUE)
 
+gmlv <- mlvsbm_simulate_generalized_network(n = rep(n, 4),
+                                    Q = rep(3, 4),
+                                    pi = pi,
+                                    gamma = gamma,
+                                    alpha = alpha,
+                                    directed = directed,
+                                    distribution = rep("bernoulli", 4))
+
+fit <- mlvsbm_estimate_generalized_network(gmlv)
+gmlv2 <- mlvsbm_create_generalized_network(X = gmlv$adjacency_matrix,
+                                           A = gmlv$affiliation_matrix,
+                                           directed = gmlv$directed,
+                                           distribution = gmlv$distribution)
+fitone <- mlvsbm_estimate_generalized_network(gmlv2, nb_clusters = rep(3, 4))
+
 X <- list()
 Z <- list()
 
