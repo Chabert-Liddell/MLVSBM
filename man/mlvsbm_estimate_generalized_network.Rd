@@ -62,6 +62,8 @@ my_genmlvsbm <- MLVSBM::mlvsbm_simulate_generalized_network(
                             .3, .1),
                           nrow = 2, ncol = 2, byrow = TRUE)),# between blocks
   directed = c(FALSE, FALSE), # Are the upper and lower level directed or not ?
-  affiliation = "preferential") # How the affiliation matrix is generated
-\donttest{fit <- MLVSBM::mlvsbm_estimate_network(mlv = my_mlvsbm, nb_cores = 1)}
+  affiliation = "preferential",
+  distribution = rep("bernoulli", 2)) # How the affiliation matrix is generated
+\donttest{fit <- MLVSBM::mlvsbm_estimate_generalized_network(
+gmlv = my_genmlvsbm, nb_cores = 1)}
 }

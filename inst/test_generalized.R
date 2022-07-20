@@ -30,7 +30,7 @@ gmlv <- mlvsbm_simulate_generalized_network(n = rep(n, 4),
 
 fit <- mlvsbm_estimate_generalized_network(gmlv)
 #MLVSBM:::plot_generalized_multilevel_graphon(fit)
-class(plot(fit))
+plot(fit)
 
 
 
@@ -44,8 +44,9 @@ fitone <- mlvsbm_estimate_generalized_network(gmlv2, nb_clusters = rep(3, 4))
 #==============================================================================
 # Compare with dynsbm
 #
-
+library(dynsbm)
 data(simdataT5Q4N40binary)
+data("simdataT5Q4N40discrete")
 
 dim(simdataT5Q4N40binary)
 Xdyn <- lapply(seq(5), function(l) simdataT5Q4N40binary[l,,])
@@ -58,6 +59,18 @@ gdyn <- mlvsbm_create_generalized_network(X = Xdyn,
 fitdyn <- mlvsbm_estimate_generalized_network(gdyn)
 fitdyn$parameters
 plot(fitdyn)
+
+Xpois <- lapply(seq(5), function(l) simdataT5Q4N40discrete[l,,])
+
+gpois <- mlvsbm_create_generalized_network(X = Xpois,
+                                          A = Adyn,
+                                          directed = rep(FALSE, 5),
+                                          distribution = rep("poisson", 5))
+fitpois <- mlvsbm_estimate_generalized_network(gpois)
+fitpois$parameters
+plot(fitpois)
+
+mlvsbm_estimate_generalized_network(gpois, init_clustering = lapply(seq(5), function(x)rep(1, 40)), init_method = "merge_split")
 
 list.dynsbm <- select.dynsbm(simdataT5Q4N40binary,
                              Qmin=1, Qmax=5, edge.type="binary", nstart=25)

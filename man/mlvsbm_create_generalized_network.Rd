@@ -35,5 +35,6 @@ org_adj <- matrix(stats::rbinom(n = 10**2, size = 1, prob = .3),
 affiliation <- diag(1, 10)
 my_mlvsbm <- mlvsbm_create_generalized_network(X = list(org_adj, ind_adj),
                                    directed = list(I = FALSE, O = FALSE),
-                                   A = list(affiliation))
+                                   A = list(affiliation),
+                                   distribution = rep("bernoulli", 2))
 }

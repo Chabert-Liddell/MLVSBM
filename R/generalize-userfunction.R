@@ -235,12 +235,13 @@ mlvsbm_simulate_generalized_network <-
 #'   directed = c(FALSE, FALSE), # Are the upper and lower level directed or not ?
 #'   affiliation = "preferential",
 #'   distribution = rep("bernoulli", 2)) # How the affiliation matrix is generated
-#' \donttest{fit <- MLVSBM::mlvsbm_estimate_network(mlv = my_mlvsbm, nb_cores = 1)}
+#' \donttest{fit <- MLVSBM::mlvsbm_estimate_generalized_network(
+#' gmlv = my_genmlvsbm, nb_cores = 1)}
 mlvsbm_estimate_generalized_network <-
   function(gmlv, nb_clusters = NULL, init_clustering = NULL, nb_cores = NULL,
            init_method = "hierarchical") {
     if (! "GenMLVSBM" %in% class(gmlv)) {
-      stop("Object mlv must be of class GenMLVSBM,
+      stop("Object gmlv must be of class GenMLVSBM,
             please use the function mlvsbm_create_network to create one")
     }
     os <- Sys.info()["sysname"]

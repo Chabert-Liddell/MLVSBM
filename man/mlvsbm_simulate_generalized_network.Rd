@@ -74,5 +74,6 @@ my_genmlvsbm <- MLVSBM::mlvsbm_simulate_generalized_network(
                matrix(c(.99, .3,
                             .3, .1),
                           nrow = 2, ncol = 2, byrow = TRUE)),# between blocks
-  directed = c(FALSE, FALSE)) # Are the upper and lower level directed
+  directed = c(FALSE, FALSE),
+  distribution = rep("bernoulli", 2)) # Are the upper and lower level directed
 }

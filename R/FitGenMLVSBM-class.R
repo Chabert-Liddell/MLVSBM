@@ -249,7 +249,7 @@ FitGenMLVSBM <-
                   tau_new <-
                     (private$M[[m]] * private$X[[m]]) %*%
                     tau_old %*%
-                    t(.log(private$param$alpha[[m]], eps = 1e-9)) -
+                    t(log(private$param$alpha[[m]])) -
                     private$M[[m]] %*%
                     tau_old %*%
                     t(private$param$alpha[[m]])
@@ -257,7 +257,7 @@ FitGenMLVSBM <-
                     tau_new <- tau_new +
                       crossprod(private$M[[m]]*private$X[[m]],
                                 tau_old %*%
-                                  .log(private$param$alpha[[m]], eps = 1e-9)) -
+                                  log(private$param$alpha[[m]])) -
                       crossprod(private$M[[m]],
                                 tau_old %*%
                                   private$param$alpha[[m]])
@@ -396,8 +396,8 @@ FitGenMLVSBM <-
           },
           "poisson" = {
             alpha <- private$param$alpha[[m]]
-            factor * (sum(.xlogy(private$emqr[[m]], alpha, eps = 1e-12)) -
-                              sum(private$nmqr[[m]]  * alpha ))
+            factor * sum(private$emqr[[m]] * log( alpha ) -
+                              private$nmqr[[m]]  * alpha )
           }
         )
       },
@@ -466,7 +466,7 @@ FitGenMLVSBM <-
       #' @param type A string for the type of plot, just "matrix" for now
       #' @return a ggplot2 object
       plot = function(type = c('matrix'), ...) {
-        if(type == "matrix") {
+        #if(type == "matrix") {
           if (! requireNamespace("ggplot2", quietly = TRUE)) {
             stop("Please install ggplot2: install.packages('ggplot2')")
           }
@@ -483,7 +483,7 @@ FitGenMLVSBM <-
           #   stop("Please install tidygraph: install.packages('tidygraph')")
           # }
           p <- plot_generalized_multilevel_graphon(self, ...)
-        }
+     #   }
         p
       },
       #' @description print method
@@ -675,22 +675,23 @@ FitGenMLVSBM <-
 #' Extract model coefficients
 #'
 #' Extracts model coefficients from objects with class
-#' \code{\link[=GenFitMLVSBM]{GenFitMLVSBM}}
+#' \code{\link[=FitGenMLVSBM]{FitGenMLVSBM}}
 #'
 #' @param object an R6 object of class FitMLVSBM
 #' @param ... additional parameters for S3 compatibility. Not used
 #' @return List of parameters.
 #' @export
-coef.FitMLVSBM <- function(object, ...) {
-  stopifnot(inherits(object, "GenFitMLVSBM"))
+coef.FitGenMLVSBM <- function(object, ...) {
+  stopifnot(inherits(object, "FitGenMLVSBM"))
   object$parameters
 }
 
 #' Model Predictions
 #'
-#' Make predictions from an SBM.
+#' Make predictions of dyads or give the nodes memberships for all levels
+#' with a generalized multilevel SBM.
 #'
-#' @param object an R6 object of class \code{\link[=FitMLVSBM]{FitMLVSBM}}
+#' @param object an R6 object of class \code{\link[=FitGenMLVSBM]{FitGenMLVSBM}}
 #' @param ... additional parameters for S3 compatibility. Not used
 #' @return A list with the following entries:
 #' \describe{
@@ -699,8 +700,8 @@ coef.FitMLVSBM <- function(object, ...) {
 #' }
 #' @importFrom stats predict
 #' @export
-predict.GemFitMLVSBM <- function(object, ...) {
-  stopifnot(inherits(object, "GenFitMLVSBM"))
+predict.FitGenMLVSBM <- function(object, ...) {
+  stopifnot(inherits(object, "FitGenMLVSBM"))
   list(dyads = object$X_hat,
        nodes = object$Z)
 }
@@ -710,14 +711,14 @@ predict.GemFitMLVSBM <- function(object, ...) {
 #'
 #' Basic matrix plot method for a FitMLVSBM object
 #' @description basic matrix plot method for a FitMLVSBM object
-#' @param x an R6 object of class \code{\link[=GenFitMLVSBM]{GenFitMLVSBM}}
+#' @param x an R6 object of class \code{\link[=FitGenMLVSBM]{FitGenMLVSBM}}
 #' @param type A string for the type of plot, just "matrix" for now
 #' @param ... additional parameters for S3 compatibility. Not used
 #' @return a ggplot2 object
 #' @export
-plot.GenFitMLVSBM <- function(x, type = c('graphon'), ...){
-  stopifnot(inherits(x, "GenFitMLVSBM"))
-  p <- x$plot(type)
+plot.FitGenMLVSBM <- function(x, type = c('graphon'), ...){
+  stopifnot(inherits(x, "FitGenMLVSBM"))
+  p <- x$plot(type, ...)
   p
 }
 

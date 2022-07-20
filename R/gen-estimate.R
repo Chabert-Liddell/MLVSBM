@@ -292,7 +292,7 @@ GenMLVSBM$set(
                       X = private$X[[level]],
                       M = private$M[[level]],
                       directed = private$directed_[level],
-                      distribution = private$distribution[level])
+                      distribution = private$distribution_[level])
     if(is.null(Z)) {
       fit$do_vem(init = init)
     } else {
