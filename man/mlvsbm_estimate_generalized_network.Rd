@@ -48,20 +48,20 @@ a given model size can be force by setting the parameters \code{nb_clusters}
 to a given value.
 }
 \examples{
-my_mlvsbm <- MLVSBM::mlvsbm_simulate_network(
-  n = list(I = 10, O = 20), # Number of nodes for the lower level and the upper level
-  Q = list(I = 2, O = 2), # Number of blocks for the lower level and the upper level
-  pi = c(.3, .7), # Block proportion for the upper level, must sum to one
-  gamma = matrix(c(.9, .2,   # Block proportion for the lower level,
+my_genmlvsbm <- MLVSBM::mlvsbm_simulate_generalized_network(
+  n = c(20,20), # Number of nodes for the lower level and the upper level
+  Q = c(2,2), # Number of blocks for the lower level and the upper level
+  pi = list(c(.3, .7),NULL), # Block proportion for the upper level, must sum to one
+  gamma = list(matrix(c(.9, .2,   # Block proportion for the lower level,
                    .1, .8), # each column must sum to one
-                 nrow = 2, ncol = 2, byrow = TRUE),
-  alpha = list(I = matrix(c(.8, .2,
+                 nrow = 2, ncol = 2, byrow = TRUE)),
+  alpha = list(matrix(c(.8, .2,
                             .2, .1),
                           nrow = 2, ncol = 2, byrow = TRUE), # Connection matrix
-               O = matrix(c(.99, .3,
+               matrix(c(.99, .3,
                             .3, .1),
                           nrow = 2, ncol = 2, byrow = TRUE)),# between blocks
-  directed = list(I = FALSE, O = FALSE), # Are the upper and lower level directed or not ?
+  directed = c(FALSE, FALSE), # Are the upper and lower level directed or not ?
   affiliation = "preferential") # How the affiliation matrix is generated
 \donttest{fit <- MLVSBM::mlvsbm_estimate_network(mlv = my_mlvsbm, nb_cores = 1)}
 }

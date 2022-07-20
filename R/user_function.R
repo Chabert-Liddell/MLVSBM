@@ -164,7 +164,6 @@ mlvsbm_simulate_network <-
                           O = n[[2]]),
                  directed = list(I = directed[[1]],
                                  O = directed[[2]]),
-                 L = L,
                  sim_param = list(alpha = list(I = alpha[[1]],
                                                O = alpha[[2]]),
                                   gamma = gamma,

@@ -2,7 +2,9 @@
 
 S3method(coef,FitMLVSBM)
 S3method(plot,FitMLVSBM)
+S3method(plot,GenFitMLVSBM)
 S3method(predict,FitMLVSBM)
+S3method(predict,GemFitMLVSBM)
 export("%>%")
 export()
 export(ARI)

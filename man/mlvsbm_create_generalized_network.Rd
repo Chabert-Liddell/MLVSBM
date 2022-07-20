@@ -33,7 +33,7 @@ ind_adj <- matrix(stats::rbinom(n = 10**2, size = 1, prob = .2),
 org_adj <- matrix(stats::rbinom(n = 10**2, size = 1, prob = .3),
                   nrow = 10, ncol = 10)
 affiliation <- diag(1, 10)
-my_mlvsbm <- mlvsbm_create_network(X = list(I = ind_adj, O = org_adj),
+my_mlvsbm <- mlvsbm_create_generalized_network(X = list(org_adj, ind_adj),
                                    directed = list(I = FALSE, O = FALSE),
-                                   A = affiliation)
+                                   A = list(affiliation))
 }

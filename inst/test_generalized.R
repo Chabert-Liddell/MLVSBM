@@ -10,10 +10,12 @@ alpha <- list(
          .1, .4, .5,
          .1, .3, .1), 3, 3)
 )
+alpha[[1]][1,1] <- .8
+alpha[[1]][3,3] <- .2
 gamma <- lapply(seq(3),
                 function(m) matrix(c(.7, .2, .1,
-                                     .1, .7, .2,
-                                     .2, .1, .7), 3, 3))
+                                     .2, .7, .2,
+                                     .1, .1, .7), 3, 3, byrow = TRUE))
 pi <- list(rep(1, 3)/3, NULL, c(.1, .3, .6), NULL)
 
 directed = c(FALSE, FALSE, FALSE, TRUE)
@@ -27,11 +29,46 @@ gmlv <- mlvsbm_simulate_generalized_network(n = rep(n, 4),
                                     distribution = rep("bernoulli", 4))
 
 fit <- mlvsbm_estimate_generalized_network(gmlv)
+#MLVSBM:::plot_generalized_multilevel_graphon(fit)
+class(plot(fit))
+
+
+
 gmlv2 <- mlvsbm_create_generalized_network(X = gmlv$adjacency_matrix,
                                            A = gmlv$affiliation_matrix,
                                            directed = gmlv$directed,
                                            distribution = gmlv$distribution)
 fitone <- mlvsbm_estimate_generalized_network(gmlv2, nb_clusters = rep(3, 4))
+
+
+#==============================================================================
+# Compare with dynsbm
+#
+
+data(simdataT5Q4N40binary)
+
+dim(simdataT5Q4N40binary)
+Xdyn <- lapply(seq(5), function(l) simdataT5Q4N40binary[l,,])
+Adyn <- lapply(seq(4), function(l) diag(1, 40))
+
+gdyn <- mlvsbm_create_generalized_network(X = Xdyn,
+                                          A = Adyn,
+                                          directed = rep(FALSE, 5),
+                                          distribution = rep("bernoulli", 5))
+fitdyn <- mlvsbm_estimate_generalized_network(gdyn)
+fitdyn$parameters
+plot(fitdyn)
+
+list.dynsbm <- select.dynsbm(simdataT5Q4N40binary,
+                             Qmin=1, Qmax=5, edge.type="binary", nstart=25)
+dynsbm <- list.dynsbm[[4]]
+
+plot(fi)
+
+
+## plotting intra/inter connectivity patterns
+connectivity.plot(dynsbm, simdataT5Q4N40binary)
+
 
 X <- list()
 Z <- list()

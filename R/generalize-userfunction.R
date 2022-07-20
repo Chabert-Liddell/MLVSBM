@@ -20,9 +20,10 @@
 #' org_adj <- matrix(stats::rbinom(n = 10**2, size = 1, prob = .3),
 #'                   nrow = 10, ncol = 10)
 #' affiliation <- diag(1, 10)
-#' my_mlvsbm <- mlvsbm_create_network(X = list(I = ind_adj, O = org_adj),
+#' my_mlvsbm <- mlvsbm_create_generalized_network(X = list(org_adj, ind_adj),
 #'                                    directed = list(I = FALSE, O = FALSE),
-#'                                    A = affiliation)
+#'                                    A = list(affiliation),
+#'                                    distribution = rep("bernoulli", 2))
 mlvsbm_create_generalized_network <-
   function(X, A, directed = NULL,
            distribution = NULL) {
@@ -117,7 +118,8 @@ mlvsbm_create_generalized_network <-
 #'                matrix(c(.99, .3,
 #'                             .3, .1),
 #'                           nrow = 2, ncol = 2, byrow = TRUE)),# between blocks
-#'   directed = c(FALSE, FALSE)) # Are the upper and lower level directed
+#'   directed = c(FALSE, FALSE),
+#'   distribution = rep("bernoulli", 2)) # Are the upper and lower level directed
 mlvsbm_simulate_generalized_network <-
   function (n, Q, pi, gamma, alpha,
             directed, affiliation = "uniform",
@@ -217,21 +219,22 @@ mlvsbm_simulate_generalized_network <-
 #' @export
 
 #' @examples
-#' my_mlvsbm <- MLVSBM::mlvsbm_simulate_network(
-#'   n = list(I = 10, O = 20), # Number of nodes for the lower level and the upper level
-#'   Q = list(I = 2, O = 2), # Number of blocks for the lower level and the upper level
-#'   pi = c(.3, .7), # Block proportion for the upper level, must sum to one
-#'   gamma = matrix(c(.9, .2,   # Block proportion for the lower level,
+#' my_genmlvsbm <- MLVSBM::mlvsbm_simulate_generalized_network(
+#'   n = c(20,20), # Number of nodes for the lower level and the upper level
+#'   Q = c(2,2), # Number of blocks for the lower level and the upper level
+#'   pi = list(c(.3, .7),NULL), # Block proportion for the upper level, must sum to one
+#'   gamma = list(matrix(c(.9, .2,   # Block proportion for the lower level,
 #'                    .1, .8), # each column must sum to one
-#'                  nrow = 2, ncol = 2, byrow = TRUE),
-#'   alpha = list(I = matrix(c(.8, .2,
+#'                  nrow = 2, ncol = 2, byrow = TRUE)),
+#'   alpha = list(matrix(c(.8, .2,
 #'                             .2, .1),
 #'                           nrow = 2, ncol = 2, byrow = TRUE), # Connection matrix
-#'                O = matrix(c(.99, .3,
+#'                matrix(c(.99, .3,
 #'                             .3, .1),
 #'                           nrow = 2, ncol = 2, byrow = TRUE)),# between blocks
-#'   directed = list(I = FALSE, O = FALSE), # Are the upper and lower level directed or not ?
-#'   affiliation = "preferential") # How the affiliation matrix is generated
+#'   directed = c(FALSE, FALSE), # Are the upper and lower level directed or not ?
+#'   affiliation = "preferential",
+#'   distribution = rep("bernoulli", 2)) # How the affiliation matrix is generated
 #' \donttest{fit <- MLVSBM::mlvsbm_estimate_network(mlv = my_mlvsbm, nb_cores = 1)}
 mlvsbm_estimate_generalized_network <-
   function(gmlv, nb_clusters = NULL, init_clustering = NULL, nb_cores = NULL,

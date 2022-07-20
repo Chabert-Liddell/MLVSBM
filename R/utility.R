@@ -367,3 +367,96 @@ plot_multilevel_graphon <- function(fit, order = "degree") {
     ggplot2::coord_equal(xlim = c(0,1), ylim = c(0,1), )
   return(p_mat)
 }
+
+
+
+
+
+plot_generalized_multilevel_graphon <- function(fit, order = "affiliation") {
+  # browser()
+  xmin <- xmax <- ymin <- ymax <- value <- NULL
+  color <- RColorBrewer::brewer.pal(max(3, fit$nb_levels), name = "Set1")
+  fit$reorder(order = order)
+  p <- list()
+  for(l in seq(fit$nb_levels)) {
+    p[[l]] <- fit$parameters$alpha[[l]] %>% t() %>%
+      reshape2::melt() %>%
+      dplyr::mutate(xmax = rep(c(0,cumsum(fit$block_proportions[[l]][1:(fit$nb_clusters[l]-1)])),
+                               fit$nb_clusters[l]),
+                    xmin = rep(cumsum(fit$block_proportions[[l]]), fit$nb_clusters[l]),
+                    ymax = rep(c(0,cumsum(fit$block_proportions[[l]][1:(fit$nb_clusters[l]-1)])),
+                               each = fit$nb_clusters[l]),
+                    ymin = rep(cumsum(fit$block_proportions[[l]]), each = fit$nb_clusters[l])) %>%
+      ggplot2::ggplot(ggplot2::aes(xmin = xmin, ymin = ymin, xmax = xmax, ymax = ymax, fill = value)) +
+      ggplot2::geom_rect() +
+      ggplot2::scale_fill_gradient2(low = "white", mid = color[l], midpoint = 1) +
+      ggplot2::geom_hline(yintercept = cumsum(fit$block_proportions[[l]][1:(fit$nb_clusters[l]-1)]), size = .2) +
+      ggplot2::geom_vline(xintercept = cumsum(fit$block_proportions[[l]][1:(fit$nb_clusters[l]-1)]), size = .2) +
+      ggplot2::geom_hline(yintercept = c(0, 1), size = 1.1) +
+      ggplot2::geom_vline(xintercept = c(0, 1), size = 1.1) +
+      ggplot2::scale_y_reverse() +
+      ggplot2::theme_void(base_size = 15, base_rect_size = 1, base_line_size  = 1) +
+      ggplot2::xlab("") + ggplot2::ylab("") + ggplot2::coord_equal(expand = FALSE)
+  }
+
+  pA <- list()
+
+  for (l in seq(fit$nb_levels -1)) {
+    pA[[l]] <- fit$parameters$gamma[[l]] %>% t() %>%
+      reshape2::melt() %>%
+      dplyr::mutate(xmax = rep(c(0,cumsum(fit$block_proportions[[l]][1:(fit$nb_clusters[l]-1)])),
+                               fit$nb_clusters[l+1]),
+                    xmin = rep(cumsum(fit$block_proportions[[l]]), fit$nb_clusters[l+1]),
+                    ymax = rep(c(0,cumsum(fit$block_proportions[[l+1]][1:(fit$nb_clusters[l+1]-1)])),
+                               each = fit$nb_clusters[l]),
+                    ymin = rep(cumsum(fit$block_proportions[[l+1]]), each = fit$nb_clusters[l])) %>%
+      ggplot2::ggplot(ggplot2::aes(xmin = xmin, ymin = ymin, xmax = xmax, ymax = ymax, fill = value)) +
+      ggplot2::geom_rect() +
+      ggplot2::scale_fill_gradient2("Aff", low = "white", mid = "black", midpoint = 1) +
+      ggplot2::geom_hline(yintercept = cumsum(fit$block_proportions[[l+1]][1:(fit$nb_clusters[l+1]-1)]),
+                          size = .2) +
+      ggplot2::geom_vline(xintercept = cumsum(fit$block_proportions[[l]][1:(fit$nb_clusters[l]-1)]),
+                          size = .2) +
+      ggplot2::geom_hline(yintercept = c(0, 1), size = 1.1) +
+      ggplot2::geom_vline(xintercept = c(0, 1), size = 1.1) +
+      ggplot2::scale_y_reverse() +
+      ggplot2::theme_void(base_size = 15, base_rect_size = 1, base_line_size  = 1) +
+      ggplot2::xlab("") + ggplot2::ylab("") + ggplot2::coord_equal(expand = FALSE)
+  }
+
+  leg <- list()
+  for (l in seq(fit$nb_levels)) {
+    leg[[l]] <- cowplot::get_legend(p[[l]])
+    p[[l]] <- p[[l]] + ggplot2::theme(legend.position = "none")
+  }
+  legA <- list()
+  for (l in seq(fit$nb_levels-1)) {
+    legA[[l]] <- cowplot::get_legend(pA[[l]])
+    pA[[l]] <- pA[[l]] + ggplot2::theme(legend.position = "none")
+  }
+  pl <- vector("list", 2*fit$nb_levels)
+  if (fit$nb_levels%%2 == 0) {
+    idl <- sort(c(seq(1, 2*fit$nb_levels-1-2, by = 4),
+                  seq(4, 2*fit$nb_levels-1-2, by = 4)))
+  } else {
+    idl <- sort(c(seq(1, 2*fit$nb_levels-1-1, by = 4),
+                  seq(4, 2*fit$nb_levels-1-1, by = 4)))
+  }
+
+  pbl <- ggplot2::ggplot() + ggplot2::theme_void()
+
+
+  pl[setdiff(seq(2*fit$nb_levels-1), idl)] <- p
+  pl[idl] <- pA
+  if (fit$nb_levels%%2 != 0) {
+    pl[[2*fit$nb_levels-1]] <- pbl
+    pl[[2*fit$nb_levels]] <- p[[fit$nb_levels]]
+  } else {
+    pl[[2*fit$nb_levels]] <- pbl
+  }
+  p_mat <- do.call(eval(parse(text="patchwork::wrap_plots")),
+                   c(pl, ncol = fit$nb_levels, byrow=FALSE))
+  p_mat <- do.call(eval(parse(text="gridExtra::grid.arrange")),
+          c(pl, ncol = fit$nb_levels, as.table=FALSE))
+  return(p_mat)
+}

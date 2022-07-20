@@ -29,7 +29,8 @@ Imports:
     ape,
     magrittr,
     cluster,
-    bettermc
+    bettermc,
+    sbm
 Suggests: 
     testthat (>= 2.1.0),
     covr,
@@ -40,6 +41,8 @@ Suggests:
     spelling,
     cowplot,
     reshape2,
-    dplyr
+    dplyr,
+    patchwork,
+    RColorBrewer
 VignetteBuilder: knitr
 Language: en-US

@@ -26,6 +26,10 @@ An R6 Class object, a fitted generalized multilevel network once $dovem() is don
 
 \item{\code{nb_clusters}}{Get the list of the number of blocks}
 
+\item{\code{nb_levels}}{Get the number of levels}
+
+\item{\code{block_proportions}}{Get the block proportions of each level}
+
 \item{\code{parameters}}{Get the list of the model parameters}
 
 \item{\code{membership}}{Get the list of the variational parameters}
@@ -83,6 +87,8 @@ predictions}
 \item \href{#method-FitGenMLVSBM-permute_empty_class}{\code{FitGenMLVSBM$permute_empty_class()}}
 \item \href{#method-FitGenMLVSBM-xz_loglikelihood}{\code{FitGenMLVSBM$xz_loglikelihood()}}
 \item \href{#method-FitGenMLVSBM-za_loglikelihood}{\code{FitGenMLVSBM$za_loglikelihood()}}
+\item \href{#method-FitGenMLVSBM-reorder}{\code{FitGenMLVSBM$reorder()}}
+\item \href{#method-FitGenMLVSBM-plot}{\code{FitGenMLVSBM$plot()}}
 \item \href{#method-FitGenMLVSBM-show}{\code{FitGenMLVSBM$show()}}
 \item \href{#method-FitGenMLVSBM-print}{\code{FitGenMLVSBM$print()}}
 \item \href{#method-FitGenMLVSBM-clone}{\code{FitGenMLVSBM$clone()}}
@@ -305,24 +311,6 @@ Launch a Variational EM algorithm
 \if{latex}{\out{\hypertarget{method-FitGenMLVSBM-permute_empty_class}{}}}
 \subsection{Method \code{permute_empty_class()}}{
 permute_empty_class Put empty blocks numbers at the end
-  #' @description Plot of FitMLVSBM objects
-  #' @param type A string for the type of plot, just "matrix" for now
-  #' @return a ggplot2 object
-  plot = function(type = c('matrix')) {
-    if(type == "matrix") {
-      if (! requireNamespace("ggplot2", quietly = TRUE)) {
-        stop("Please install ggplot2: install.packages('ggplot2')")
-      }
-      if (! requireNamespace("ggraph", quietly = TRUE)) {
-        stop("Please install ggraph: install.packages('ggraph')")
-      }
-      if (! requireNamespace("tidygraph", quietly = TRUE)) {
-        stop("Please install tidygraph: install.packages('tidygraph')")
-      }
-      p <- plot_multilevel_matrix(private$X, self$X_hat, private$A, self$Z)
-    }
-    p
-  },
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FitGenMLVSBM$permute_empty_class(m)}\if{html}{\out{</div>}}
 }
@@ -345,6 +333,43 @@ permute_empty_class Put empty blocks numbers at the end
 \if{html}{\out{<div class="r">}}\preformatted{FitGenMLVSBM$za_loglikelihood(m)}\if{html}{\out{</div>}}
 }
 
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-FitGenMLVSBM-reorder"></a>}}
+\if{latex}{\out{\hypertarget{method-FitGenMLVSBM-reorder}{}}}
+\subsection{Method \code{reorder()}}{
+Reorder the block memberships and parameters of the networks
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FitGenMLVSBM$reorder(order = "affiliation")}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{order}}{One of c("affiliation", "degree")}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-FitGenMLVSBM-plot"></a>}}
+\if{latex}{\out{\hypertarget{method-FitGenMLVSBM-plot}{}}}
+\subsection{Method \code{plot()}}{
+Plot of FitMLVSBM objects
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FitGenMLVSBM$plot(type = c("matrix"), ...)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{type}}{A string for the type of plot, just "matrix" for now}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+a ggplot2 object
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-FitGenMLVSBM-show"></a>}}

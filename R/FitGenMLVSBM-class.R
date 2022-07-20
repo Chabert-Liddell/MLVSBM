@@ -408,24 +408,84 @@ FitGenMLVSBM <-
       },
 
 
-    #'   #' @description Plot of FitMLVSBM objects
-    #'   #' @param type A string for the type of plot, just "matrix" for now
-    #'   #' @return a ggplot2 object
-    #'   plot = function(type = c('matrix')) {
-    #'     if(type == "matrix") {
-    #'       if (! requireNamespace("ggplot2", quietly = TRUE)) {
-    #'         stop("Please install ggplot2: install.packages('ggplot2')")
-    #'       }
-    #'       if (! requireNamespace("ggraph", quietly = TRUE)) {
-    #'         stop("Please install ggraph: install.packages('ggraph')")
-    #'       }
-    #'       if (! requireNamespace("tidygraph", quietly = TRUE)) {
-    #'         stop("Please install tidygraph: install.packages('tidygraph')")
-    #'       }
-    #'       p <- plot_multilevel_matrix(private$X, self$X_hat, private$A, self$Z)
-    #'     }
-    #'     p
-    #'   },
+    #' @param order One of c("affiliation", "degree")
+    #' @description Reorder the block memberships and parameters of the networks
+      reorder = function(order = "affiliation") {
+      #  browser()
+        ord <- list()
+        for(l in seq(private$L)) {
+          ord[[l]] <- seq(private$Q[l])
+        }
+        if (order == "degree") {
+          for(l in seq(private$L)) {
+            if(private$Q[l] > 1) {
+              ord[[l]] <- order(self$block_proportions[[l]] %*%
+                                  private$param$alpha[[l]], decreasing=TRUE)
+            }
+          }
+          if(private$Q[1] > 1) {
+            private$tau[[1]] <- private$tau[[1]][,ord[[1]]]
+            private$param$alpha[[1]] <- private$param$alpha[[1]][ord[[1]],ord[[1]]]
+            private$param$pi[[1]] <- private$param$pi[[l]][ord[[1]]]
+          }
+          for(l in seq(2, private$L)) {
+            if(private$Q[l] >1) {
+              private$tau[[l]] <- private$tau[[l]][,ord[[l]]]
+              private$param$alpha[[l]] <- private$param$alpha[[l]][ord[[l]],ord[[l]]]
+              if(! is.null(private$param$pi[[l]])) {
+                private$param$pi[[l]] <- private$param$pi[[l]][ord[[l]]]
+              }
+              private$param$gamma[[l-1]] <- private$param$gamma[[l-1]][ord[[l]],ord[[l-1]]]
+            }
+          }
+        }
+        if (order == "affiliation") {
+          if(private$Q[1] > 1) {
+            ord[[1]] <- order(private$param$pi[[1]] %*% private$param$alpha[[1]],
+                              decreasing=TRUE)
+            private$tau[[1]] <- private$tau[[1]][,ord[[1]]]
+            private$param$alpha[[1]] <- private$param$alpha[[1]][ord[[1]],ord[[1]]]
+            private$param$pi[[1]] <- private$param$pi[[1]][ord[[1]]]
+          }
+          for(l in seq(2, private$L)) {
+            if(private$Q[l] >1) {
+              ord[[l]] <- order(apply(private$param$gamma[[l-1]][,ord[[l-1]]], 1, "which.max"),
+                                decreasing = FALSE)
+              private$tau[[l]] <- private$tau[[l]][,ord[[l]]]
+              private$param$alpha[[l]] <- private$param$alpha[[l]][ord[[l]],ord[[l]]]
+              if(! is.null(private$param$pi[[l]])) {
+                private$param$pi[[l]] <- private$param$pi[[l]][ord[[l]]]
+              }
+              private$param$gamma[[l-1]] <- private$param$gamma[[l-1]][ord[[l]],ord[[l-1]]]
+            }
+          }
+        }
+        return(ord)
+      },
+      #' @description Plot of FitMLVSBM objects
+      #' @param type A string for the type of plot, just "matrix" for now
+      #' @return a ggplot2 object
+      plot = function(type = c('matrix'), ...) {
+        if(type == "matrix") {
+          if (! requireNamespace("ggplot2", quietly = TRUE)) {
+            stop("Please install ggplot2: install.packages('ggplot2')")
+          }
+          if (! requireNamespace("patchwork", quietly = TRUE)) {
+            stop("Please install ggplot2: install.packages('patchwork')")
+          }
+          if (! requireNamespace("RColorBrewer", quietly = TRUE)) {
+            stop("Please install ggplot2: install.packages('RColorBrewer')")
+          }
+          # if (! requireNamespace("ggraph", quietly = TRUE)) {
+          #   stop("Please install ggraph: install.packages('ggraph')")
+          # }
+          # if (! requireNamespace("tidygraph", quietly = TRUE)) {
+          #   stop("Please install tidygraph: install.packages('tidygraph')")
+          # }
+          p <- plot_generalized_multilevel_graphon(self, ...)
+        }
+        p
+      },
       #' @description print method
       #' @param type character to tune the displayed name
       show = function(type = "Multilevel Stochastic Block Model") {
@@ -454,6 +514,12 @@ FitGenMLVSBM <-
       nb_nodes           = function(value) private$n,
       #' @field nb_clusters Get the list of the number of blocks
       nb_clusters        = function(value) private$Q,
+      #' @field nb_levels Get the number of levels
+      nb_levels          = function(value)
+        if (missing(value)) private$L else private$L = value,
+      #' @field block_proportions Get the block proportions of each level
+      block_proportions          = function(value)
+        lapply(private$tau, function(tau) colMeans(tau)),
       #' @field parameters Get the list of the model parameters
       parameters = function(value) {
         if(missing(value)) return(private$param)
@@ -608,14 +674,15 @@ FitGenMLVSBM <-
 
 #' Extract model coefficients
 #'
-#' Extracts model coefficients from objects with class \code{\link[=FitMLVSBM]{FitMLVSBM}}
+#' Extracts model coefficients from objects with class
+#' \code{\link[=GenFitMLVSBM]{GenFitMLVSBM}}
 #'
 #' @param object an R6 object of class FitMLVSBM
 #' @param ... additional parameters for S3 compatibility. Not used
 #' @return List of parameters.
 #' @export
 coef.FitMLVSBM <- function(object, ...) {
-  stopifnot(inherits(object, "FitMLVSBM"))
+  stopifnot(inherits(object, "GenFitMLVSBM"))
   object$parameters
 }
 
@@ -632,25 +699,25 @@ coef.FitMLVSBM <- function(object, ...) {
 #' }
 #' @importFrom stats predict
 #' @export
-predict.FitMLVSBM <- function(object, ...) {
-  stopifnot(inherits(object, "FitMLVSBM"))
+predict.GemFitMLVSBM <- function(object, ...) {
+  stopifnot(inherits(object, "GenFitMLVSBM"))
   list(dyads = object$X_hat,
        nodes = object$Z)
 }
 
 
-#' #' Multilevel SBM Plot
-#' #'
-#' #' Basic matrix plot method for a FitMLVSBM object
-#' #' @description basic matrix plot method for a FitMLVSBM object
-#' #' @param x an R6 object of class \code{\link[=FitMLVSBM]{FitMLVSBM}}
-#' #' @param type A string for the type of plot, just "matrix" for now
-#' #' @param ... additional parameters for S3 compatibility. Not used
-#' #' @return a ggplot2 object
-#' #' @export
-#' plot.FitMLVSBM <- function(x, type = c('matrix'), ...){
-#'   stopifnot(inherits(x, "FitMLVSBM"))
-#'   p <- x$plot(type)
-#'   p
-#' }
+#' Generalized Multilevel SBM Plot
+#'
+#' Basic matrix plot method for a FitMLVSBM object
+#' @description basic matrix plot method for a FitMLVSBM object
+#' @param x an R6 object of class \code{\link[=GenFitMLVSBM]{GenFitMLVSBM}}
+#' @param type A string for the type of plot, just "matrix" for now
+#' @param ... additional parameters for S3 compatibility. Not used
+#' @return a ggplot2 object
+#' @export
+plot.GenFitMLVSBM <- function(x, type = c('graphon'), ...){
+  stopifnot(inherits(x, "GenFitMLVSBM"))
+  p <- x$plot(type)
+  p
+}
 

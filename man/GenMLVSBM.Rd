@@ -37,6 +37,8 @@ Methods for global inference and model selection are included.
 \item{\code{directed}}{Access the list of boolean for levels  direction}
 
 \item{\code{directed}}{Access the list of the distribution used for each levels}
+
+\item{\code{nb_levels}}{Access the number of levels in the network}
 }
 \if{html}{\out{</div>}}
 }

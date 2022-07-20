@@ -19,7 +19,8 @@ List of parameters.
 List of parameters.
 }
 \description{
-Extracts model coefficients from objects with class \code{\link[=FitMLVSBM]{FitMLVSBM}}
+Extracts model coefficients from objects with class
+\code{\link[=GenFitMLVSBM]{GenFitMLVSBM}}
 
 Extracts model coefficients from objects with class \code{\link[=FitMLVSBM]{FitMLVSBM}}
 }

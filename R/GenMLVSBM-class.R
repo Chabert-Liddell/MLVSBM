@@ -160,7 +160,10 @@ GenMLVSBM <-
         if (missing(value)) private$directed_ else private$directed_ = value,
       #' @field directed Access the list of the distribution used for each levels
       distribution          = function(value)
-        if (missing(value)) private$distribution_ else private$distribution_ = value
+        if (missing(value)) private$distribution_ else private$distribution_ = value,
+      #' @field nb_levels Access the number of levels in the network
+      nb_levels          = function(value)
+        if (missing(value)) private$L else private$L = value
     )
   )
 
