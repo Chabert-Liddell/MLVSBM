@@ -161,7 +161,7 @@ FitSBM <-
                 tau_old %*%
                 t(private$alpha)
               if (private$directed_) {
-                tau_new <- tau_new +
+                tau <- tau +
                   crossprod(private$M*private$X,
                             tau_old %*%
                               log(private$alpha)) -
