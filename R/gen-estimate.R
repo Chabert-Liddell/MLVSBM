@@ -314,6 +314,7 @@ GenMLVSBM$set(
                          M = private$M,
                          directed = private$directed_,
                          distribution = private$distribution_)
+    fit$fit_options <- self$fit_options
     if (is.null(Z)) {
       fit$do_vem(init = init)
     }  else {

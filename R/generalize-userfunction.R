@@ -212,9 +212,18 @@ mlvsbm_simulate_generalized_network <-
 #' @param init_method One of "hierarchical" (the default) or "spectral",
 #' "spectral" might be more efficient but can lead to some numeric errors.
 #' Not used when int_clustering is given.
+#' @param fit_options A named list to be passed to the VE-M inference algorithm.
 #'
 #' @return A FitGenMLVSBM object, the best inference of the network
 #'
+#' @details
+#' ## fit_options
+#' ### ve : Using the default \code{ve = "joint"} will update all the block
+#' memberships of all levels at each VE step before performing a M step.
+#' Using \code{ve = "sequential"} will update the block memberships of one level
+#' at a time before performing a M step only on the concerned parameters. Use
+#' this option if the running time of the algorithm is too long and the number
+#' of levels is large.
 #' @importFrom blockmodels BM_bernoulli
 #' @export
 
@@ -239,7 +248,8 @@ mlvsbm_simulate_generalized_network <-
 #' gmlv = my_genmlvsbm, nb_cores = 1)}
 mlvsbm_estimate_generalized_network <-
   function(gmlv, nb_clusters = NULL, init_clustering = NULL, nb_cores = NULL,
-           init_method = "hierarchical") {
+           init_method = "hierarchical",
+           fit_options = list(ve = "joint")) {
     if (! "GenMLVSBM" %in% class(gmlv)) {
       stop("Object gmlv must be of class GenMLVSBM,
             please use the function mlvsbm_create_network to create one")
@@ -254,6 +264,7 @@ mlvsbm_estimate_generalized_network <-
         nb_cores <-  1
       }
     }
+    gmlv$fit_options <- fit_options
     #browser()
     if (is.null(nb_clusters)) {
       if (is.null(init_clustering)) {

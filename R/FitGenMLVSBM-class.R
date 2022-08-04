@@ -25,6 +25,7 @@ FitGenMLVSBM <-
     ##  Public Methods
     ##
     public = list(
+      fit_options = list(ve = "joint"),
       #' @description Constructor for the FitMLVSBM class
       #' @param Q Vector with the number of blocks
       #' @param A List of affiliation matrice
@@ -210,6 +211,7 @@ FitGenMLVSBM <-
           }
         },
       #' @description Compute the VE step of the VEM algorithm
+      #' @param m The level to be updated
       #' @param threshold The convergence threshold
       #' @param fixPointIter The maximum number of fixed point iterations
       #' @param safeguard Parameter live in a compact [safeguard, 1-safeguard]
@@ -298,6 +300,102 @@ FitGenMLVSBM <-
           private$tau[[m]] <-  tau
         },
 
+      #' @description Compute the VE step of the VEM algorithm
+      #' @param threshold The convergence threshold
+      #' @param fixPointIter The maximum number of fixed point iterations
+      #' @param safeguard Parameter live in a compact [safeguard, 1-safeguard]
+      ve_step2 =
+        function(threshold = 1e-6, fixPointIter = 5, safeguard = 1e-6) {
+          condition <- TRUE
+          tau <- private$tau
+          tau_old <- private$tau
+          it <- 1
+          while (condition) {
+          for (m in seq(private$L)) {
+            if (private$Q[m] == 1) {
+              tau[[m]] <- matrix(1, private$n[m], private$Q[m])
+            } else {
+              ## sigma
+              tau[[m]] <-
+                switch(
+                  private$distribution_[m],
+                  "bernoulli" = {
+                    tau_new <- (private$M[[m]] * private$X[[m]]) %*%
+                      tau_old[[m]] %*%
+                      t(.logit(private$param$alpha[[m]], eps = 1e-9)) +
+                      private$M[[m]] %*%
+                      tau_old[[m]] %*%
+                      t(.log(1-private$param$alpha[[m]], eps = 1e-9))
+                    if (private$directed_[m]) {
+                      tau_new <- tau_new +
+                        crossprod(private$M[[m]]*private$X[[m]],
+                                  tau_old[[m]] %*%
+                                    .logit(private$param$alpha[[m]], eps=1e-9)) +
+                        crossprod(private$M[[m]],
+                                  tau_old[[m]] %*%
+                                    .log(1-private$param$alpha[[m]], eps = 1e-9))
+                    }
+                    invisible(tau_new)
+                  },
+                  "poisson" = {
+                    tau_new <-
+                      (private$M[[m]] * private$X[[m]]) %*%
+                      tau_old[[m]] %*%
+                      t(log(private$param$alpha[[m]])) -
+                      private$M[[m]] %*%
+                      tau_old[[m]] %*%
+                      t(private$param$alpha[[m]])
+                    if (private$directed_[m]) {
+                      tau_new <- tau_new +
+                        crossprod(private$M[[m]]*private$X[[m]],
+                                  tau_old[[m]] %*%
+                                    log(private$param$alpha[[m]])) -
+                        crossprod(private$M[[m]],
+                                  tau_old[[m]] %*%
+                                    private$param$alpha[[m]])
+                    }
+                    invisible(tau_new)
+                  }
+                )
+            # tau <- density_function(private$X[[m]],
+            #                         private$M[[m]],
+            #                         tau_old,
+            #                         private$direction_[m],
+            #                         private$distribution_[m])
+            if (private$no_aff[m]) {
+              tau[[m]] <- tau[[m]] +
+                matrix(log(private$param$pi[[m]]),
+                       private$n[m],
+                       private$Q[m],
+                       byrow = TRUE)
+            }
+            if (m > 1) {
+              tau[[m]] <- tau[[m]] + private$A[[m-1]] %*%
+                tcrossprod(tau_old[[m-1]], log(private$param$gamma[[m-1]]))
+            }
+            if (m < private$L) {
+              tau[[m]] <- tau[[m]] + crossprod(private$A[[m]], tau_old[[m+1]]) %*%
+                log(private$param$gamma[[m]])
+            }
+            tau[[m]]  <- exp(t(apply(X = tau[[m]],
+                                MARGIN = 1,
+                                FUN = function(x) x - max(x))) )
+            tau[[m]][tau[[m]] < safeguard] <- safeguard
+            tau[[m]]  <-  tau[[m]]/rowSums(tau[[m]])
+            }
+          }
+            it  <-  it + 1
+            condition  <-
+              (max(vapply(seq_along(tau),
+                          function(m) dist_param(tau[[m]], tau_old[[m]]),
+                          FUN.VALUE = .1)) > threshold &&
+                              it <= fixPointIter)
+            tau_old   <- tau
+          }
+          private$tau <-  tau
+        },
+
+
       update_mqr = function(m) {
         tau_tmp <- private$tau[[m]]
         private$emqr[[m]] <-
@@ -329,16 +427,22 @@ FitGenMLVSBM <-
               param_old <- private$param
               tau_old   <- private$tau
               bound_old <- self$vbound[length(self$vbound)]
-              ## Forward pass
-              for (m in seq(private$L)) {
-                self$ve_step(m, safeguard = safeguard)
-                self$m_step(m, safeguard = safeguard)
+              if (self$fit_options$ve == "sequential") {
+                ## Forward pass
+                for (m in seq(private$L)) {
+                  self$ve_step(m, safeguard = safeguard)
+                  self$m_step(m, safeguard = safeguard)
+                }
+                ## Backward pass
+                for (m in seq(private$L-1, 1)) {
+                  self$ve_step(m, safeguard = safeguard)
+                  self$m_step(m, safeguard = safeguard)
+                }
+              } else {
+                self$ve_step2(safeguard = safeguard)
+                for (m in seq(private$L)) self$m_step(m, safeguard = safeguard)
               }
-              ## Backward pass
-              for (m in seq(private$L-1, 1)) {
-                self$ve_step(m, safeguard = safeguard)
-                self$m_step(m, safeguard = safeguard)
-              }
+
               lapply(seq(private$L), function(m) self$update_mqr(m))
              ## Calculer la vbound par morceau de maniere a ne regarder que la
              ## difference entre les update pour un niveau donné
@@ -358,6 +462,9 @@ FitGenMLVSBM <-
                     FUN.VALUE = .1)))
                    > threshold &
                      it <= maxIter)
+                if (it == maxIter) {
+                  warning(paste0("VEM for Q = ", private$Q, "did not converge!"))
+                }
               }
             }
             invisible(lapply(seq(private$L), self$permute_empty_class))

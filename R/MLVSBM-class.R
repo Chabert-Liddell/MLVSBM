@@ -8,7 +8,7 @@
 MLVSBM <-
   R6::R6Class(
     "MLVSBM",
-    ## fields for internal use (refering to mathematical notations)
+    ## fields for internal use (referring to mathematical notations)
     private = list(
       n            = NULL, # Number of nodes
       sim_param    = NULL, # parameters used for simulation

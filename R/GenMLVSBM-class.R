@@ -28,6 +28,7 @@ GenMLVSBM <-
       ICLtab_sbm    = NULL
     ),
     public = list(
+      fit_options = NULL,
       #' @param n A list of size 2, the number of nodes
       #' @param X A list of L adjacency matrices
       #' @param A A list of L-1 affiliation matrices
