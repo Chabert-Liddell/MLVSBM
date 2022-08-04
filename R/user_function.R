@@ -130,8 +130,8 @@ mlvsbm_simulate_network <-
     if (! is.matrix(gamma) | ! is.matrix(alpha[[1]]) | ! is.matrix(alpha[[2]])) {
       stop(paste0("gamma, alpha[[1]] and alpha[[2]] must be matrices!!!"))
     }
-    if (any(pi > 1) | any(pi < 0) | sum(pi) != 1) {
-      warning(paste0("pi is a probability vector,
+    if (any(pi > 1) | any(pi < 0) | ! all.equal(sum(pi),1)) {
+      stop(paste0("pi is a probability vector,
                  its coefficients must sum to one!!!"))
     }
     if ( Q[[2]] != length(pi) |
@@ -144,7 +144,8 @@ mlvsbm_simulate_network <-
       stop(paste0("Number of clusters and parameters dimension are
                  not compatible!!!"))
     }
-    if (any(gamma > 1) | any(gamma < 0) | any(colSums(gamma) != 1)) {
+    if (any(gamma > 1) | any(gamma < 0) |
+        ! all.equal(colSums(gamma), rep(1, ncol(gamma)))) {
       stop(paste0("Any column of gamma must be a probability vector!!!"))
     }
     if (any(alpha[[1]] > 1) | any(alpha[[1]] < 0)) {
