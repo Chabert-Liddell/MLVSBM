@@ -1,3 +1,6 @@
+# MLVSBM 0.2.4
+* Minor bug fix
+
 # MLVSBM 0.2.3
 * Changed `plot` function and method of FitMLVSBM object to graphon view type.
 
