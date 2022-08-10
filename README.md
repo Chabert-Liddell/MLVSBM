@@ -9,7 +9,7 @@
 status](https://travis-ci.org/Chabert-Liddell/MLVSBM.svg?branch=master)](https://travis-ci.org/Chabert-Liddell/MLVSBM)
 [![Codecov test
 coverage](https://codecov.io/gh/Chabert-Liddell/MLVSBM/branch/master/graph/badge.svg)](https://app.codecov.io/gh/Chabert-Liddell/MLVSBM?branch=master)
-[![](https://img.shields.io/badge/devel%20version-0.2.3-blue.svg)](https://github.com/Chabert-Liddell/MLVSBM)
+[![](https://img.shields.io/badge/devel%20version-0.2.4-blue.svg)](https://github.com/Chabert-Liddell/MLVSBM)
 [![](https://www.r-pkg.org/badges/version/MLVSBM?color=green)](https://cran.r-project.org/package=MLVSBM)
 [![](https://img.shields.io/badge/doi-10.1016/j.csda.2021.107179-yellow.svg)](https://doi.org/10.1016/j.csda.2021.107179)
 <!-- badges: end -->
@@ -123,8 +123,7 @@ We can also plot a synthetic view of the network, with the fitted model:
 
 ``` r
 plot(fit)
-#> Joining, by = c("name", "group")
-#> Joining, by = "name"
+#> Coordinate system already present. Adding new coordinate system, which will replace the existing one.
 ```
 
 <img src="man/figures/README-plot-1.png" width="100%" />
@@ -150,6 +149,9 @@ coef(fit)
 #> $pi
 #> $pi$O
 #> [1] 0.1499768 0.5496535 0.3003697
+#> 
+#> $pi$I
+#> [1] 0.3804705 0.1694755 0.4500540
 #> 
 #> 
 #> $gamma
@@ -232,6 +234,9 @@ fit$parameters # The connectivity and membership parameters of the model
 #> $pi
 #> $pi$O
 #> [1] 0.1499768 0.5496535 0.3003697
+#> 
+#> $pi$I
+#> [1] 0.3804705 0.1694755 0.4500540
 #> 
 #> 
 #> $gamma

@@ -11,4 +11,4 @@
 ^cran-comments\.md$
 ^CRAN-RELEASE$
 ^CRAN-SUBMISSION$
-^inst/test_generalized.R
+^inst/test_generalized\.R$
