@@ -463,7 +463,7 @@ FitGenMLVSBM <-
                    > threshold &
                      it <= maxIter)
                 if (it == maxIter) {
-                  warning(paste0("VEM for Q = ", private$Q, "did not converge!"))
+                  warning(paste0("VEM for Q = ", private$Q, " did not converge!"))
                 }
               }
             }
@@ -525,47 +525,53 @@ FitGenMLVSBM <-
         }
         if (order == "degree") {
           for(l in seq(private$L)) {
-            if(private$Q[l] > 1) {
+           # if(private$Q[l] > 1) {
               ord[[l]] <- order(self$block_proportions[[l]] %*%
                                   private$param$alpha[[l]], decreasing=TRUE)
-            }
+            #}
           }
-          if(private$Q[1] > 1) {
-            private$tau[[1]] <- private$tau[[1]][,ord[[1]]]
-            private$param$alpha[[1]] <- private$param$alpha[[1]][ord[[1]],ord[[1]]]
-            private$param$pi[[1]] <- private$param$pi[[l]][ord[[1]]]
-          }
+          #if(private$Q[1] > 1) {
+            private$tau[[1]] <- private$tau[[1]][,ord[[1]], drop = FALSE]
+            private$param$alpha[[1]] <- private$param$alpha[[1]][ord[[1]],ord[[1]], drop = FALSE]
+            private$param$pi[[1]] <- private$param$pi[[1]][ord[[1]]]
+        #  }
           for(l in seq(2, private$L)) {
-            if(private$Q[l] >1) {
-              private$tau[[l]] <- private$tau[[l]][,ord[[l]]]
-              private$param$alpha[[l]] <- private$param$alpha[[l]][ord[[l]],ord[[l]]]
+         #   if(private$Q[l] >1) {
+              private$tau[[l]] <- private$tau[[l]][,ord[[l]], drop = FALSE]
+              private$param$alpha[[l]] <- private$param$alpha[[l]][ord[[l]],ord[[l]], drop = FALSE]
               if(! is.null(private$param$pi[[l]])) {
                 private$param$pi[[l]] <- private$param$pi[[l]][ord[[l]]]
               }
-              private$param$gamma[[l-1]] <- private$param$gamma[[l-1]][ord[[l]],ord[[l-1]]]
-            }
+              private$param$gamma[[l-1]] <- private$param$gamma[[l-1]][ord[[l]],ord[[l-1]], drop = FALSE]
+          #  }
           }
         }
         if (order == "affiliation") {
-          if(private$Q[1] > 1) {
+      #    if(private$Q[1] > 1) {
             ord[[1]] <- order(private$param$pi[[1]] %*% private$param$alpha[[1]],
                               decreasing=TRUE)
-            private$tau[[1]] <- private$tau[[1]][,ord[[1]]]
-            private$param$alpha[[1]] <- private$param$alpha[[1]][ord[[1]],ord[[1]]]
+            private$tau[[1]] <- private$tau[[1]][,ord[[1]], drop = FALSE]
+            private$param$alpha[[1]] <- private$param$alpha[[1]][ord[[1]],ord[[1]], drop = FALSE]
             private$param$pi[[1]] <- private$param$pi[[1]][ord[[1]]]
-          }
+            private$param$gamma[[1]] <- private$param$gamma[[1]][,ord[[1]], drop = FALSE]
+       #   }
           for(l in seq(2, private$L)) {
-            if(private$Q[l] >1) {
-              ord[[l]] <- order(apply(private$param$gamma[[l-1]][,ord[[l-1]]], 1, "which.max"),
-                                decreasing = FALSE)
-              private$tau[[l]] <- private$tau[[l]][,ord[[l]]]
-              private$param$alpha[[l]] <- private$param$alpha[[l]][ord[[l]],ord[[l]]]
+        #    if(private$Q[l] >1) {
+              ord[[l]] <- order(
+                apply(private$param$gamma[[l-1]],
+                      1, "which.max"),
+                decreasing = FALSE)
+              private$tau[[l]] <- private$tau[[l]][,ord[[l]], drop = FALSE]
+              private$param$alpha[[l]] <- private$param$alpha[[l]][ord[[l]],ord[[l]], drop = FALSE]
               if(! is.null(private$param$pi[[l]])) {
                 private$param$pi[[l]] <- private$param$pi[[l]][ord[[l]]]
               }
-              private$param$gamma[[l-1]] <- private$param$gamma[[l-1]][ord[[l]],ord[[l-1]]]
+              private$param$gamma[[l-1]] <- private$param$gamma[[l-1]][ord[[l]],, drop = FALSE]
+              if(l < private$L) {
+                private$param$gamma[[l]] <- private$param$gamma[[l]][,ord[[l]], drop = FALSE]
+              }
             }
-          }
+         # }
         }
         return(ord)
       },

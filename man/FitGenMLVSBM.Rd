@@ -82,6 +82,7 @@ predictions}
 \item \href{#method-FitGenMLVSBM-clear}{\code{FitGenMLVSBM$clear()}}
 \item \href{#method-FitGenMLVSBM-m_step}{\code{FitGenMLVSBM$m_step()}}
 \item \href{#method-FitGenMLVSBM-ve_step}{\code{FitGenMLVSBM$ve_step()}}
+\item \href{#method-FitGenMLVSBM-ve_step2}{\code{FitGenMLVSBM$ve_step2()}}
 \item \href{#method-FitGenMLVSBM-update_mqr}{\code{FitGenMLVSBM$update_mqr()}}
 \item \href{#method-FitGenMLVSBM-do_vem}{\code{FitGenMLVSBM$do_vem()}}
 \item \href{#method-FitGenMLVSBM-permute_empty_class}{\code{FitGenMLVSBM$permute_empty_class()}}
@@ -249,6 +250,29 @@ m_step Compute the M step of the VEM algorithm
 Compute the VE step of the VEM algorithm
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FitGenMLVSBM$ve_step(m, threshold = 1e-06, fixPointIter = 3, safeguard = 1e-06)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{m}}{The level to be updated}
+
+\item{\code{threshold}}{The convergence threshold}
+
+\item{\code{fixPointIter}}{The maximum number of fixed point iterations}
+
+\item{\code{safeguard}}{Parameter live in a compact [safeguard, 1-safeguard]}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-FitGenMLVSBM-ve_step2"></a>}}
+\if{latex}{\out{\hypertarget{method-FitGenMLVSBM-ve_step2}{}}}
+\subsection{Method \code{ve_step2()}}{
+Compute the VE step of the VEM algorithm
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FitGenMLVSBM$ve_step2(threshold = 1e-06, fixPointIter = 5, safeguard = 1e-06)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

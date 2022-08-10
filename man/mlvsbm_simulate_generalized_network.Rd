@@ -40,7 +40,8 @@ network ?}
 \item{affiliation}{The distribution under which the affiliation matrix is
 simulated in c("uniform", "preferential", "diagonal").
 "diagonal" is a special case where all affiliation matrix are diagonal
-(individuals are the same on each levels). It requires \code{n} to be
+(individuals are the same on each levels, for temporal networks e.g.).
+It requires \code{n} to be
 constant.}
 
 \item{distribution}{A list for the distribution of X,

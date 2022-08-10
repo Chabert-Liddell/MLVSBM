@@ -15,15 +15,34 @@
 #' @importFrom stats rbinom
 #' @export
 #' @examples
-#' ind_adj <- matrix(stats::rbinom(n = 10**2, size = 1, prob = .2),
-#'                   nrow = 10, ncol = 10)
+#'
+#' # A standard binary 2 levels multilevel network
+#' ind_adj <- matrix(stats::rbinom(n = 20**2, size = 1, prob = .2),
+#'                   nrow = 20, ncol = 20)
+#' diag(ind_adj) <- 0
 #' org_adj <- matrix(stats::rbinom(n = 10**2, size = 1, prob = .3),
 #'                   nrow = 10, ncol = 10)
-#' affiliation <- diag(1, 10)
+#' diag(org_adj) <- 0
+#' affiliation <- matrix(0, 20, 10)
+#' affiliation[cbind(seq(20),  sample(seq(10), 20, replace = TRUE))] <- 1
+#'
 #' my_mlvsbm <- mlvsbm_create_generalized_network(X = list(org_adj, ind_adj),
-#'                                    directed = list(I = FALSE, O = FALSE),
+#'                                    directed = c(TRUE, TRUE),
 #'                                    A = list(affiliation),
 #'                                    distribution = rep("bernoulli", 2))
+#'
+#' # A 4 levels temporal network with the same nodes and with count data.
+#' #All the affiliation matrices are diagonal.
+#'
+#' X <- replicate(4,
+#'        matrix(stats::rpois(n = 20*20, lambda = .7), 20, 20),
+#'        simplify = FALSE)
+#' for (m in seq(4)) {diag(X[[m]]) <- 0}
+#' A <- replicate(3, diag(1, 20), simplify = FALSE)
+#' my_mlvsbm <- mlvsbm_create_generalized_network(X = X,
+#'                                    directed = rep(4, TRUE),
+#'                                    A = A,
+#'                                    distribution = rep("poisson", 4))
 mlvsbm_create_generalized_network <-
   function(X, A, directed = NULL,
            distribution = NULL) {
@@ -90,7 +109,8 @@ mlvsbm_create_generalized_network <-
 #' @param affiliation The distribution under which the affiliation matrix is
 #' simulated in c("uniform", "preferential", "diagonal").
 #' "diagonal" is a special case where all affiliation matrix are diagonal
-#' (individuals are the same on each levels). It requires \code{n} to be
+#' (individuals are the same on each levels, for temporal networks e.g.).
+#' It requires \code{n} to be
 #' constant.
 #' @param no_empty_org A logical with FALSE as default, should
 #' every nodes  have at least one affiliated node on the level below?
@@ -246,6 +266,51 @@ mlvsbm_simulate_generalized_network <-
 #'   distribution = rep("bernoulli", 2)) # How the affiliation matrix is generated
 #' \donttest{fit <- MLVSBM::mlvsbm_estimate_generalized_network(
 #' gmlv = my_genmlvsbm, nb_cores = 1)}
+#'
+#' # A more complex example. A 4 levels network with different structures and
+#' # level direction.
+#' n <- 100
+#' L <- 4
+#' alpha <- list(
+#'   diag(.4, 3, 3) + .1, # Undirected assortative community
+#'   -diag(.2, 3, 3) + .3, # Undirected disassortative
+#'   matrix(c(.8, .2, .1, # Undirected core-periphery
+#'            .4, .4, .1,
+#'            .2, .1, .1), 3, 3),
+#'   matrix(c(.3, .5, .5, # Directed mixt structure
+#'            .1, .4, .5,
+#'            .1, .3, .1), 3, 3)
+#' )
+#' gamma <- lapply(seq(3),
+#'                 function(m) matrix(c(.8, .1, .1,
+#'                                      .1, .8, .1,
+#'                                      .1, .1, .8), 3, 3, byrow = TRUE))
+#' pi <- list(rep(1, 3)/3, NULL, c(.1, .3, .6), NULL)
+
+#'  directed = c(FALSE, FALSE, FALSE, TRUE)
+
+#' gmlv <- mlvsbm_simulate_generalized_network(n = rep(n, 4),
+#'                                             Q = rep(3, 4),
+#'                                             pi = pi,
+#'                                             gamma = gamma,
+#'                                             alpha = alpha,
+#'                                             directed = directed,
+#'                                             distribution = rep("bernoulli", 4))
+
+#' \dontrun{
+#' fit <- mlvsbm_estimate_generalized_network(gmlv,
+#'               fit_options = list(ve = "joint"))
+#' plot(fit)
+#' fit2 <- mlvsbm_estimate_generalized_network(gmlv,
+#'                fit_options = list(ve = "sequential"))
+#' fitone <- mlvsbm_estimate_generalized_network(gmlv2, nb_clusters = rep(3, 4),
+#'                  fit_options = list(ve = "sequential"))
+#' fit_from_scratch <-  mlvsbm_estimate_generalized_network(
+#'              gmlv,
+#'              init_clustering = lapply(seq(4), function(x)rep(1, n)),
+#'              init_method = "merge_split",
+#'              fit_options = list(ve = "joint"))
+#' }
 mlvsbm_estimate_generalized_network <-
   function(gmlv, nb_clusters = NULL, init_clustering = NULL, nb_cores = NULL,
            init_method = "hierarchical",

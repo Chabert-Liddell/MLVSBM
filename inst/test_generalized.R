@@ -2,7 +2,7 @@ n <- 100
 L <- 4
 alpha <- list(
   diag(.4, 3, 3) + .1,
-  -diag(.15, 3, 3) + .3,
+  -diag(.2, 3, 3) + .3,
   matrix(c(.8, .2, .1,
         .4, .4, .1,
         .2, .1, .1), 3, 3),
@@ -30,8 +30,15 @@ gmlv <- mlvsbm_simulate_generalized_network(n = rep(n, 4),
 
 fit <- mlvsbm_estimate_generalized_network(gmlv, fit_options = list(ve = "joint"))
 fit2 <- mlvsbm_estimate_generalized_network(gmlv, fit_options = list(ve = "sequential"))
-#MLVSBM:::plot_generalized_multilevel_graphon(fit)
+fitone <- mlvsbm_estimate_generalized_network(gmlv2, nb_clusters = rep(3, 4),
+                                              fit_options = list(ve = "sequential"))
+fit_from_scratch <-  mlvsbm_estimate_generalized_network(gmlv,
+                                    init_clustering = lapply(seq(4),
+                                                             function(x)rep(1, n)),
+                                    init_method = "merge_split",
+                                    fit_options = list(ve = "joint"))
 plot(fit)
+
 mlvsbm_estimate_generalized_network(gmlv,
                                     init_clustering = lapply(seq(4),
                                                              function(x)rep(1, n)),
@@ -49,7 +56,7 @@ gmlv2 <- mlvsbm_create_generalized_network(X = gmlv$adjacency_matrix,
                                            A = gmlv$affiliation_matrix,
                                            directed = gmlv$directed,
                                            distribution = gmlv$distribution)
-fitone <- mlvsbm_estimate_generalized_network(gmlv2, nb_clusters = rep(3, 4))
+
 
 
 #==============================================================================

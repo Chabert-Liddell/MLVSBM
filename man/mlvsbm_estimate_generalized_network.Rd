@@ -10,7 +10,8 @@ mlvsbm_estimate_generalized_network(
   nb_clusters = NULL,
   init_clustering = NULL,
   nb_cores = NULL,
-  init_method = "hierarchical"
+  init_method = "hierarchical",
+  fit_options = list(ve = "joint")
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ for Windows and \code{detectCores()/2} for Linux and MacOS}
 \item{init_method}{One of "hierarchical" (the default) or "spectral",
 "spectral" might be more efficient but can lead to some numeric errors.
 Not used when int_clustering is given.}
+
+\item{fit_options}{A named list to be passed to the VE-M inference algorithm.}
 }
 \value{
 A FitGenMLVSBM object, the best inference of the network
@@ -46,6 +49,15 @@ inferring the generalized multilevel network. This step can be skipped by
 specifying an initial clustering with the \code{init_clustering}. Also,
 a given model size can be force by setting the parameters \code{nb_clusters}
 to a given value.
+}
+\details{
+## fit_options
+### ve : Using the default \code{ve = "joint"} will update all the block
+memberships of all levels at each VE step before performing a M step.
+Using \code{ve = "sequential"} will update the block memberships of one level
+at a time before performing a M step only on the concerned parameters. Use
+this option if the running time of the algorithm is too long and the number
+of levels is large.
 }
 \examples{
 my_genmlvsbm <- MLVSBM::mlvsbm_simulate_generalized_network(
@@ -66,4 +78,46 @@ my_genmlvsbm <- MLVSBM::mlvsbm_simulate_generalized_network(
   distribution = rep("bernoulli", 2)) # How the affiliation matrix is generated
 \donttest{fit <- MLVSBM::mlvsbm_estimate_generalized_network(
 gmlv = my_genmlvsbm, nb_cores = 1)}
+
+# A more complex example. A 4 levels network with different structures and
+# level direction.
+n <- 100
+L <- 4
+alpha <- list(
+  diag(.4, 3, 3) + .1, # Undirected assortative community
+  -diag(.2, 3, 3) + .3, # Undirected disassortative
+  matrix(c(.8, .2, .1, # Undirected core-periphery
+           .4, .4, .1,
+           .2, .1, .1), 3, 3),
+  matrix(c(.3, .5, .5, # Directed mixt structure
+           .1, .4, .5,
+           .1, .3, .1), 3, 3)
+)
+gamma <- lapply(seq(3),
+                function(m) matrix(c(.8, .1, .1,
+                                     .1, .8, .1,
+                                     .1, .1, .8), 3, 3, byrow = TRUE))
+pi <- list(rep(1, 3)/3, NULL, c(.1, .3, .6), NULL)
+ directed = c(FALSE, FALSE, FALSE, TRUE)
+gmlv <- mlvsbm_simulate_generalized_network(n = rep(n, 4),
+                                            Q = rep(3, 4),
+                                            pi = pi,
+                                            gamma = gamma,
+                                            alpha = alpha,
+                                            directed = directed,
+                                            distribution = rep("bernoulli", 4))
+\dontrun{
+fit <- mlvsbm_estimate_generalized_network(gmlv,
+              fit_options = list(ve = "joint"))
+plot(fit)
+fit2 <- mlvsbm_estimate_generalized_network(gmlv,
+               fit_options = list(ve = "sequential"))
+fitone <- mlvsbm_estimate_generalized_network(gmlv2, nb_clusters = rep(3, 4),
+                 fit_options = list(ve = "sequential"))
+fit_from_scratch <-  mlvsbm_estimate_generalized_network(
+             gmlv,
+             init_clustering = lapply(seq(4), function(x)rep(1, n)),
+             init_method = "merge_split",
+             fit_options = list(ve = "joint"))
+}
 }

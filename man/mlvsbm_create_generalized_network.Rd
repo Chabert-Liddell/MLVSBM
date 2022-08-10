@@ -28,13 +28,32 @@ An unfitted MLVSBM object corresponding to the multilevel network
 Create a GenMLVSBM object from observed data
 }
 \examples{
-ind_adj <- matrix(stats::rbinom(n = 10**2, size = 1, prob = .2),
-                  nrow = 10, ncol = 10)
+
+# A standard binary 2 levels multilevel network
+ind_adj <- matrix(stats::rbinom(n = 20**2, size = 1, prob = .2),
+                  nrow = 20, ncol = 20)
+diag(ind_adj) <- 0
 org_adj <- matrix(stats::rbinom(n = 10**2, size = 1, prob = .3),
                   nrow = 10, ncol = 10)
-affiliation <- diag(1, 10)
+diag(org_adj) <- 0
+affiliation <- matrix(0, 20, 10)
+affiliation[cbind(seq(20),  sample(seq(10), 20, replace = TRUE))] <- 1
+
 my_mlvsbm <- mlvsbm_create_generalized_network(X = list(org_adj, ind_adj),
-                                   directed = list(I = FALSE, O = FALSE),
+                                   directed = c(TRUE, TRUE),
                                    A = list(affiliation),
                                    distribution = rep("bernoulli", 2))
+
+# A 4 levels temporal network with the same nodes and with count data.
+#All the affiliation matrices are diagonal.
+
+X <- replicate(4,
+       matrix(stats::rpois(n = 20*20, lambda = .7), 20, 20),
+       simplify = FALSE)
+for (m in seq(4)) {diag(X[[m]]) <- 0}
+A <- replicate(3, diag(1, 20), simplify = FALSE)
+my_mlvsbm <- mlvsbm_create_generalized_network(X = X,
+                                   directed = rep(4, TRUE),
+                                   A = A,
+                                   distribution = rep("poisson", 4))
 }
