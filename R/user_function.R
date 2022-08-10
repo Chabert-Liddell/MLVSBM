@@ -179,7 +179,6 @@ mlvsbm_simulate_network <-
     new_mlvsbm$simulate()
     return(new_mlvsbm)
   }
-
 #' Infer a multilevel network (MLVSBM object), the original object is modified
 #'
 #' @description The inference use a greedy algorithm to navigate between model

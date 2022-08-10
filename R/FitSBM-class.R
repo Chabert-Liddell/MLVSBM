@@ -137,17 +137,38 @@ FitSBM <-
           tau_old   <-  private$tau
           while(condition){
             ## tau
-            tau  <-
-              matrix(log(private$pi), private$n, private$Q, byrow = TRUE) +
-              (private$M * private$X) %*% tcrossprod(tau_old,
-                                                     log(private$alpha)) +
-              (private$M * (1 - private$X)) %*% tcrossprod(tau_old,
-                                                           log(1 - private$alpha))
-            if (private$directed_) {
+            if(private$distribution_ == "bernoulli") {
+              tau  <-
+                matrix(log(private$pi), private$n, private$Q, byrow = TRUE) +
+                (private$M * private$X) %*% tcrossprod(tau_old,
+                                                       log(private$alpha)) +
+                (private$M * (1 - private$X)) %*% tcrossprod(tau_old,
+                                                             log(1 - private$alpha))
+              if (private$directed_) {
+                tau <- tau +
+                  t(private$M * private$X) %*% tcrossprod(tau_old, t(log(private$alpha))) +
+                  t(private$M * (1 - private$X)) %*%
+                  tcrossprod(tau_old, t(log(1 - private$alpha)))
+              }
+            }
+            if(private$distribution_ == "poisson") {
+              tau <- matrix(log(private$pi), private$n, private$Q, byrow = TRUE)
               tau <- tau +
-                t(private$M * private$X) %*% tcrossprod(tau_old, t(log(private$alpha))) +
-                t(private$M * (1 - private$X)) %*%
-                tcrossprod(tau_old, t(log(1 - private$alpha)))
+                (private$M * private$X) %*%
+                tau_old %*%
+                t(log(private$alpha)) -
+                private$M %*%
+                tau_old %*%
+                t(private$alpha)
+              if (private$directed_) {
+                tau <- tau +
+                  crossprod(private$M*private$X,
+                            tau_old %*%
+                              log(private$alpha)) -
+                  crossprod(private$M,
+                            tau_old %*%
+                              private$alpha)
+              }
             }
             if (private$Q == 1) {
               tau  <- as.matrix(exp(apply(tau, 1, function(x) x - max(x))), ncol = 1 )
@@ -247,7 +268,7 @@ FitSBM <-
       },
       ## other functions
       #' @field entropy Get the entropy of the model
-      entropy    = function(value) - sum( xlogx(private$tau)),
+      entropy    = function(value) - sum( .xlogx(private$tau)),
       #' @field bound Get the variational bound of the model
       bound     = function(value) self$likelihood + self$entropy,
       #' @field df_mixture Get the degree of freedom of the block proportion
@@ -278,15 +299,27 @@ FitSBM <-
       #-------------------------------------------------------------------------------
       #' @field X_likelihood adjacency part of the log likelihood
       X_likelihood = function(value) {
-        facteur <-  if (private$directed_) 1 else .5
-        return(
-          facteur * (
-            sum(private$M * private$X *
-                  quad_form(log(private$alpha), private$tau)) +
-              sum(private$M * (1 - private$X) *
-                    quad_form(log(1 - private$alpha), private$tau))
-          )
-        )
+        factor <-  if (private$directed_) 1 else .5
+        xl <- 0
+        emqr <-
+          .tquadform(private$tau, private$X * private$M)
+        nmqr <-
+          .tquadform(private$tau, private$M)
+        if(private$distribution_ == "bernoulli") {
+          xl <-
+            factor * sum(
+              .xlogy(emqr, private$alpha, eps = 1e-12) +
+                .xlogy(nmqr - emqr, 1 - private$alpha, eps = 1e-12))
+            # sum(private$M * private$X *
+            #       quad_form(log(private$alpha), private$tau)) +
+            #   sum(private$M * (1 - private$X) *
+            #         quad_form(log(1 - private$alpha), private$tau))
+        }
+        if (private$distribution_ == "poisson") {
+          xl <- factor * sum(emqr*log(private$alpha) -
+                      nmqr  * private$alpha )
+        }
+        return(xl)
       },
       #' @field Z_likelihood block part of the log likelihood
       Z_likelihood = function(value) sum(private$tau%*%log(private$pi)),

@@ -1,3 +1,11 @@
+# MLVSBM 0.3.0
+* Added support for generalized multilevel networks:
+* This includes three new user functions: `mlvsbm_simulate_generalized_network()`,
+`mlvsbm_create_generalized_network()` and `mlvsbm_estimate_generalized_network()`.
+* This function added the following features: "poisson" distribution of the 
+interactions to deal with count data, support for network of more than two levels 
+(temporal networks e.g.), support for networks with nodes with no affiliation.
+
 # MLVSBM 0.2.4
 * Minor bug fix
 

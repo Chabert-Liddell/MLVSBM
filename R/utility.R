@@ -133,11 +133,58 @@ build_fold_matrix <- function(X, K) {
 }
 
 
-xlogx      <- function(x) ifelse(x < 2*.Machine$double.eps, 0, x*log(x))
+.xlogx      <- function(x) ifelse(x < 2*.Machine$double.eps, 0, x*log(x))
+
 quad_form  <- function(X, tau) tau %*% tcrossprod(X, tau)
 logistic   <- function(x) 1/(1 + exp(-x))
 logit      <- function(x) log(x/(1 - x))
 
+
+
+.xlogy     <- function(x, y, eps = NULL) {
+  ifelse(x < 2*.Machine$double.eps, 0, x*.log(y, eps = eps))
+}
+.quadform  <- function(x, y)  tcrossprod(x %*% y, x)
+.tquadform  <- function(x, y)  crossprod(x, y %*% x)
+logistic   <- function(x) 1/(1 + exp(-x))
+logit      <- function(x) log(x/(1 - x))
+.logit <- function(x, eps = NULL) {
+  if(is.null(eps)) {
+    res <- log(x/(1-x))
+  } else {
+    res <- log(pmax(pmin(x, 1-eps), eps)/pmax(pmin(1-x, 1-eps), eps))
+  }
+  return (res)
+}
+
+
+.threshold <- function(x, eps = 1e-9) {
+  #  x <- .softmax(x)
+  x[x < eps] <- eps
+  x[x > 1-eps] <- 1-eps
+  x <- x/.rowSums(x, nrow(x), ncol(x))
+  x
+}
+
+.softmax <- function(x) {
+  x_max <- apply(x, 1, max)
+  x <- exp(x - x_max)
+  x <- x/.rowSums(x, nrow(x), ncol(x))
+  x
+}
+.log <- function(x, eps = NULL) {
+  if(is.null(eps)) {
+    res <- log(x)
+  } else {
+    res <- log(pmax(pmin(x, 1-eps), eps))
+  }
+  return (res)
+}
+.one_hot <- function(x, Q) {
+  O <- matrix(0, length(x),Q)
+  O[cbind(seq.int(length(x)), x)] <- 1
+  return(O)
+}
 #' Compare two clustering with the Adjusted Rand Index
 #'
 #' @param x A vector of integers, the clusters labels
@@ -318,5 +365,133 @@ plot_multilevel_graphon <- function(fit, order = "degree") {
     cowplot::draw_plot(leg$A, x = .15, y = .7, width = .2, height = .2 ) +
     cowplot::draw_plot(leg$O, x = .3, y = .7, width = .2, height = .2 ) +
     ggplot2::coord_equal(xlim = c(0,1), ylim = c(0,1), )
+  return(p_mat)
+}
+
+
+
+
+
+plot_generalized_multilevel_graphon <- function(fit, order = "affiliation") {
+  # browser()
+  xmin <- xmax <- ymin <- ymax <- value <- NULL
+  color <- RColorBrewer::brewer.pal(min(9, max(3, fit$nb_levels)), name = "Set1")
+  if (length(fit$nb_levels) > length(color)) {
+    color <- rep(fit$nb_levels, "blue")
+  }
+  fit$reorder(order = order)
+  p <- list()
+  for(l in seq(fit$nb_levels)) {
+    if (fit$nb_clusters[l] > 1) {
+      p[[l]] <- fit$parameters$alpha[[l]] %>% t() %>%
+        reshape2::melt() %>%
+        dplyr::mutate(xmax = rep(c(0,cumsum(fit$block_proportions[[l]][1:(fit$nb_clusters[l]-1)])),
+                                 fit$nb_clusters[l]),
+                      xmin = rep(cumsum(fit$block_proportions[[l]]), fit$nb_clusters[l]),
+                      ymax = rep(c(0,cumsum(fit$block_proportions[[l]][1:(fit$nb_clusters[l]-1)])),
+                                 each = fit$nb_clusters[l]),
+                      ymin = rep(cumsum(fit$block_proportions[[l]]), each = fit$nb_clusters[l])) %>%
+        ggplot2::ggplot(ggplot2::aes(xmin = xmin, ymin = ymin, xmax = xmax, ymax = ymax, fill = value)) +
+        ggplot2::geom_rect() +
+        ggplot2::scale_fill_gradient2(low = "white", mid = color[l], midpoint = 1) +
+        ggplot2::geom_hline(yintercept = cumsum(fit$block_proportions[[l]][1:(fit$nb_clusters[l]-1)]), size = .2) +
+        ggplot2::geom_vline(xintercept = cumsum(fit$block_proportions[[l]][1:(fit$nb_clusters[l]-1)]), size = .2) +
+        ggplot2::geom_hline(yintercept = c(0, 1), size = 1.1) +
+        ggplot2::geom_vline(xintercept = c(0, 1), size = 1.1) +
+        ggplot2::scale_y_reverse() +
+        ggplot2::theme_void(base_size = 15, base_rect_size = 1, base_line_size  = 1) +
+        ggplot2::xlab("") + ggplot2::ylab("") + ggplot2::coord_equal(expand = FALSE)
+    } else {
+      p[[l]] <- fit$parameters$alpha[[l]] %>% t() %>%
+        reshape2::melt() %>%
+        ggplot2::ggplot(ggplot2::aes(xmin = 0, ymin = 0, xmax = 1, ymax = 1, fill = value)) +
+        ggplot2::geom_rect() +
+        ggplot2::scale_fill_gradient2(low = "white", mid = color[l], midpoint = 1) +
+        ggplot2::geom_hline(yintercept = cumsum(fit$block_proportions[[l]][1:(fit$nb_clusters[l]-1)]), size = .2) +
+        ggplot2::geom_vline(xintercept = cumsum(fit$block_proportions[[l]][1:(fit$nb_clusters[l]-1)]), size = .2) +
+        ggplot2::geom_hline(yintercept = c(0, 1), size = 1.1) +
+        ggplot2::geom_vline(xintercept = c(0, 1), size = 1.1) +
+        ggplot2::scale_y_reverse() +
+        ggplot2::theme_void(base_size = 15, base_rect_size = 1, base_line_size  = 1) +
+        ggplot2::xlab("") + ggplot2::ylab("") + ggplot2::coord_equal(expand = FALSE)
+    }
+
+  }
+
+  pA <- list()
+
+  for (l in seq(fit$nb_levels -1)) {
+    if(fit$nb_clusters[l] == 1) {
+      xmin <- rep(1, fit$nb_clusters[l+1])
+      xmax <- rep(0, fit$nb_clusters[l+1])
+    } else {
+      xmax <-  rep(c(0,cumsum(fit$block_proportions[[l]][1:(fit$nb_clusters[l]-1)])),
+                 fit$nb_clusters[l+1])
+      xmin <-  rep(cumsum(fit$block_proportions[[l]]), fit$nb_clusters[l+1])
+    }
+    if(fit$nb_clusters[l+1] == 1) {
+      ymin <- rep(1, fit$nb_clusters[l])
+      ymax <- rep(0, fit$nb_clusters[l])
+    } else {
+      ymax <-  rep(c(0,cumsum(fit$block_proportions[[l+1]][1:(fit$nb_clusters[l+1]-1)])),
+                 each = fit$nb_clusters[l])
+      ymin <-  rep(cumsum(fit$block_proportions[[l+1]]), each = fit$nb_clusters[l])
+    }
+    pA[[l]] <- fit$parameters$gamma[[l]] %>% t() %>%
+      reshape2::melt() %>%
+      dplyr::mutate(xmax = xmax,
+                    xmin = xmin,
+                    ymax = ymax,
+                    ymin = ymin) %>%
+      ggplot2::ggplot(ggplot2::aes(xmin = xmin, ymin = ymin, xmax = xmax, ymax = ymax, fill = value)) +
+      ggplot2::geom_rect() +
+      ggplot2::scale_fill_gradient2("Aff", low = "white", mid = "black", midpoint = 1) +
+      ggplot2::geom_hline(yintercept = cumsum(fit$block_proportions[[l+1]][1:(fit$nb_clusters[l+1]-1)]),
+                          size = .2) +
+      ggplot2::geom_vline(xintercept = cumsum(fit$block_proportions[[l]][1:(fit$nb_clusters[l]-1)]),
+                          size = .2) +
+      ggplot2::geom_hline(yintercept = c(0, 1), size = 1.1) +
+      ggplot2::geom_vline(xintercept = c(0, 1), size = 1.1) +
+      ggplot2::scale_y_reverse() +
+      ggplot2::theme_void(base_size = 15, base_rect_size = 1, base_line_size  = 1) +
+      ggplot2::xlab("") + ggplot2::ylab("") + ggplot2::coord_equal(expand = FALSE)
+  }
+
+  leg <- list()
+  for (l in seq(fit$nb_levels)) {
+    leg[[l]] <- cowplot::get_legend(p[[l]])
+    p[[l]] <- p[[l]] + ggplot2::theme(legend.position = "none") +
+      ggplot2::labs(tag = l)
+  }
+  legA <- list()
+  for (l in seq(fit$nb_levels-1)) {
+    legA[[l]] <- cowplot::get_legend(pA[[l]])
+    pA[[l]] <- pA[[l]] + ggplot2::theme(legend.position = "none") +
+      ggplot2::labs(tag = paste0(l, "-", l+1))
+  }
+  pl <- vector("list", 2*fit$nb_levels)
+  if (fit$nb_levels%%2 == 0) {
+    idl <- sort(c(seq(1, 2*fit$nb_levels-1-2, by = 4),
+                  seq(4, 2*fit$nb_levels-1-2, by = 4)))
+  } else {
+    idl <- sort(c(seq(1, 2*fit$nb_levels-1-1, by = 4),
+                  seq(4, 2*fit$nb_levels-1-1, by = 4)))
+  }
+
+  pbl <- ggplot2::ggplot() + ggplot2::theme_void()
+
+
+  pl[setdiff(seq(2*fit$nb_levels-1), idl)] <- p
+  pl[idl] <- pA
+  if (fit$nb_levels%%2 != 0) {
+    pl[[2*fit$nb_levels-1]] <- pbl
+    pl[[2*fit$nb_levels]] <- p[[fit$nb_levels]]
+  } else {
+    pl[[2*fit$nb_levels]] <- pbl
+  }
+  p_mat <- do.call(eval(parse(text="patchwork::wrap_plots")),
+                   c(pl, ncol = fit$nb_levels, byrow=FALSE))
+  # p_mat <- do.call(eval(parse(text="gridExtra::grid.arrange")),
+  #         c(pl, ncol = fit$nb_levels, as.table=FALSE))
   return(p_mat)
 }

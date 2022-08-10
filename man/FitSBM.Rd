@@ -64,21 +64,21 @@ $do_vem() is done
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{FitSBM$new()}}
-\item \href{#method-update_alpha}{\code{FitSBM$update_alpha()}}
-\item \href{#method-update_pi}{\code{FitSBM$update_pi()}}
-\item \href{#method-init_clustering}{\code{FitSBM$init_clustering()}}
-\item \href{#method-m_step}{\code{FitSBM$m_step()}}
-\item \href{#method-ve_step}{\code{FitSBM$ve_step()}}
-\item \href{#method-do_vem}{\code{FitSBM$do_vem()}}
-\item \href{#method-permute_empty_class}{\code{FitSBM$permute_empty_class()}}
-\item \href{#method-clear}{\code{FitSBM$clear()}}
-\item \href{#method-clone}{\code{FitSBM$clone()}}
+\item \href{#method-FitSBM-new}{\code{FitSBM$new()}}
+\item \href{#method-FitSBM-update_alpha}{\code{FitSBM$update_alpha()}}
+\item \href{#method-FitSBM-update_pi}{\code{FitSBM$update_pi()}}
+\item \href{#method-FitSBM-init_clustering}{\code{FitSBM$init_clustering()}}
+\item \href{#method-FitSBM-m_step}{\code{FitSBM$m_step()}}
+\item \href{#method-FitSBM-ve_step}{\code{FitSBM$ve_step()}}
+\item \href{#method-FitSBM-do_vem}{\code{FitSBM$do_vem()}}
+\item \href{#method-FitSBM-permute_empty_class}{\code{FitSBM$permute_empty_class()}}
+\item \href{#method-FitSBM-clear}{\code{FitSBM$clear()}}
+\item \href{#method-FitSBM-clone}{\code{FitSBM$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-FitSBM-new"></a>}}
+\if{latex}{\out{\hypertarget{method-FitSBM-new}{}}}
 \subsection{Method \code{new()}}{
 Constructor for FitSBM  R6 class
 \subsection{Usage}{
@@ -111,8 +111,8 @@ A new FitSBM object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-update_alpha"></a>}}
-\if{latex}{\out{\hypertarget{method-update_alpha}{}}}
+\if{html}{\out{<a id="method-FitSBM-update_alpha"></a>}}
+\if{latex}{\out{\hypertarget{method-FitSBM-update_alpha}{}}}
 \subsection{Method \code{update_alpha()}}{
 Update the connection parameter for the M step
 \subsection{Usage}{
@@ -128,8 +128,8 @@ Update the connection parameter for the M step
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-update_pi"></a>}}
-\if{latex}{\out{\hypertarget{method-update_pi}{}}}
+\if{html}{\out{<a id="method-FitSBM-update_pi"></a>}}
+\if{latex}{\out{\hypertarget{method-FitSBM-update_pi}{}}}
 \subsection{Method \code{update_pi()}}{
 Update the upper level mixture parameter for the M step
 \subsection{Usage}{
@@ -145,8 +145,8 @@ Update the upper level mixture parameter for the M step
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-init_clustering"></a>}}
-\if{latex}{\out{\hypertarget{method-init_clustering}{}}}
+\if{html}{\out{<a id="method-FitSBM-init_clustering"></a>}}
+\if{latex}{\out{\hypertarget{method-FitSBM-init_clustering}{}}}
 \subsection{Method \code{init_clustering()}}{
 init_clustering Initial clustering for VEM algorithm
 \subsection{Usage}{
@@ -167,8 +167,8 @@ init_clustering Initial clustering for VEM algorithm
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-m_step"></a>}}
-\if{latex}{\out{\hypertarget{method-m_step}{}}}
+\if{html}{\out{<a id="method-FitSBM-m_step"></a>}}
+\if{latex}{\out{\hypertarget{method-FitSBM-m_step}{}}}
 \subsection{Method \code{m_step()}}{
 m_step Compute the M step of the VEM algorithm
 \subsection{Usage}{
@@ -184,8 +184,8 @@ m_step Compute the M step of the VEM algorithm
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-ve_step"></a>}}
-\if{latex}{\out{\hypertarget{method-ve_step}{}}}
+\if{html}{\out{<a id="method-FitSBM-ve_step"></a>}}
+\if{latex}{\out{\hypertarget{method-FitSBM-ve_step}{}}}
 \subsection{Method \code{ve_step()}}{
 Compute the VE step of the VEM algorithm
 \subsection{Usage}{
@@ -205,8 +205,8 @@ Compute the VE step of the VEM algorithm
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-do_vem"></a>}}
-\if{latex}{\out{\hypertarget{method-do_vem}{}}}
+\if{html}{\out{<a id="method-FitSBM-do_vem"></a>}}
+\if{latex}{\out{\hypertarget{method-FitSBM-do_vem}{}}}
 \subsection{Method \code{do_vem()}}{
 Launch a Variational EM algorithm
 \subsection{Usage}{
@@ -239,8 +239,8 @@ Launch a Variational EM algorithm
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-permute_empty_class"></a>}}
-\if{latex}{\out{\hypertarget{method-permute_empty_class}{}}}
+\if{html}{\out{<a id="method-FitSBM-permute_empty_class"></a>}}
+\if{latex}{\out{\hypertarget{method-FitSBM-permute_empty_class}{}}}
 \subsection{Method \code{permute_empty_class()}}{
 permute_empty_class Put empty blocks numbers at the end
 \subsection{Usage}{
@@ -249,8 +249,8 @@ permute_empty_class Put empty blocks numbers at the end
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clear"></a>}}
-\if{latex}{\out{\hypertarget{method-clear}{}}}
+\if{html}{\out{<a id="method-FitSBM-clear"></a>}}
+\if{latex}{\out{\hypertarget{method-FitSBM-clear}{}}}
 \subsection{Method \code{clear()}}{
 Reset all parameters
 \subsection{Usage}{
@@ -259,8 +259,8 @@ Reset all parameters
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-FitSBM-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-FitSBM-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

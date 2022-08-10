@@ -42,6 +42,64 @@ MLVSBM$set(
     }
 )
 
+
+GenMLVSBM$set(
+  "public", "simulate",
+  # Simulate a multilevel network from a MLVSBM object
+  function() {
+    if (is.null(private$A)) {
+      if(private$sim_param$affiliation == "diagonal") {
+        private$A <- lapply(seq(private$L), function(l) diag(1, private$n[l]))
+      } else {
+        private$A <-
+          lapply(seq(private$L -1),
+            function(l) {
+              simulate_affiliation(n = private$n[l+1],
+                                   m = private$n[l],
+                                   affiliation = private$sim_param$affiliation,
+                                   no_empty_org = private$sim_param$no_empty_org)
+            }
+          )
+      }
+    }
+    private$Z    <-  vector("list", private$L)
+    private$Z[[1]] <-  sample(
+      x = seq(private$sim_param$Q[1]),
+      size = private$n[1],
+      replace = TRUE,
+      prob = private$sim_param$pi[[1]]) # Variables latentes L
+    for (l in seq(2, private$L)) {
+      private$Z[[l]] <-  numeric(private$n[l])
+      ind          <- private$A[[l-1]] %*% private$Z[[l-1]]
+      for (i in seq(private$n[l])) {
+        if (ind[i,] > 0) {
+          private$Z[[l]][i] <- sample(seq(private$sim_param$Q[l]),
+                                      size = 1,
+                                      prob = private$sim_param$gamma[[l-1]][, ind[i, ]])
+        } else {
+          private$Z[[l]][i] <- sample(seq(private$sim_param$Q[l]),
+                                      size = 1,
+                                      prob = private$sim_param$pi[[l]])
+        }
+      }
+    }
+    private$X <- vector("list", private$L)
+    private$X <- lapply(
+      X = seq(private$L),
+      FUN = function(l) {
+        simulate_adjacency(Z = private$Z[[l]],
+                           n = private$n[l],
+                           alpha = private$sim_param$alpha[[l]],
+                           directed = private$directed_[l],
+                           distribution = private$distribution_[l],
+                           no_isolated_node = private$sim_param$no_isolated_node)
+      }
+    )
+  }
+)
+
+
+
 #' Simulation an adjacency matrix
 #'
 #' @importFrom stats rbinom
@@ -91,32 +149,36 @@ simulate_adjacency <- function(Z, n, alpha, directed,
 #' @return A \eqn{n \times m} affiliation matrix, with a unique 1 on each rows
 simulate_affiliation <-
   function(n, m, affiliation = "uniform", no_empty_org = FALSE) {
-  A <- matrix(0, n, m)
-  if (no_empty_org) {
-    A[1:m, 1:m] <- diag(1, m, m)
-    if (affiliation == "uniform") {
-      for (i in seq(m+1, n)) {
-        j       <-  sample(x = seq(m), size = 1)
-        A[i, j] <- 1
+    if(is.null(m)) {
+      m = n[2]
+      n = n[1]
+    }
+    A <- matrix(0, n, m)
+    if (no_empty_org) {
+      A[1:m, 1:m] <- diag(1, m, m)
+      if (affiliation == "uniform") {
+        for (i in seq(m+1, n)) {
+          j       <-  sample(x = seq(m), size = 1)
+          A[i, j] <- 1
+        }
+      }
+      if (affiliation == "preferential") {
+        for (i in seq(m+1, n)) {
+          j <- sample( x = seq(m), size = 1, prob = c(colSums(A)))
+          A[i, j] <- 1
+        }
+      }
+    } else {
+      if (affiliation == "uniform") {
+        ind <- sample(x = seq(m), size = n, replace = TRUE)
+        A[matrix(c(seq(n), ind), ncol = 2)] <- 1
+      }
+      if (affiliation == "preferential") {
+        for (i in seq(n)) {
+          j <- sample( x = seq(m), size = 1, prob = c(colSums(A)) + 1)
+          A[i, j] <- 1
+        }
       }
     }
-    if (affiliation == "preferential") {
-      for (i in seq(m+1, n)) {
-        j <- sample( x = seq(m), size = 1, prob = c(colSums(A)))
-        A[i, j] <- 1
-      }
-    }
-  } else {
-    if (affiliation == "uniform") {
-      ind <- sample(x = seq(m), size = n, replace = TRUE)
-      A[matrix(c(seq(n), ind), ncol = 2)] <- 1
-    }
-    if (affiliation == "preferential") {
-      for (i in seq(n)) {
-        j <- sample( x = seq(m), size = 1, prob = c(colSums(A)) + 1)
-        A[i, j] <- 1
-      }
-    }
+    return(A)
   }
-  return(A)
-}

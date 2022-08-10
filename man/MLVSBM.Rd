@@ -43,28 +43,28 @@ Methods for global inference and model selection are included.
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-estimate_level}{\code{MLVSBM$estimate_level()}}
-\item \href{#method-estimate_sbm_neighbours}{\code{MLVSBM$estimate_sbm_neighbours()}}
-\item \href{#method-estimate_sbm_from_neighbours}{\code{MLVSBM$estimate_sbm_from_neighbours()}}
-\item \href{#method-estimate_sbm}{\code{MLVSBM$estimate_sbm()}}
-\item \href{#method-mcestimate}{\code{MLVSBM$mcestimate()}}
-\item \href{#method-estimate_from_neighbours}{\code{MLVSBM$estimate_from_neighbours()}}
-\item \href{#method-estimate_neighbours}{\code{MLVSBM$estimate_neighbours()}}
-\item \href{#method-merge_split_membership}{\code{MLVSBM$merge_split_membership()}}
-\item \href{#method-mc_ms_estimate}{\code{MLVSBM$mc_ms_estimate()}}
-\item \href{#method-estimate_one}{\code{MLVSBM$estimate_one()}}
-\item \href{#method-estimate_all_bm}{\code{MLVSBM$estimate_all_bm()}}
-\item \href{#method-new}{\code{MLVSBM$new()}}
-\item \href{#method-findmodel}{\code{MLVSBM$findmodel()}}
-\item \href{#method-clearmodels}{\code{MLVSBM$clearmodels()}}
-\item \href{#method-addmodel}{\code{MLVSBM$addmodel()}}
-\item \href{#method-simulate}{\code{MLVSBM$simulate()}}
-\item \href{#method-clone}{\code{MLVSBM$clone()}}
+\item \href{#method-MLVSBM-estimate_level}{\code{MLVSBM$estimate_level()}}
+\item \href{#method-MLVSBM-estimate_sbm_neighbours}{\code{MLVSBM$estimate_sbm_neighbours()}}
+\item \href{#method-MLVSBM-estimate_sbm_from_neighbours}{\code{MLVSBM$estimate_sbm_from_neighbours()}}
+\item \href{#method-MLVSBM-estimate_sbm}{\code{MLVSBM$estimate_sbm()}}
+\item \href{#method-MLVSBM-mcestimate}{\code{MLVSBM$mcestimate()}}
+\item \href{#method-MLVSBM-estimate_from_neighbours}{\code{MLVSBM$estimate_from_neighbours()}}
+\item \href{#method-MLVSBM-estimate_neighbours}{\code{MLVSBM$estimate_neighbours()}}
+\item \href{#method-MLVSBM-merge_split_membership}{\code{MLVSBM$merge_split_membership()}}
+\item \href{#method-MLVSBM-mc_ms_estimate}{\code{MLVSBM$mc_ms_estimate()}}
+\item \href{#method-MLVSBM-estimate_one}{\code{MLVSBM$estimate_one()}}
+\item \href{#method-MLVSBM-estimate_all_bm}{\code{MLVSBM$estimate_all_bm()}}
+\item \href{#method-MLVSBM-new}{\code{MLVSBM$new()}}
+\item \href{#method-MLVSBM-findmodel}{\code{MLVSBM$findmodel()}}
+\item \href{#method-MLVSBM-clearmodels}{\code{MLVSBM$clearmodels()}}
+\item \href{#method-MLVSBM-addmodel}{\code{MLVSBM$addmodel()}}
+\item \href{#method-MLVSBM-simulate}{\code{MLVSBM$simulate()}}
+\item \href{#method-MLVSBM-clone}{\code{MLVSBM$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-estimate_level"></a>}}
-\if{latex}{\out{\hypertarget{method-estimate_level}{}}}
+\if{html}{\out{<a id="method-MLVSBM-estimate_level"></a>}}
+\if{latex}{\out{\hypertarget{method-MLVSBM-estimate_level}{}}}
 \subsection{Method \code{estimate_level()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MLVSBM$estimate_level(
@@ -80,8 +80,8 @@ Methods for global inference and model selection are included.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-estimate_sbm_neighbours"></a>}}
-\if{latex}{\out{\hypertarget{method-estimate_sbm_neighbours}{}}}
+\if{html}{\out{<a id="method-MLVSBM-estimate_sbm_neighbours"></a>}}
+\if{latex}{\out{\hypertarget{method-MLVSBM-estimate_sbm_neighbours}{}}}
 \subsection{Method \code{estimate_sbm_neighbours()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MLVSBM$estimate_sbm_neighbours(
@@ -97,8 +97,8 @@ Methods for global inference and model selection are included.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-estimate_sbm_from_neighbours"></a>}}
-\if{latex}{\out{\hypertarget{method-estimate_sbm_from_neighbours}{}}}
+\if{html}{\out{<a id="method-MLVSBM-estimate_sbm_from_neighbours"></a>}}
+\if{latex}{\out{\hypertarget{method-MLVSBM-estimate_sbm_from_neighbours}{}}}
 \subsection{Method \code{estimate_sbm_from_neighbours()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MLVSBM$estimate_sbm_from_neighbours(
@@ -111,8 +111,8 @@ Methods for global inference and model selection are included.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-estimate_sbm"></a>}}
-\if{latex}{\out{\hypertarget{method-estimate_sbm}{}}}
+\if{html}{\out{<a id="method-MLVSBM-estimate_sbm"></a>}}
+\if{latex}{\out{\hypertarget{method-MLVSBM-estimate_sbm}{}}}
 \subsection{Method \code{estimate_sbm()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MLVSBM$estimate_sbm(level = "lower", Q = Q, Z = NULL, init = "hierarchical")}\if{html}{\out{</div>}}
@@ -120,8 +120,8 @@ Methods for global inference and model selection are included.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-mcestimate"></a>}}
-\if{latex}{\out{\hypertarget{method-mcestimate}{}}}
+\if{html}{\out{<a id="method-MLVSBM-mcestimate"></a>}}
+\if{latex}{\out{\hypertarget{method-MLVSBM-mcestimate}{}}}
 \subsection{Method \code{mcestimate()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MLVSBM$mcestimate(Q, Z = NULL, init = "hierarchical", independent = FALSE)}\if{html}{\out{</div>}}
@@ -129,8 +129,8 @@ Methods for global inference and model selection are included.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-estimate_from_neighbours"></a>}}
-\if{latex}{\out{\hypertarget{method-estimate_from_neighbours}{}}}
+\if{html}{\out{<a id="method-MLVSBM-estimate_from_neighbours"></a>}}
+\if{latex}{\out{\hypertarget{method-MLVSBM-estimate_from_neighbours}{}}}
 \subsection{Method \code{estimate_from_neighbours()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MLVSBM$estimate_from_neighbours(
@@ -143,8 +143,8 @@ Methods for global inference and model selection are included.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-estimate_neighbours"></a>}}
-\if{latex}{\out{\hypertarget{method-estimate_neighbours}{}}}
+\if{html}{\out{<a id="method-MLVSBM-estimate_neighbours"></a>}}
+\if{latex}{\out{\hypertarget{method-MLVSBM-estimate_neighbours}{}}}
 \subsection{Method \code{estimate_neighbours()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MLVSBM$estimate_neighbours(
@@ -157,8 +157,8 @@ Methods for global inference and model selection are included.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-merge_split_membership"></a>}}
-\if{latex}{\out{\hypertarget{method-merge_split_membership}{}}}
+\if{html}{\out{<a id="method-MLVSBM-merge_split_membership"></a>}}
+\if{latex}{\out{\hypertarget{method-MLVSBM-merge_split_membership}{}}}
 \subsection{Method \code{merge_split_membership()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MLVSBM$merge_split_membership(
@@ -168,8 +168,8 @@ Methods for global inference and model selection are included.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-mc_ms_estimate"></a>}}
-\if{latex}{\out{\hypertarget{method-mc_ms_estimate}{}}}
+\if{html}{\out{<a id="method-MLVSBM-mc_ms_estimate"></a>}}
+\if{latex}{\out{\hypertarget{method-MLVSBM-mc_ms_estimate}{}}}
 \subsection{Method \code{mc_ms_estimate()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MLVSBM$mc_ms_estimate(Z = NA, independent = FALSE, nb_cores = NULL)}\if{html}{\out{</div>}}
@@ -177,8 +177,8 @@ Methods for global inference and model selection are included.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-estimate_one"></a>}}
-\if{latex}{\out{\hypertarget{method-estimate_one}{}}}
+\if{html}{\out{<a id="method-MLVSBM-estimate_one"></a>}}
+\if{latex}{\out{\hypertarget{method-MLVSBM-estimate_one}{}}}
 \subsection{Method \code{estimate_one()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MLVSBM$estimate_one(
@@ -192,8 +192,8 @@ Methods for global inference and model selection are included.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-estimate_all_bm"></a>}}
-\if{latex}{\out{\hypertarget{method-estimate_all_bm}{}}}
+\if{html}{\out{<a id="method-MLVSBM-estimate_all_bm"></a>}}
+\if{latex}{\out{\hypertarget{method-MLVSBM-estimate_all_bm}{}}}
 \subsection{Method \code{estimate_all_bm()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MLVSBM$estimate_all_bm(
@@ -207,8 +207,8 @@ Methods for global inference and model selection are included.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-MLVSBM-new"></a>}}
+\if{latex}{\out{\hypertarget{method-MLVSBM-new}{}}}
 \subsection{Method \code{new()}}{
 Constructor for R6 class MLVSBM
 \subsection{Usage}{
@@ -247,8 +247,8 @@ A MLVSBM object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-findmodel"></a>}}
-\if{latex}{\out{\hypertarget{method-findmodel}{}}}
+\if{html}{\out{<a id="method-MLVSBM-findmodel"></a>}}
+\if{latex}{\out{\hypertarget{method-MLVSBM-findmodel}{}}}
 \subsection{Method \code{findmodel()}}{
 Find a fitted model of a given size
 \subsection{Usage}{
@@ -269,8 +269,8 @@ A FitMLVSBM object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clearmodels"></a>}}
-\if{latex}{\out{\hypertarget{method-clearmodels}{}}}
+\if{html}{\out{<a id="method-MLVSBM-clearmodels"></a>}}
+\if{latex}{\out{\hypertarget{method-MLVSBM-clearmodels}{}}}
 \subsection{Method \code{clearmodels()}}{
 delete all fitted models
 \subsection{Usage}{
@@ -279,8 +279,8 @@ delete all fitted models
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-addmodel"></a>}}
-\if{latex}{\out{\hypertarget{method-addmodel}{}}}
+\if{html}{\out{<a id="method-MLVSBM-addmodel"></a>}}
+\if{latex}{\out{\hypertarget{method-MLVSBM-addmodel}{}}}
 \subsection{Method \code{addmodel()}}{
 Added a FitMLVSBM object to the list of fitted model
 \subsection{Usage}{
@@ -296,8 +296,8 @@ Added a FitMLVSBM object to the list of fitted model
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-simulate"></a>}}
-\if{latex}{\out{\hypertarget{method-simulate}{}}}
+\if{html}{\out{<a id="method-MLVSBM-simulate"></a>}}
+\if{latex}{\out{\hypertarget{method-MLVSBM-simulate}{}}}
 \subsection{Method \code{simulate()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MLVSBM$simulate()}\if{html}{\out{</div>}}
@@ -305,8 +305,8 @@ Added a FitMLVSBM object to the list of fitted model
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-MLVSBM-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-MLVSBM-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

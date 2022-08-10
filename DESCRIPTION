@@ -1,7 +1,7 @@
 Package: MLVSBM
 Type: Package
 Title: A Stochastic Block Model for Multilevel Networks
-Version: 0.2.4
+Version: 0.3.0
 Authors@R: 
     person(given = "Saint-Clair",
            family = "Chabert-Liddell",
@@ -20,7 +20,7 @@ Encoding: UTF-8
 LazyData: true
 URL: https://github.com/Chabert-Liddell/MLVSBM
 BugReports: https://github.com/Chabert-Liddell/MLVSBM/issues
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.1
 Depends:
     R (>= 3.5.0)
 Imports: 
@@ -28,7 +28,9 @@ Imports:
     blockmodels,
     ape,
     magrittr,
-    cluster
+    cluster,
+    bettermc,
+    sbm
 Suggests: 
     testthat (>= 2.1.0),
     covr,
@@ -39,6 +41,8 @@ Suggests:
     spelling,
     cowplot,
     reshape2,
-    dplyr
+    dplyr,
+    patchwork,
+    RColorBrewer
 VignetteBuilder: knitr
 Language: en-US
