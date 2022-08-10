@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MLVSBM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0.9000</span>
       </span>
     </div>
 
@@ -75,34 +75,47 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">simulate_adjacency</span><span class="op">(</span>
-  <span class="va">Z</span>,
-  <span class="va">n</span>,
-  <span class="va">alpha</span>,
-  <span class="va">directed</span>,
-  distribution <span class="op">=</span> <span class="st">"bernoulli"</span>,
-  no_isolated_node <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">simulate_adjacency</span><span class="op">(</span></span>
+<span>  <span class="va">Z</span>,</span>
+<span>  <span class="va">n</span>,</span>
+<span>  <span class="va">alpha</span>,</span>
+<span>  <span class="va">directed</span>,</span>
+<span>  distribution <span class="op">=</span> <span class="st">"bernoulli"</span>,</span>
+<span>  no_isolated_node <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>Z</dt>
 <dd><p>A vector of integer of size n, the label</p></dd>
+
+
 <dt>n</dt>
 <dd><p>An integer, the number of rows or columns of the matrix</p></dd>
+
+
 <dt>alpha</dt>
 <dd><p>A \(\max(Z)\times \max(Z)\) matrix, the connectivity parameters</p></dd>
+
+
 <dt>directed</dt>
 <dd><p>A boolean, Is the network directed or not ?</p></dd>
+
+
 <dt>distribution</dt>
 <dd><p>The distribution of the indices: only "bernoulli"</p></dd>
+
+
 <dt>no_isolated_node</dt>
 <dd><p>A boolean, may row and column of adjacency matrices sum to 0</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A nxn adjacency matrix</p>
+    
+
+<p>A nxn adjacency matrix</p>
     </div>
 
   </div>
@@ -117,8 +130,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

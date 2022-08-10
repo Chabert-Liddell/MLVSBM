@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MLVSBM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0.9000</span>
       </span>
     </div>
 
@@ -75,24 +75,33 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">simulate_affiliation</span><span class="op">(</span><span class="va">n</span>, <span class="va">m</span>, affiliation <span class="op">=</span> <span class="st">"uniform"</span>, no_empty_org <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">simulate_affiliation</span><span class="op">(</span><span class="va">n</span>, <span class="va">m</span>, affiliation <span class="op">=</span> <span class="st">"uniform"</span>, no_empty_org <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>n</dt>
 <dd><p>An integer, the number of individuals</p></dd>
+
+
 <dt>m</dt>
 <dd><p>An integer, the number of organizations</p></dd>
+
+
 <dt>affiliation</dt>
 <dd><p>The type of affiliation between c("uniform", "preferential")</p></dd>
+
+
 <dt>no_empty_org</dt>
 <dd><p>A Boolean. Force all columns to have at least a 1.
 Must have \(n&gt;m\).</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A \(n \times m\) affiliation matrix, with a unique 1 on each rows</p>
+    
+
+<p>A \(n \times m\) affiliation matrix, with a unique 1 on each rows</p>
     </div>
 
   </div>
@@ -107,8 +116,7 @@ Must have \(n&gt;m\).</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

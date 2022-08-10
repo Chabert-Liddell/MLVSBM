@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MLVSBM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0.9000</span>
       </span>
     </div>
 
@@ -75,12 +75,12 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">mlvsbm_create_network</span><span class="op">(</span>
-  <span class="va">X</span>,
-  <span class="va">A</span>,
-  directed <span class="op">=</span> <span class="cn">NULL</span>,
-  distribution <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"bernoulli"</span>, <span class="st">"bernoulli"</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mlvsbm_create_network</span><span class="op">(</span></span>
+<span>  <span class="va">X</span>,</span>
+<span>  <span class="va">A</span>,</span>
+<span>  directed <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  distribution <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"bernoulli"</span>, <span class="st">"bernoulli"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -89,31 +89,40 @@
 <dd><p>A list of 2 squares binary matrices,
 the first one being the individual or lower level
 the second one being the organizational or upper level</p></dd>
+
+
 <dt>A</dt>
 <dd><p>A matrix the affiliation matrix with individuals in rows and
 organizations in columns</p></dd>
+
+
 <dt>directed</dt>
 <dd><p>A list of 2 boolean are the upper and lower level
 directed or not. Default will check if the matrix are symmetric or not.</p></dd>
+
+
 <dt>distribution</dt>
 <dd><p>A list for the distribution of X,
 only "bernoulli" is implemented</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>An unfitted MLVSBM object corresponding to the multilevel network</p>
+    
+
+<p>An unfitted MLVSBM object corresponding to the multilevel network</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">ind_adj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span><span class="op">**</span><span class="fl">2</span>, size <span class="op">=</span> <span class="fl">1</span>, prob <span class="op">=</span> <span class="fl">.2</span><span class="op">)</span>,</span>
-<span class="r-in">                  nrow <span class="op">=</span> <span class="fl">10</span>, ncol <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">org_adj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span><span class="op">**</span><span class="fl">2</span>, size <span class="op">=</span> <span class="fl">1</span>, prob <span class="op">=</span> <span class="fl">.3</span><span class="op">)</span>,</span>
-<span class="r-in">                  nrow <span class="op">=</span> <span class="fl">10</span>, ncol <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">affiliation</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">10</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">my_mlvsbm</span> <span class="op">&lt;-</span> <span class="fu">mlvsbm_create_network</span><span class="op">(</span>X <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>I <span class="op">=</span> <span class="va">ind_adj</span>, O <span class="op">=</span> <span class="va">org_adj</span><span class="op">)</span>,</span>
-<span class="r-in">                                   directed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>I <span class="op">=</span> <span class="cn">FALSE</span>, O <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
-<span class="r-in">                                   A <span class="op">=</span> <span class="va">affiliation</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">ind_adj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span><span class="op">**</span><span class="fl">2</span>, size <span class="op">=</span> <span class="fl">1</span>, prob <span class="op">=</span> <span class="fl">.2</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                  nrow <span class="op">=</span> <span class="fl">10</span>, ncol <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">org_adj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span><span class="op">**</span><span class="fl">2</span>, size <span class="op">=</span> <span class="fl">1</span>, prob <span class="op">=</span> <span class="fl">.3</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                  nrow <span class="op">=</span> <span class="fl">10</span>, ncol <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">affiliation</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">my_mlvsbm</span> <span class="op">&lt;-</span> <span class="fu">mlvsbm_create_network</span><span class="op">(</span>X <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>I <span class="op">=</span> <span class="va">ind_adj</span>, O <span class="op">=</span> <span class="va">org_adj</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                                   directed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>I <span class="op">=</span> <span class="cn">FALSE</span>, O <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                                   A <span class="op">=</span> <span class="va">affiliation</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -128,8 +137,7 @@ only "bernoulli" is implemented</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

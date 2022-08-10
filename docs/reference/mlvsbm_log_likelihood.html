@@ -20,7 +20,7 @@ obtained by different methods."><!-- mathjax --><script src="https://cdnjs.cloud
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MLVSBM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0.9000</span>
       </span>
     </div>
 
@@ -80,42 +80,47 @@ obtained by different methods.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">mlvsbm_log_likelihood</span><span class="op">(</span><span class="va">mlv</span>, <span class="va">clustering</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mlvsbm_log_likelihood</span><span class="op">(</span><span class="va">mlv</span>, <span class="va">clustering</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>mlv</dt>
 <dd><p>A MLVSBM object, the network data</p></dd>
+
+
 <dt>clustering</dt>
 <dd><p>A list of 2 vectors of integers of the same length as
 the number of node of each level.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A numeric, the log likelihood of the multilevel network
+    
+
+<p>A numeric, the log likelihood of the multilevel network
 for the given clustering.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">my_mlvsbm</span> <span class="op">&lt;-</span> <span class="fu">MLVSBM</span><span class="fu">::</span><span class="fu"><a href="mlvsbm_simulate_network.html">mlvsbm_simulate_network</a></span><span class="op">(</span></span>
-<span class="r-in">  n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>I <span class="op">=</span> <span class="fl">40</span>, O <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>, <span class="co"># Number of nodes for the lower level and the upper level</span></span>
-<span class="r-in">  Q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>I <span class="op">=</span> <span class="fl">2</span>, O <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>, <span class="co"># Number of blocks for the lower level and the upper level</span></span>
-<span class="r-in">  pi <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.3</span>, <span class="fl">.7</span><span class="op">)</span>, <span class="co"># Block proportion for the upper level, must sum to one</span></span>
-<span class="r-in">  gamma <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.9</span>, <span class="fl">.2</span>,   <span class="co"># Block proportion for the lower level,</span></span>
-<span class="r-in">                   <span class="fl">.1</span>, <span class="fl">.8</span><span class="op">)</span>, <span class="co"># each column must sum to one</span></span>
-<span class="r-in">                 nrow <span class="op">=</span> <span class="fl">2</span>, ncol <span class="op">=</span> <span class="fl">2</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
-<span class="r-in">  alpha <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>I <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.8</span>, <span class="fl">.2</span>,</span>
-<span class="r-in">                            <span class="fl">.2</span>, <span class="fl">.1</span><span class="op">)</span>,</span>
-<span class="r-in">                          nrow <span class="op">=</span> <span class="fl">2</span>, ncol <span class="op">=</span> <span class="fl">2</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, <span class="co"># Connection matrix</span></span>
-<span class="r-in">               O <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.99</span>, <span class="fl">.3</span>,</span>
-<span class="r-in">                            <span class="fl">.3</span>, <span class="fl">.1</span><span class="op">)</span>,</span>
-<span class="r-in">                          nrow <span class="op">=</span> <span class="fl">2</span>, ncol <span class="op">=</span> <span class="fl">2</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>,<span class="co"># between blocks</span></span>
-<span class="r-in">  directed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>I <span class="op">=</span> <span class="cn">FALSE</span>, O <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>, <span class="co"># Are the upper and lower level directed or not ?</span></span>
-<span class="r-in">  affiliation <span class="op">=</span> <span class="st">"preferential"</span><span class="op">)</span> <span class="co"># How the affiliation matrix is generated</span></span>
-<span class="r-in"><span class="fu">mlvsbm_log_likelihood</span><span class="op">(</span>mlv <span class="op">=</span> <span class="va">my_mlvsbm</span>, clustering <span class="op">=</span> <span class="va">my_mlvsbm</span><span class="op">$</span><span class="va">memberships</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -429.7242</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">my_mlvsbm</span> <span class="op">&lt;-</span> <span class="fu">MLVSBM</span><span class="fu">::</span><span class="fu"><a href="mlvsbm_simulate_network.html">mlvsbm_simulate_network</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>I <span class="op">=</span> <span class="fl">40</span>, O <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>, <span class="co"># Number of nodes for the lower level and the upper level</span></span></span>
+<span class="r-in"><span>  Q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>I <span class="op">=</span> <span class="fl">2</span>, O <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>, <span class="co"># Number of blocks for the lower level and the upper level</span></span></span>
+<span class="r-in"><span>  pi <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.3</span>, <span class="fl">.7</span><span class="op">)</span>, <span class="co"># Block proportion for the upper level, must sum to one</span></span></span>
+<span class="r-in"><span>  gamma <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.9</span>, <span class="fl">.2</span>,   <span class="co"># Block proportion for the lower level,</span></span></span>
+<span class="r-in"><span>                   <span class="fl">.1</span>, <span class="fl">.8</span><span class="op">)</span>, <span class="co"># each column must sum to one</span></span></span>
+<span class="r-in"><span>                 nrow <span class="op">=</span> <span class="fl">2</span>, ncol <span class="op">=</span> <span class="fl">2</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  alpha <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>I <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.8</span>, <span class="fl">.2</span>,</span></span>
+<span class="r-in"><span>                            <span class="fl">.2</span>, <span class="fl">.1</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                          nrow <span class="op">=</span> <span class="fl">2</span>, ncol <span class="op">=</span> <span class="fl">2</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, <span class="co"># Connection matrix</span></span></span>
+<span class="r-in"><span>               O <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.99</span>, <span class="fl">.3</span>,</span></span>
+<span class="r-in"><span>                            <span class="fl">.3</span>, <span class="fl">.1</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                          nrow <span class="op">=</span> <span class="fl">2</span>, ncol <span class="op">=</span> <span class="fl">2</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>,<span class="co"># between blocks</span></span></span>
+<span class="r-in"><span>  directed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>I <span class="op">=</span> <span class="cn">FALSE</span>, O <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>, <span class="co"># Are the upper and lower level directed or not ?</span></span></span>
+<span class="r-in"><span>  affiliation <span class="op">=</span> <span class="st">"preferential"</span><span class="op">)</span> <span class="co"># How the affiliation matrix is generated</span></span></span>
+<span class="r-in"><span><span class="fu">mlvsbm_log_likelihood</span><span class="op">(</span>mlv <span class="op">=</span> <span class="va">my_mlvsbm</span>, clustering <span class="op">=</span> <span class="va">my_mlvsbm</span><span class="op">$</span><span class="va">memberships</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -460.5182</span>
 </code></pre></div>
     </div>
   </div>
@@ -130,8 +135,7 @@ for the given clustering.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

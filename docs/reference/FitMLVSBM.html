@@ -18,7 +18,7 @@ An R6 Class object, a fitted multilevel network once $dovem() is done"><!-- math
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MLVSBM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0.9000</span>
       </span>
     </div>
 
@@ -186,33 +186,33 @@ predictions</p></dd>
 <div class="section">
 <h3 id="public-methods">Public methods<a class="anchor" aria-label="anchor" href="#public-methods"></a></h3>
 
-<ul><li><p><a href="#method-new"><code>FitMLVSBM$new()</code></a></p></li>
-<li><p><a href="#method-update_alpha"><code>FitMLVSBM$update_alpha()</code></a></p></li>
-<li><p><a href="#method-update_pi"><code>FitMLVSBM$update_pi()</code></a></p></li>
-<li><p><a href="#method-update_gamma"><code>FitMLVSBM$update_gamma()</code></a></p></li>
-<li><p><a href="#method-init_clustering"><code>FitMLVSBM$init_clustering()</code></a></p></li>
-<li><p><a href="#method-clear"><code>FitMLVSBM$clear()</code></a></p></li>
-<li><p><a href="#method-m_step"><code>FitMLVSBM$m_step()</code></a></p></li>
-<li><p><a href="#method-ve_step"><code>FitMLVSBM$ve_step()</code></a></p></li>
-<li><p><a href="#method-do_vem"><code>FitMLVSBM$do_vem()</code></a></p></li>
-<li><p><a href="#method-permute_empty_class"><code>FitMLVSBM$permute_empty_class()</code></a></p></li>
-<li><p><a href="#method-plot"><code>FitMLVSBM$plot()</code></a></p></li>
-<li><p><a href="#method-show"><code>FitMLVSBM$show()</code></a></p></li>
-<li><p><a href="#method-print"><code>FitMLVSBM$print()</code></a></p></li>
-<li><p><a href="#method-clone"><code>FitMLVSBM$clone()</code></a></p></li>
-</ul></div><p></p><hr><a id="method-new"></a><div class="section">
+<ul><li><p><a href="#method-FitMLVSBM-new"><code>FitMLVSBM$new()</code></a></p></li>
+<li><p><a href="#method-FitMLVSBM-update_alpha"><code>FitMLVSBM$update_alpha()</code></a></p></li>
+<li><p><a href="#method-FitMLVSBM-update_pi"><code>FitMLVSBM$update_pi()</code></a></p></li>
+<li><p><a href="#method-FitMLVSBM-update_gamma"><code>FitMLVSBM$update_gamma()</code></a></p></li>
+<li><p><a href="#method-FitMLVSBM-init_clustering"><code>FitMLVSBM$init_clustering()</code></a></p></li>
+<li><p><a href="#method-FitMLVSBM-clear"><code>FitMLVSBM$clear()</code></a></p></li>
+<li><p><a href="#method-FitMLVSBM-m_step"><code>FitMLVSBM$m_step()</code></a></p></li>
+<li><p><a href="#method-FitMLVSBM-ve_step"><code>FitMLVSBM$ve_step()</code></a></p></li>
+<li><p><a href="#method-FitMLVSBM-do_vem"><code>FitMLVSBM$do_vem()</code></a></p></li>
+<li><p><a href="#method-FitMLVSBM-permute_empty_class"><code>FitMLVSBM$permute_empty_class()</code></a></p></li>
+<li><p><a href="#method-FitMLVSBM-plot"><code>FitMLVSBM$plot()</code></a></p></li>
+<li><p><a href="#method-FitMLVSBM-show"><code>FitMLVSBM$show()</code></a></p></li>
+<li><p><a href="#method-FitMLVSBM-print"><code>FitMLVSBM$print()</code></a></p></li>
+<li><p><a href="#method-FitMLVSBM-clone"><code>FitMLVSBM$clone()</code></a></p></li>
+</ul></div><p></p><hr><a id="method-FitMLVSBM-new"></a><div class="section">
 <h3 id="method-new-">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new-"></a></h3>
 <p>Constructor for the FitMLVSBM class</p><div class="section">
 <h4 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va"><a href="../reference/FitMLVSBM.html">FitMLVSBM</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>
-  Q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>I <span class="op">=</span> <span class="fl">1</span>, O <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,
-  A <span class="op">=</span> <span class="cn">NA</span>,
-  X <span class="op">=</span> <span class="cn">NA</span>,
-  M <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>I <span class="op">=</span> <span class="cn">NA</span>, O <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span>,
-  directed <span class="op">=</span> <span class="cn">NA</span>,
-  distribution <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"bernoulli"</span>, <span class="st">"bernoulli"</span><span class="op">)</span>,
-  independent <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va"><a href="../reference/FitMLVSBM.html">FitMLVSBM</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>  Q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>I <span class="op">=</span> <span class="fl">1</span>, O <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  A <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  X <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  M <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>I <span class="op">=</span> <span class="cn">NA</span>, O <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span>,</span>
+<span>  directed <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  distribution <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"bernoulli"</span>, <span class="st">"bernoulli"</span><span class="op">)</span>,</span>
+<span>  independent <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -252,11 +252,11 @@ predictions</p></dd>
 <p>A FitMLVSBM object</p>
 </div>
 
-</div><p></p><hr><a id="method-update_alpha"></a><div class="section">
+</div><p></p><hr><a id="method-FitMLVSBM-update_alpha"></a><div class="section">
 <h3 id="method-update-alpha-">Method <code>update_alpha()</code><a class="anchor" aria-label="anchor" href="#method-update-alpha-"></a></h3>
 <p>Update the connection parameters for the M step</p><div class="section">
 <h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">FitMLVSBM</span><span class="op">$</span><span class="fu">update_alpha</span><span class="op">(</span>safeguard <span class="op">=</span> <span class="fl">2</span> <span class="op">*</span> <span class="va">.Machine</span><span class="op">$</span><span class="va">double.eps</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">FitMLVSBM</span><span class="op">$</span><span class="fu">update_alpha</span><span class="op">(</span>safeguard <span class="op">=</span> <span class="fl">2</span> <span class="op">*</span> <span class="va">.Machine</span><span class="op">$</span><span class="va">double.eps</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -268,11 +268,11 @@ predictions</p></dd>
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-update_pi"></a><div class="section">
+</div><p></p><hr><a id="method-FitMLVSBM-update_pi"></a><div class="section">
 <h3 id="method-update-pi-">Method <code>update_pi()</code><a class="anchor" aria-label="anchor" href="#method-update-pi-"></a></h3>
 <p>Update the upper level mixture parameter for the M step</p><div class="section">
 <h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">FitMLVSBM</span><span class="op">$</span><span class="fu">update_pi</span><span class="op">(</span>safeguard <span class="op">=</span> <span class="fl">0.001</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">FitMLVSBM</span><span class="op">$</span><span class="fu">update_pi</span><span class="op">(</span>safeguard <span class="op">=</span> <span class="fl">0.001</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -284,11 +284,11 @@ predictions</p></dd>
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-update_gamma"></a><div class="section">
+</div><p></p><hr><a id="method-FitMLVSBM-update_gamma"></a><div class="section">
 <h3 id="method-update-gamma-">Method <code>update_gamma()</code><a class="anchor" aria-label="anchor" href="#method-update-gamma-"></a></h3>
 <p>Update the lower level mixture parameter for the M step</p><div class="section">
 <h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">FitMLVSBM</span><span class="op">$</span><span class="fu">update_gamma</span><span class="op">(</span>safeguard <span class="op">=</span> <span class="fl">1e-06</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">FitMLVSBM</span><span class="op">$</span><span class="fu">update_gamma</span><span class="op">(</span>safeguard <span class="op">=</span> <span class="fl">1e-06</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -300,15 +300,15 @@ predictions</p></dd>
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-init_clustering"></a><div class="section">
+</div><p></p><hr><a id="method-FitMLVSBM-init_clustering"></a><div class="section">
 <h3 id="method-init-clustering-">Method <code>init_clustering()</code><a class="anchor" aria-label="anchor" href="#method-init-clustering-"></a></h3>
 <p>init_clustering Initial clustering for VEM algorithm</p><div class="section">
 <h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">FitMLVSBM</span><span class="op">$</span><span class="fu">init_clustering</span><span class="op">(</span>
-  safeguard <span class="op">=</span> <span class="fl">2</span> <span class="op">*</span> <span class="va">.Machine</span><span class="op">$</span><span class="va">double.eps</span>,
-  method <span class="op">=</span> <span class="st">"hierarchical"</span>,
-  Z <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">FitMLVSBM</span><span class="op">$</span><span class="fu">init_clustering</span><span class="op">(</span></span>
+<span>  safeguard <span class="op">=</span> <span class="fl">2</span> <span class="op">*</span> <span class="va">.Machine</span><span class="op">$</span><span class="va">double.eps</span>,</span>
+<span>  method <span class="op">=</span> <span class="st">"hierarchical"</span>,</span>
+<span>  Z <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -329,19 +329,19 @@ predictions</p></dd>
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-clear"></a><div class="section">
+</div><p></p><hr><a id="method-FitMLVSBM-clear"></a><div class="section">
 <h3 id="method-clear-">Method <code>clear()</code><a class="anchor" aria-label="anchor" href="#method-clear-"></a></h3>
 <p>Reset all parameters</p><div class="section">
 <h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">FitMLVSBM</span><span class="op">$</span><span class="fu">clear</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">FitMLVSBM</span><span class="op">$</span><span class="fu">clear</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 
-</div><p></p><hr><a id="method-m_step"></a><div class="section">
+</div><p></p><hr><a id="method-FitMLVSBM-m_step"></a><div class="section">
 <h3 id="method-m-step-">Method <code>m_step()</code><a class="anchor" aria-label="anchor" href="#method-m-step-"></a></h3>
 <p>m_step Compute the M step of the VEM algorithm</p><div class="section">
 <h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">FitMLVSBM</span><span class="op">$</span><span class="fu">m_step</span><span class="op">(</span>safeguard <span class="op">=</span> <span class="fl">1e-06</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">FitMLVSBM</span><span class="op">$</span><span class="fu">m_step</span><span class="op">(</span>safeguard <span class="op">=</span> <span class="fl">1e-06</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -353,11 +353,11 @@ predictions</p></dd>
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-ve_step"></a><div class="section">
+</div><p></p><hr><a id="method-FitMLVSBM-ve_step"></a><div class="section">
 <h3 id="method-ve-step-">Method <code>ve_step()</code><a class="anchor" aria-label="anchor" href="#method-ve-step-"></a></h3>
 <p>Compute the VE step of the VEM algorithm</p><div class="section">
 <h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">FitMLVSBM</span><span class="op">$</span><span class="fu">ve_step</span><span class="op">(</span>threshold <span class="op">=</span> <span class="fl">1e-06</span>, fixPointIter <span class="op">=</span> <span class="fl">10</span>, safeguard <span class="op">=</span> <span class="fl">1e-06</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">FitMLVSBM</span><span class="op">$</span><span class="fu">ve_step</span><span class="op">(</span>threshold <span class="op">=</span> <span class="fl">1e-06</span>, fixPointIter <span class="op">=</span> <span class="fl">10</span>, safeguard <span class="op">=</span> <span class="fl">1e-06</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -377,18 +377,18 @@ predictions</p></dd>
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-do_vem"></a><div class="section">
+</div><p></p><hr><a id="method-FitMLVSBM-do_vem"></a><div class="section">
 <h3 id="method-do-vem-">Method <code>do_vem()</code><a class="anchor" aria-label="anchor" href="#method-do-vem-"></a></h3>
 <p>Launch a Variational EM algorithm</p><div class="section">
 <h4 id="usage-8">Usage<a class="anchor" aria-label="anchor" href="#usage-8"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">FitMLVSBM</span><span class="op">$</span><span class="fu">do_vem</span><span class="op">(</span>
-  init <span class="op">=</span> <span class="st">"hierarchical"</span>,
-  threshold <span class="op">=</span> <span class="fl">1e-06</span>,
-  maxIter <span class="op">=</span> <span class="fl">1000</span>,
-  fixPointIter <span class="op">=</span> <span class="fl">100</span>,
-  safeguard <span class="op">=</span> <span class="fl">1e-06</span>,
-  Z <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">FitMLVSBM</span><span class="op">$</span><span class="fu">do_vem</span><span class="op">(</span></span>
+<span>  init <span class="op">=</span> <span class="st">"hierarchical"</span>,</span>
+<span>  threshold <span class="op">=</span> <span class="fl">1e-06</span>,</span>
+<span>  maxIter <span class="op">=</span> <span class="fl">1000</span>,</span>
+<span>  fixPointIter <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  safeguard <span class="op">=</span> <span class="fl">1e-06</span>,</span>
+<span>  Z <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -420,19 +420,19 @@ predictions</p></dd>
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-permute_empty_class"></a><div class="section">
+</div><p></p><hr><a id="method-FitMLVSBM-permute_empty_class"></a><div class="section">
 <h3 id="method-permute-empty-class-">Method <code>permute_empty_class()</code><a class="anchor" aria-label="anchor" href="#method-permute-empty-class-"></a></h3>
 <p>permute_empty_class Put empty blocks numbers at the end</p><div class="section">
 <h4 id="usage-9">Usage<a class="anchor" aria-label="anchor" href="#usage-9"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">FitMLVSBM</span><span class="op">$</span><span class="fu">permute_empty_class</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">FitMLVSBM</span><span class="op">$</span><span class="fu">permute_empty_class</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 
-</div><p></p><hr><a id="method-plot"></a><div class="section">
+</div><p></p><hr><a id="method-FitMLVSBM-plot"></a><div class="section">
 <h3 id="method-plot-">Method <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code><a class="anchor" aria-label="anchor" href="#method-plot-"></a></h3>
 <p>Plot of FitMLVSBM objects</p><div class="section">
 <h4 id="usage-10">Usage<a class="anchor" aria-label="anchor" href="#usage-10"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">FitMLVSBM</span><span class="op">$</span><span class="fu">plot</span><span class="op">(</span>type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"matrix"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">FitMLVSBM</span><span class="op">$</span><span class="fu">plot</span><span class="op">(</span>type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"matrix"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -448,11 +448,11 @@ predictions</p></dd>
 <p>a ggplot2 object</p>
 </div>
 
-</div><p></p><hr><a id="method-show"></a><div class="section">
+</div><p></p><hr><a id="method-FitMLVSBM-show"></a><div class="section">
 <h3 id="method-show-">Method <code>show()</code><a class="anchor" aria-label="anchor" href="#method-show-"></a></h3>
 <p>print method</p><div class="section">
 <h4 id="usage-11">Usage<a class="anchor" aria-label="anchor" href="#usage-11"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">FitMLVSBM</span><span class="op">$</span><span class="fu">show</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"Multilevel Stochastic Block Model"</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">FitMLVSBM</span><span class="op">$</span><span class="fu">show</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"Multilevel Stochastic Block Model"</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -464,19 +464,19 @@ predictions</p></dd>
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-print"></a><div class="section">
+</div><p></p><hr><a id="method-FitMLVSBM-print"></a><div class="section">
 <h3 id="method-print-">Method <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code><a class="anchor" aria-label="anchor" href="#method-print-"></a></h3>
 <p>print method</p><div class="section">
 <h4 id="usage-12">Usage<a class="anchor" aria-label="anchor" href="#usage-12"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">FitMLVSBM</span><span class="op">$</span><span class="fu">print</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">FitMLVSBM</span><span class="op">$</span><span class="fu">print</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 
-</div><p></p><hr><a id="method-clone"></a><div class="section">
+</div><p></p><hr><a id="method-FitMLVSBM-clone"></a><div class="section">
 <h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
 <h4 id="usage-13">Usage<a class="anchor" aria-label="anchor" href="#usage-13"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">FitMLVSBM</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">FitMLVSBM</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -504,8 +504,7 @@ predictions</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

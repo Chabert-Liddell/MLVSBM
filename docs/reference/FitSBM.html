@@ -18,7 +18,7 @@ $do_vem() is done"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/aja
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MLVSBM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0.9000</span>
       </span>
     </div>
 
@@ -179,27 +179,27 @@ $do_vem() is done</p>
 <div class="section">
 <h3 id="public-methods">Public methods<a class="anchor" aria-label="anchor" href="#public-methods"></a></h3>
 
-<ul><li><p><a href="#method-new"><code>FitSBM$new()</code></a></p></li>
-<li><p><a href="#method-update_alpha"><code>FitSBM$update_alpha()</code></a></p></li>
-<li><p><a href="#method-update_pi"><code>FitSBM$update_pi()</code></a></p></li>
-<li><p><a href="#method-init_clustering"><code>FitSBM$init_clustering()</code></a></p></li>
-<li><p><a href="#method-m_step"><code>FitSBM$m_step()</code></a></p></li>
-<li><p><a href="#method-ve_step"><code>FitSBM$ve_step()</code></a></p></li>
-<li><p><a href="#method-do_vem"><code>FitSBM$do_vem()</code></a></p></li>
-<li><p><a href="#method-permute_empty_class"><code>FitSBM$permute_empty_class()</code></a></p></li>
-<li><p><a href="#method-clear"><code>FitSBM$clear()</code></a></p></li>
-<li><p><a href="#method-clone"><code>FitSBM$clone()</code></a></p></li>
-</ul></div><p></p><hr><a id="method-new"></a><div class="section">
+<ul><li><p><a href="#method-FitSBM-new"><code>FitSBM$new()</code></a></p></li>
+<li><p><a href="#method-FitSBM-update_alpha"><code>FitSBM$update_alpha()</code></a></p></li>
+<li><p><a href="#method-FitSBM-update_pi"><code>FitSBM$update_pi()</code></a></p></li>
+<li><p><a href="#method-FitSBM-init_clustering"><code>FitSBM$init_clustering()</code></a></p></li>
+<li><p><a href="#method-FitSBM-m_step"><code>FitSBM$m_step()</code></a></p></li>
+<li><p><a href="#method-FitSBM-ve_step"><code>FitSBM$ve_step()</code></a></p></li>
+<li><p><a href="#method-FitSBM-do_vem"><code>FitSBM$do_vem()</code></a></p></li>
+<li><p><a href="#method-FitSBM-permute_empty_class"><code>FitSBM$permute_empty_class()</code></a></p></li>
+<li><p><a href="#method-FitSBM-clear"><code>FitSBM$clear()</code></a></p></li>
+<li><p><a href="#method-FitSBM-clone"><code>FitSBM$clone()</code></a></p></li>
+</ul></div><p></p><hr><a id="method-FitSBM-new"></a><div class="section">
 <h3 id="method-new-">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new-"></a></h3>
 <p>Constructor for FitSBM  R6 class</p><div class="section">
 <h4 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va"><a href="../reference/FitSBM.html">FitSBM</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>
-  Q <span class="op">=</span> <span class="fl">1</span>,
-  X <span class="op">=</span> <span class="cn">NULL</span>,
-  M <span class="op">=</span> <span class="cn">NULL</span>,
-  directed <span class="op">=</span> <span class="cn">FALSE</span>,
-  distribution <span class="op">=</span> <span class="st">"bernoulli"</span>
-<span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va"><a href="../reference/FitSBM.html">FitSBM</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>  Q <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  X <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  M <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  directed <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  distribution <span class="op">=</span> <span class="st">"bernoulli"</span></span>
+<span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -231,11 +231,11 @@ $do_vem() is done</p>
 <p>A new FitSBM object</p>
 </div>
 
-</div><p></p><hr><a id="method-update_alpha"></a><div class="section">
+</div><p></p><hr><a id="method-FitSBM-update_alpha"></a><div class="section">
 <h3 id="method-update-alpha-">Method <code>update_alpha()</code><a class="anchor" aria-label="anchor" href="#method-update-alpha-"></a></h3>
 <p>Update the connection parameter for the M step</p><div class="section">
 <h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">FitSBM</span><span class="op">$</span><span class="fu">update_alpha</span><span class="op">(</span>safeguard <span class="op">=</span> <span class="fl">1e-06</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">FitSBM</span><span class="op">$</span><span class="fu">update_alpha</span><span class="op">(</span>safeguard <span class="op">=</span> <span class="fl">1e-06</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -247,11 +247,11 @@ $do_vem() is done</p>
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-update_pi"></a><div class="section">
+</div><p></p><hr><a id="method-FitSBM-update_pi"></a><div class="section">
 <h3 id="method-update-pi-">Method <code>update_pi()</code><a class="anchor" aria-label="anchor" href="#method-update-pi-"></a></h3>
 <p>Update the upper level mixture parameter for the M step</p><div class="section">
 <h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">FitSBM</span><span class="op">$</span><span class="fu">update_pi</span><span class="op">(</span>safeguard <span class="op">=</span> <span class="fl">1e-06</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">FitSBM</span><span class="op">$</span><span class="fu">update_pi</span><span class="op">(</span>safeguard <span class="op">=</span> <span class="fl">1e-06</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -263,11 +263,11 @@ $do_vem() is done</p>
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-init_clustering"></a><div class="section">
+</div><p></p><hr><a id="method-FitSBM-init_clustering"></a><div class="section">
 <h3 id="method-init-clustering-">Method <code>init_clustering()</code><a class="anchor" aria-label="anchor" href="#method-init-clustering-"></a></h3>
 <p>init_clustering Initial clustering for VEM algorithm</p><div class="section">
 <h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">FitSBM</span><span class="op">$</span><span class="fu">init_clustering</span><span class="op">(</span>safeguard <span class="op">=</span> <span class="fl">1e-06</span>, method <span class="op">=</span> <span class="st">"hierarchical"</span>, Z <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">FitSBM</span><span class="op">$</span><span class="fu">init_clustering</span><span class="op">(</span>safeguard <span class="op">=</span> <span class="fl">1e-06</span>, method <span class="op">=</span> <span class="st">"hierarchical"</span>, Z <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -288,11 +288,11 @@ $do_vem() is done</p>
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-m_step"></a><div class="section">
+</div><p></p><hr><a id="method-FitSBM-m_step"></a><div class="section">
 <h3 id="method-m-step-">Method <code>m_step()</code><a class="anchor" aria-label="anchor" href="#method-m-step-"></a></h3>
 <p>m_step Compute the M step of the VEM algorithm</p><div class="section">
 <h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">FitSBM</span><span class="op">$</span><span class="fu">m_step</span><span class="op">(</span>safeguard <span class="op">=</span> <span class="fl">1e-06</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">FitSBM</span><span class="op">$</span><span class="fu">m_step</span><span class="op">(</span>safeguard <span class="op">=</span> <span class="fl">1e-06</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -304,11 +304,11 @@ $do_vem() is done</p>
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-ve_step"></a><div class="section">
+</div><p></p><hr><a id="method-FitSBM-ve_step"></a><div class="section">
 <h3 id="method-ve-step-">Method <code>ve_step()</code><a class="anchor" aria-label="anchor" href="#method-ve-step-"></a></h3>
 <p>Compute the VE step of the VEM algorithm</p><div class="section">
 <h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">FitSBM</span><span class="op">$</span><span class="fu">ve_step</span><span class="op">(</span>threshold <span class="op">=</span> <span class="fl">1e-06</span>, fixPointIter <span class="op">=</span> <span class="fl">100</span>, safeguard <span class="op">=</span> <span class="fl">1e-06</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">FitSBM</span><span class="op">$</span><span class="fu">ve_step</span><span class="op">(</span>threshold <span class="op">=</span> <span class="fl">1e-06</span>, fixPointIter <span class="op">=</span> <span class="fl">100</span>, safeguard <span class="op">=</span> <span class="fl">1e-06</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -328,18 +328,18 @@ $do_vem() is done</p>
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-do_vem"></a><div class="section">
+</div><p></p><hr><a id="method-FitSBM-do_vem"></a><div class="section">
 <h3 id="method-do-vem-">Method <code>do_vem()</code><a class="anchor" aria-label="anchor" href="#method-do-vem-"></a></h3>
 <p>Launch a Variational EM algorithm</p><div class="section">
 <h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">FitSBM</span><span class="op">$</span><span class="fu">do_vem</span><span class="op">(</span>
-  init <span class="op">=</span> <span class="st">"hierarchical"</span>,
-  threshold <span class="op">=</span> <span class="fl">1e-06</span>,
-  maxIter <span class="op">=</span> <span class="fl">1000</span>,
-  fixPointIter <span class="op">=</span> <span class="fl">100</span>,
-  safeguard <span class="op">=</span> <span class="fl">1e-06</span>,
-  Z <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">FitSBM</span><span class="op">$</span><span class="fu">do_vem</span><span class="op">(</span></span>
+<span>  init <span class="op">=</span> <span class="st">"hierarchical"</span>,</span>
+<span>  threshold <span class="op">=</span> <span class="fl">1e-06</span>,</span>
+<span>  maxIter <span class="op">=</span> <span class="fl">1000</span>,</span>
+<span>  fixPointIter <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  safeguard <span class="op">=</span> <span class="fl">1e-06</span>,</span>
+<span>  Z <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -371,27 +371,27 @@ $do_vem() is done</p>
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-permute_empty_class"></a><div class="section">
+</div><p></p><hr><a id="method-FitSBM-permute_empty_class"></a><div class="section">
 <h3 id="method-permute-empty-class-">Method <code>permute_empty_class()</code><a class="anchor" aria-label="anchor" href="#method-permute-empty-class-"></a></h3>
 <p>permute_empty_class Put empty blocks numbers at the end</p><div class="section">
 <h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">FitSBM</span><span class="op">$</span><span class="fu">permute_empty_class</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">FitSBM</span><span class="op">$</span><span class="fu">permute_empty_class</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 
-</div><p></p><hr><a id="method-clear"></a><div class="section">
+</div><p></p><hr><a id="method-FitSBM-clear"></a><div class="section">
 <h3 id="method-clear-">Method <code>clear()</code><a class="anchor" aria-label="anchor" href="#method-clear-"></a></h3>
 <p>Reset all parameters</p><div class="section">
 <h4 id="usage-8">Usage<a class="anchor" aria-label="anchor" href="#usage-8"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">FitSBM</span><span class="op">$</span><span class="fu">clear</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">FitSBM</span><span class="op">$</span><span class="fu">clear</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 
-</div><p></p><hr><a id="method-clone"></a><div class="section">
+</div><p></p><hr><a id="method-FitSBM-clone"></a><div class="section">
 <h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
 <h4 id="usage-9">Usage<a class="anchor" aria-label="anchor" href="#usage-9"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">FitSBM</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">FitSBM</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -419,8 +419,7 @@ $do_vem() is done</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

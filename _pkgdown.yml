@@ -32,6 +32,9 @@ reference:
   - '`mlvsbm_create_network`'
   - '`mlvsbm_estimate_network`'
   - '`mlvsbm_simulate_network`'
+  - '`mlvsbm_create_generalized_network`'
+  - '`mlvsbm_estimate_generalized_network`'
+  - '`mlvsbm_simulate_generalized_network`'
   - '`mlvsbm_log_likelihood`'
 - title: Advanced object functions
   desc:  ~
@@ -39,6 +42,8 @@ reference:
   - '`FitMLVSBM`'
   - '`FitSBM`'
   - '`MLVSBM`'
+  - '`FitGenMLVSBM`'
+  - '`GenMLVSBM`'
 - title: Miscellaneous helper functions
   desc: ~
   contents:
@@ -56,3 +61,6 @@ reference:
   - '`coef.FitMLVSBM`'
   - '`plot.FitMLVSBM`'
   - '`predict.FitMLVSBM`'
+  - '`coef.FitGenMLVSBM`'
+  - '`plot.FitGenMLVSBM`'
+  - '`predict.FitGenMLVSBM`'

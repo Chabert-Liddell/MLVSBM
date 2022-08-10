@@ -31,16 +31,25 @@
     <loc>/reference/ARI.html</loc>
   </url>
   <url>
+    <loc>/reference/FitGenMLVSBM.html</loc>
+  </url>
+  <url>
     <loc>/reference/FitMLVSBM.html</loc>
   </url>
   <url>
     <loc>/reference/FitSBM.html</loc>
   </url>
   <url>
+    <loc>/reference/GenMLVSBM.html</loc>
+  </url>
+  <url>
     <loc>/reference/MLVSBM.html</loc>
   </url>
   <url>
     <loc>/reference/build_fold_matrix.html</loc>
+  </url>
+  <url>
+    <loc>/reference/coef.FitGenMLVSBM.html</loc>
   </url>
   <url>
     <loc>/reference/coef.FitMLVSBM.html</loc>
@@ -55,7 +64,13 @@
     <loc>/reference/merge_clust.html</loc>
   </url>
   <url>
+    <loc>/reference/mlvsbm_create_generalized_network.html</loc>
+  </url>
+  <url>
     <loc>/reference/mlvsbm_create_network.html</loc>
+  </url>
+  <url>
+    <loc>/reference/mlvsbm_estimate_generalized_network.html</loc>
   </url>
   <url>
     <loc>/reference/mlvsbm_estimate_network.html</loc>
@@ -64,16 +79,25 @@
     <loc>/reference/mlvsbm_log_likelihood.html</loc>
   </url>
   <url>
+    <loc>/reference/mlvsbm_simulate_generalized_network.html</loc>
+  </url>
+  <url>
     <loc>/reference/mlvsbm_simulate_network.html</loc>
   </url>
   <url>
     <loc>/reference/pipe.html</loc>
   </url>
   <url>
+    <loc>/reference/plot.FitGenMLVSBM.html</loc>
+  </url>
+  <url>
     <loc>/reference/plot.FitMLVSBM.html</loc>
   </url>
   <url>
     <loc>/reference/plot_matrix.html</loc>
+  </url>
+  <url>
+    <loc>/reference/predict.FitGenMLVSBM.html</loc>
   </url>
   <url>
     <loc>/reference/predict.FitMLVSBM.html</loc>

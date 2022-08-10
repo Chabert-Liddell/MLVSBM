@@ -9,7 +9,7 @@
 status](https://travis-ci.org/Chabert-Liddell/MLVSBM.svg?branch=master)](https://travis-ci.org/Chabert-Liddell/MLVSBM)
 [![Codecov test
 coverage](https://codecov.io/gh/Chabert-Liddell/MLVSBM/branch/master/graph/badge.svg)](https://app.codecov.io/gh/Chabert-Liddell/MLVSBM?branch=master)
-[![](https://img.shields.io/badge/devel%20version-0.2.4-blue.svg)](https://github.com/Chabert-Liddell/MLVSBM)
+[![](https://img.shields.io/badge/devel%20version-0.3.0.9000-blue.svg)](https://github.com/Chabert-Liddell/MLVSBM)
 [![](https://www.r-pkg.org/badges/version/MLVSBM?color=green)](https://cran.r-project.org/package=MLVSBM)
 [![](https://img.shields.io/badge/doi-10.1016/j.csda.2021.107179-yellow.svg)](https://doi.org/10.1016/j.csda.2021.107179)
 <!-- badges: end -->
@@ -17,6 +17,11 @@ coverage](https://codecov.io/gh/Chabert-Liddell/MLVSBM/branch/master/graph/badge
 This is an R package implementation of a Stochastic Block Model for
 Multilevel Network (MLVSBM) as described in Chabert-Liddell, Barbillon,
 Donnet and Lazega (2021) <https://doi.org/10.1016/j.csda.2021.107179>.
+
+Details about generalized multilevel networks which are supported by the
+latest dev version on github can be found at
+[“http://www.theses.fr/en/2022UPASM005”](http://www.theses.fr/en/2022UPASM005)
+(Chapter 2.E).
 
 ## Installation
 
@@ -27,7 +32,8 @@ You can install the latest released version of MLVSBM from
 install.packages("MLVSBM")
 ```
 
-or the latest dev version from [github](https://github.com) with:
+or the latest dev version which includes support for generalized
+multilevel networks from [github](https://github.com) with:
 
 ``` r
 devtools::install_github("Chabert-Liddell/MLVSBM")

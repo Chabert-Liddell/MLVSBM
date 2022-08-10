@@ -24,7 +24,7 @@ can be force by setting the parameters nb_clusters to a given value."><!-- mathj
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MLVSBM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0.9000</span>
       </span>
     </div>
 
@@ -89,71 +89,81 @@ can be force by setting the parameters <code>nb_clusters</code> to a given value
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">mlvsbm_estimate_network</span><span class="op">(</span>
-  <span class="va">mlv</span>,
-  nb_clusters <span class="op">=</span> <span class="cn">NULL</span>,
-  init_clustering <span class="op">=</span> <span class="cn">NULL</span>,
-  nb_cores <span class="op">=</span> <span class="cn">NULL</span>,
-  init_method <span class="op">=</span> <span class="st">"hierarchical"</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mlvsbm_estimate_network</span><span class="op">(</span></span>
+<span>  <span class="va">mlv</span>,</span>
+<span>  nb_clusters <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  init_clustering <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  nb_cores <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  init_method <span class="op">=</span> <span class="st">"hierarchical"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>mlv</dt>
 <dd><p>A MLVSBM object, the network to be inferred.</p></dd>
+
+
 <dt>nb_clusters</dt>
 <dd><p>A list of 2 integers, the model size.
 If left to <code>NULL</code>, the algorithm
 will navigate freely. Otherwise it will navigate between the specified model
 size and its neighbors.</p></dd>
+
+
 <dt>init_clustering</dt>
 <dd><p>A list of 2 vectors of integers of the same length as
 the number of node of each level. If specified, the algorithm will start from
 this clustering, then navigate freely.</p></dd>
+
+
 <dt>nb_cores</dt>
 <dd><p>An integer, the number of cores to use. Default to <code>1</code>
 for Windows and <code>detectCores()/2</code> for Linux and MacOS</p></dd>
+
+
 <dt>init_method</dt>
 <dd><p>One of "hierarchical" (the default) or "spectral",
 "spectral" might be more efficient but can lead to some numeric errors.
 Not used when int_clustering is given.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A FitMLVSBM object, the best inference of the network</p>
+    
+
+<p>A FitMLVSBM object, the best inference of the network</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">my_mlvsbm</span> <span class="op">&lt;-</span> <span class="fu">MLVSBM</span><span class="fu">::</span><span class="fu"><a href="mlvsbm_simulate_network.html">mlvsbm_simulate_network</a></span><span class="op">(</span></span>
-<span class="r-in">  n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>I <span class="op">=</span> <span class="fl">10</span>, O <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>, <span class="co"># Number of nodes for the lower level and the upper level</span></span>
-<span class="r-in">  Q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>I <span class="op">=</span> <span class="fl">2</span>, O <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>, <span class="co"># Number of blocks for the lower level and the upper level</span></span>
-<span class="r-in">  pi <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.3</span>, <span class="fl">.7</span><span class="op">)</span>, <span class="co"># Block proportion for the upper level, must sum to one</span></span>
-<span class="r-in">  gamma <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.9</span>, <span class="fl">.2</span>,   <span class="co"># Block proportion for the lower level,</span></span>
-<span class="r-in">                   <span class="fl">.1</span>, <span class="fl">.8</span><span class="op">)</span>, <span class="co"># each column must sum to one</span></span>
-<span class="r-in">                 nrow <span class="op">=</span> <span class="fl">2</span>, ncol <span class="op">=</span> <span class="fl">2</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
-<span class="r-in">  alpha <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>I <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.8</span>, <span class="fl">.2</span>,</span>
-<span class="r-in">                            <span class="fl">.2</span>, <span class="fl">.1</span><span class="op">)</span>,</span>
-<span class="r-in">                          nrow <span class="op">=</span> <span class="fl">2</span>, ncol <span class="op">=</span> <span class="fl">2</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, <span class="co"># Connection matrix</span></span>
-<span class="r-in">               O <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.99</span>, <span class="fl">.3</span>,</span>
-<span class="r-in">                            <span class="fl">.3</span>, <span class="fl">.1</span><span class="op">)</span>,</span>
-<span class="r-in">                          nrow <span class="op">=</span> <span class="fl">2</span>, ncol <span class="op">=</span> <span class="fl">2</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>,<span class="co"># between blocks</span></span>
-<span class="r-in">  directed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>I <span class="op">=</span> <span class="cn">FALSE</span>, O <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>, <span class="co"># Are the upper and lower level directed or not ?</span></span>
-<span class="r-in">  affiliation <span class="op">=</span> <span class="st">"preferential"</span><span class="op">)</span> <span class="co"># How the affiliation matrix is generated</span></span>
-<span class="r-in"><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">MLVSBM</span><span class="fu">::</span><span class="fu">mlvsbm_estimate_network</span><span class="op">(</span>mlv <span class="op">=</span> <span class="va">my_mlvsbm</span>, nb_cores <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">my_mlvsbm</span> <span class="op">&lt;-</span> <span class="fu">MLVSBM</span><span class="fu">::</span><span class="fu"><a href="mlvsbm_simulate_network.html">mlvsbm_simulate_network</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>I <span class="op">=</span> <span class="fl">10</span>, O <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>, <span class="co"># Number of nodes for the lower level and the upper level</span></span></span>
+<span class="r-in"><span>  Q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>I <span class="op">=</span> <span class="fl">2</span>, O <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>, <span class="co"># Number of blocks for the lower level and the upper level</span></span></span>
+<span class="r-in"><span>  pi <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.3</span>, <span class="fl">.7</span><span class="op">)</span>, <span class="co"># Block proportion for the upper level, must sum to one</span></span></span>
+<span class="r-in"><span>  gamma <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.9</span>, <span class="fl">.2</span>,   <span class="co"># Block proportion for the lower level,</span></span></span>
+<span class="r-in"><span>                   <span class="fl">.1</span>, <span class="fl">.8</span><span class="op">)</span>, <span class="co"># each column must sum to one</span></span></span>
+<span class="r-in"><span>                 nrow <span class="op">=</span> <span class="fl">2</span>, ncol <span class="op">=</span> <span class="fl">2</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  alpha <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>I <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.8</span>, <span class="fl">.2</span>,</span></span>
+<span class="r-in"><span>                            <span class="fl">.2</span>, <span class="fl">.1</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                          nrow <span class="op">=</span> <span class="fl">2</span>, ncol <span class="op">=</span> <span class="fl">2</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, <span class="co"># Connection matrix</span></span></span>
+<span class="r-in"><span>               O <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.99</span>, <span class="fl">.3</span>,</span></span>
+<span class="r-in"><span>                            <span class="fl">.3</span>, <span class="fl">.1</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                          nrow <span class="op">=</span> <span class="fl">2</span>, ncol <span class="op">=</span> <span class="fl">2</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>,<span class="co"># between blocks</span></span></span>
+<span class="r-in"><span>  directed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>I <span class="op">=</span> <span class="cn">FALSE</span>, O <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>, <span class="co"># Are the upper and lower level directed or not ?</span></span></span>
+<span class="r-in"><span>  affiliation <span class="op">=</span> <span class="st">"preferential"</span><span class="op">)</span> <span class="co"># How the affiliation matrix is generated</span></span></span>
+<span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">MLVSBM</span><span class="fu">::</span><span class="fu">mlvsbm_estimate_network</span><span class="op">(</span>mlv <span class="op">=</span> <span class="va">my_mlvsbm</span>, nb_cores <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Infering lower level :"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "# blocks: 1, ICL = -32.994880164007 !"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "# blocks: 1, ICL = -26.930037446818 !"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Infering upper level :"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "# blocks: 2, ICL = -106.3442738192 !"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "======= # Individual clusters : 1 , # Organisation clusters 2,  ICL : -139.633058316844========"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "======= # Individual blocks : 2 , # Organizational blocks 2,  ICL : -135.940062537664========"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "======= # Individual blocks : 2 , # Organizational blocks 2,  ICL : -135.940062537664========"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "ICL for independent levels : -139.339153983207"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "ICL for interdependent levels : -135.940062537664"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "=====Interdependence is detected between the two levels!====="</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Infering upper level :"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "# blocks: 2, ICL = -95.8866254432541 !"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "======= # Individual clusters : 1 , # Organisation clusters 2,  ICL : -122.859056733766========"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "======= # Individual blocks : 1 , # Organizational blocks 2,  ICL : -122.859056733766========"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "ICL for independent levels : -122.816662890072"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "ICL for interdependent levels : -122.859056733766"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "=====The levels of this network are independent!====="</span>
 </code></pre></div>
     </div>
   </div>
@@ -168,8 +178,7 @@ Not used when int_clustering is given.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

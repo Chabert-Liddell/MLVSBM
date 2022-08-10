@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MLVSBM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0.9000</span>
       </span>
     </div>
 
@@ -85,6 +85,19 @@
         </td>
         <td><p>Create a simulated multilevel network (MLVSBM object)</p></td>
       </tr><tr><td>
+          <p><code><a href="mlvsbm_create_generalized_network.html">mlvsbm_create_generalized_network()</a></code> </p>
+        </td>
+        <td><p>Create a GenMLVSBM object from observed data</p></td>
+      </tr><tr><td>
+          <p><code><a href="mlvsbm_estimate_generalized_network.html">mlvsbm_estimate_generalized_network()</a></code> </p>
+        </td>
+        <td><p>Infer a generalized multilevel network (GenMLVSBM object),
+the original object is modified</p></td>
+      </tr><tr><td>
+          <p><code><a href="mlvsbm_simulate_generalized_network.html">mlvsbm_simulate_generalized_network()</a></code> </p>
+        </td>
+        <td><p>Create a simulate a generalized multilevel network (GenMLVSBM object)</p></td>
+      </tr><tr><td>
           <p><code><a href="mlvsbm_log_likelihood.html">mlvsbm_log_likelihood()</a></code> </p>
         </td>
         <td><p>Compute the complete log likelihood of a multilevel network for a given
@@ -103,6 +116,14 @@ clustering of the nodes.</p></td>
         <td><p>An R6 Class object for unilevel network</p></td>
       </tr><tr><td>
           <p><code><a href="MLVSBM.html">MLVSBM</a></code> </p>
+        </td>
+        <td><p>R6Class for multilevel object</p></td>
+      </tr><tr><td>
+          <p><code><a href="FitGenMLVSBM.html">FitGenMLVSBM</a></code> </p>
+        </td>
+        <td><p>An R6 Class object, a fitted generalized multilevel network once $dovem() is done</p></td>
+      </tr><tr><td>
+          <p><code><a href="GenMLVSBM.html">GenMLVSBM</a></code> </p>
         </td>
         <td><p>R6Class for multilevel object</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
@@ -157,6 +178,18 @@ clustering of the nodes.</p></td>
           <p><code><a href="predict.FitMLVSBM.html">predict(<i>&lt;FitMLVSBM&gt;</i>)</a></code> </p>
         </td>
         <td><p>Model Predictions</p></td>
+      </tr><tr><td>
+          <p><code><a href="coef.FitGenMLVSBM.html">coef(<i>&lt;FitGenMLVSBM&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Extract model coefficients</p></td>
+      </tr><tr><td>
+          <p><code><a href="plot.FitGenMLVSBM.html">plot(<i>&lt;FitGenMLVSBM&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Generalized Multilevel SBM Plot</p></td>
+      </tr><tr><td>
+          <p><code><a href="predict.FitGenMLVSBM.html">predict(<i>&lt;FitGenMLVSBM&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Model Predictions</p></td>
       </tr></tbody></table></div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -170,8 +203,7 @@ clustering of the nodes.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

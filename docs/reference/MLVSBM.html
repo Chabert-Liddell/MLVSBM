@@ -18,7 +18,7 @@ Methods for global inference and model selection are included."><!-- mathjax -->
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MLVSBM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0.9000</span>
       </span>
     </div>
 
@@ -143,180 +143,180 @@ Methods for global inference and model selection are included.</p>
 <div class="section">
 <h3 id="public-methods">Public methods<a class="anchor" aria-label="anchor" href="#public-methods"></a></h3>
 
-<ul><li><p><a href="#method-estimate_level"><code>MLVSBM$estimate_level()</code></a></p></li>
-<li><p><a href="#method-estimate_sbm_neighbours"><code>MLVSBM$estimate_sbm_neighbours()</code></a></p></li>
-<li><p><a href="#method-estimate_sbm_from_neighbours"><code>MLVSBM$estimate_sbm_from_neighbours()</code></a></p></li>
-<li><p><a href="#method-estimate_sbm"><code>MLVSBM$estimate_sbm()</code></a></p></li>
-<li><p><a href="#method-mcestimate"><code>MLVSBM$mcestimate()</code></a></p></li>
-<li><p><a href="#method-estimate_from_neighbours"><code>MLVSBM$estimate_from_neighbours()</code></a></p></li>
-<li><p><a href="#method-estimate_neighbours"><code>MLVSBM$estimate_neighbours()</code></a></p></li>
-<li><p><a href="#method-merge_split_membership"><code>MLVSBM$merge_split_membership()</code></a></p></li>
-<li><p><a href="#method-mc_ms_estimate"><code>MLVSBM$mc_ms_estimate()</code></a></p></li>
-<li><p><a href="#method-estimate_one"><code>MLVSBM$estimate_one()</code></a></p></li>
-<li><p><a href="#method-estimate_all_bm"><code>MLVSBM$estimate_all_bm()</code></a></p></li>
-<li><p><a href="#method-new"><code>MLVSBM$new()</code></a></p></li>
-<li><p><a href="#method-findmodel"><code>MLVSBM$findmodel()</code></a></p></li>
-<li><p><a href="#method-clearmodels"><code>MLVSBM$clearmodels()</code></a></p></li>
-<li><p><a href="#method-addmodel"><code>MLVSBM$addmodel()</code></a></p></li>
-<li><p><a href="#method-simulate"><code>MLVSBM$simulate()</code></a></p></li>
-<li><p><a href="#method-clone"><code>MLVSBM$clone()</code></a></p></li>
-</ul></div><p></p><hr><a id="method-estimate_level"></a><div class="section">
+<ul><li><p><a href="#method-MLVSBM-estimate_level"><code>MLVSBM$estimate_level()</code></a></p></li>
+<li><p><a href="#method-MLVSBM-estimate_sbm_neighbours"><code>MLVSBM$estimate_sbm_neighbours()</code></a></p></li>
+<li><p><a href="#method-MLVSBM-estimate_sbm_from_neighbours"><code>MLVSBM$estimate_sbm_from_neighbours()</code></a></p></li>
+<li><p><a href="#method-MLVSBM-estimate_sbm"><code>MLVSBM$estimate_sbm()</code></a></p></li>
+<li><p><a href="#method-MLVSBM-mcestimate"><code>MLVSBM$mcestimate()</code></a></p></li>
+<li><p><a href="#method-MLVSBM-estimate_from_neighbours"><code>MLVSBM$estimate_from_neighbours()</code></a></p></li>
+<li><p><a href="#method-MLVSBM-estimate_neighbours"><code>MLVSBM$estimate_neighbours()</code></a></p></li>
+<li><p><a href="#method-MLVSBM-merge_split_membership"><code>MLVSBM$merge_split_membership()</code></a></p></li>
+<li><p><a href="#method-MLVSBM-mc_ms_estimate"><code>MLVSBM$mc_ms_estimate()</code></a></p></li>
+<li><p><a href="#method-MLVSBM-estimate_one"><code>MLVSBM$estimate_one()</code></a></p></li>
+<li><p><a href="#method-MLVSBM-estimate_all_bm"><code>MLVSBM$estimate_all_bm()</code></a></p></li>
+<li><p><a href="#method-MLVSBM-new"><code>MLVSBM$new()</code></a></p></li>
+<li><p><a href="#method-MLVSBM-findmodel"><code>MLVSBM$findmodel()</code></a></p></li>
+<li><p><a href="#method-MLVSBM-clearmodels"><code>MLVSBM$clearmodels()</code></a></p></li>
+<li><p><a href="#method-MLVSBM-addmodel"><code>MLVSBM$addmodel()</code></a></p></li>
+<li><p><a href="#method-MLVSBM-simulate"><code>MLVSBM$simulate()</code></a></p></li>
+<li><p><a href="#method-MLVSBM-clone"><code>MLVSBM$clone()</code></a></p></li>
+</ul></div><p></p><hr><a id="method-MLVSBM-estimate_level"></a><div class="section">
 <h3 id="method-estimate-level-">Method <code>estimate_level()</code><a class="anchor" aria-label="anchor" href="#method-estimate-level-"></a></h3>
 
 <div class="section">
 <h4 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">MLVSBM</span><span class="op">$</span><span class="fu">estimate_level</span><span class="op">(</span>
-  level <span class="op">=</span> <span class="st">"lower"</span>,
-  Q_min <span class="op">=</span> <span class="fl">1</span>,
-  Q_max <span class="op">=</span> <span class="fl">10</span>,
-  Z <span class="op">=</span> <span class="cn">NULL</span>,
-  init <span class="op">=</span> <span class="st">"hierarchical"</span>,
-  depth <span class="op">=</span> <span class="fl">1</span>,
-  nb_cores <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">MLVSBM</span><span class="op">$</span><span class="fu">estimate_level</span><span class="op">(</span></span>
+<span>  level <span class="op">=</span> <span class="st">"lower"</span>,</span>
+<span>  Q_min <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  Q_max <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  Z <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  init <span class="op">=</span> <span class="st">"hierarchical"</span>,</span>
+<span>  depth <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  nb_cores <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 
-</div><p></p><hr><a id="method-estimate_sbm_neighbours"></a><div class="section">
+</div><p></p><hr><a id="method-MLVSBM-estimate_sbm_neighbours"></a><div class="section">
 <h3 id="method-estimate-sbm-neighbours-">Method <code>estimate_sbm_neighbours()</code><a class="anchor" aria-label="anchor" href="#method-estimate-sbm-neighbours-"></a></h3>
 
 <div class="section">
 <h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">MLVSBM</span><span class="op">$</span><span class="fu">estimate_sbm_neighbours</span><span class="op">(</span>
-  level <span class="op">=</span> <span class="st">"lower"</span>,
-  Q <span class="op">=</span> <span class="cn">NULL</span>,
-  Q_min <span class="op">=</span> <span class="fl">1</span>,
-  Q_max <span class="op">=</span> <span class="fl">10</span>,
-  fit <span class="op">=</span> <span class="cn">NULL</span>,
-  nb_cores <span class="op">=</span> <span class="cn">NULL</span>,
-  init <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">MLVSBM</span><span class="op">$</span><span class="fu">estimate_sbm_neighbours</span><span class="op">(</span></span>
+<span>  level <span class="op">=</span> <span class="st">"lower"</span>,</span>
+<span>  Q <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  Q_min <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  Q_max <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  fit <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  nb_cores <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  init <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 
-</div><p></p><hr><a id="method-estimate_sbm_from_neighbours"></a><div class="section">
+</div><p></p><hr><a id="method-MLVSBM-estimate_sbm_from_neighbours"></a><div class="section">
 <h3 id="method-estimate-sbm-from-neighbours-">Method <code>estimate_sbm_from_neighbours()</code><a class="anchor" aria-label="anchor" href="#method-estimate-sbm-from-neighbours-"></a></h3>
 
 <div class="section">
 <h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">MLVSBM</span><span class="op">$</span><span class="fu">estimate_sbm_from_neighbours</span><span class="op">(</span>
-  level <span class="op">=</span> <span class="st">"lower"</span>,
-  Q <span class="op">=</span> <span class="cn">NULL</span>,
-  fits <span class="op">=</span> <span class="cn">NULL</span>,
-  nb_cores <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">MLVSBM</span><span class="op">$</span><span class="fu">estimate_sbm_from_neighbours</span><span class="op">(</span></span>
+<span>  level <span class="op">=</span> <span class="st">"lower"</span>,</span>
+<span>  Q <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  fits <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  nb_cores <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 
-</div><p></p><hr><a id="method-estimate_sbm"></a><div class="section">
+</div><p></p><hr><a id="method-MLVSBM-estimate_sbm"></a><div class="section">
 <h3 id="method-estimate-sbm-">Method <code>estimate_sbm()</code><a class="anchor" aria-label="anchor" href="#method-estimate-sbm-"></a></h3>
 
 <div class="section">
 <h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">MLVSBM</span><span class="op">$</span><span class="fu">estimate_sbm</span><span class="op">(</span>level <span class="op">=</span> <span class="st">"lower"</span>, Q <span class="op">=</span> <span class="va">Q</span>, Z <span class="op">=</span> <span class="cn">NULL</span>, init <span class="op">=</span> <span class="st">"hierarchical"</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">MLVSBM</span><span class="op">$</span><span class="fu">estimate_sbm</span><span class="op">(</span>level <span class="op">=</span> <span class="st">"lower"</span>, Q <span class="op">=</span> <span class="va">Q</span>, Z <span class="op">=</span> <span class="cn">NULL</span>, init <span class="op">=</span> <span class="st">"hierarchical"</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 
-</div><p></p><hr><a id="method-mcestimate"></a><div class="section">
+</div><p></p><hr><a id="method-MLVSBM-mcestimate"></a><div class="section">
 <h3 id="method-mcestimate-">Method <code>mcestimate()</code><a class="anchor" aria-label="anchor" href="#method-mcestimate-"></a></h3>
 
 <div class="section">
 <h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">MLVSBM</span><span class="op">$</span><span class="fu">mcestimate</span><span class="op">(</span><span class="va">Q</span>, Z <span class="op">=</span> <span class="cn">NULL</span>, init <span class="op">=</span> <span class="st">"hierarchical"</span>, independent <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">MLVSBM</span><span class="op">$</span><span class="fu">mcestimate</span><span class="op">(</span><span class="va">Q</span>, Z <span class="op">=</span> <span class="cn">NULL</span>, init <span class="op">=</span> <span class="st">"hierarchical"</span>, independent <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 
-</div><p></p><hr><a id="method-estimate_from_neighbours"></a><div class="section">
+</div><p></p><hr><a id="method-MLVSBM-estimate_from_neighbours"></a><div class="section">
 <h3 id="method-estimate-from-neighbours-">Method <code>estimate_from_neighbours()</code><a class="anchor" aria-label="anchor" href="#method-estimate-from-neighbours-"></a></h3>
 
 <div class="section">
 <h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">MLVSBM</span><span class="op">$</span><span class="fu">estimate_from_neighbours</span><span class="op">(</span>
-  <span class="va">Q</span>,
-  models <span class="op">=</span> <span class="cn">NULL</span>,
-  independent <span class="op">=</span> <span class="cn">FALSE</span>,
-  nb_cores <span class="op">=</span> <span class="va">nb_cores</span>
-<span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">MLVSBM</span><span class="op">$</span><span class="fu">estimate_from_neighbours</span><span class="op">(</span></span>
+<span>  <span class="va">Q</span>,</span>
+<span>  models <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  independent <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  nb_cores <span class="op">=</span> <span class="va">nb_cores</span></span>
+<span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 
-</div><p></p><hr><a id="method-estimate_neighbours"></a><div class="section">
+</div><p></p><hr><a id="method-MLVSBM-estimate_neighbours"></a><div class="section">
 <h3 id="method-estimate-neighbours-">Method <code>estimate_neighbours()</code><a class="anchor" aria-label="anchor" href="#method-estimate-neighbours-"></a></h3>
 
 <div class="section">
 <h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">MLVSBM</span><span class="op">$</span><span class="fu">estimate_neighbours</span><span class="op">(</span>
-  <span class="va">Q</span>,
-  fit <span class="op">=</span> <span class="cn">NULL</span>,
-  independent <span class="op">=</span> <span class="va">independent</span>,
-  nb_cores <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">MLVSBM</span><span class="op">$</span><span class="fu">estimate_neighbours</span><span class="op">(</span></span>
+<span>  <span class="va">Q</span>,</span>
+<span>  fit <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  independent <span class="op">=</span> <span class="va">independent</span>,</span>
+<span>  nb_cores <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 
-</div><p></p><hr><a id="method-merge_split_membership"></a><div class="section">
+</div><p></p><hr><a id="method-MLVSBM-merge_split_membership"></a><div class="section">
 <h3 id="method-merge-split-membership-">Method <code>merge_split_membership()</code><a class="anchor" aria-label="anchor" href="#method-merge-split-membership-"></a></h3>
 
 <div class="section">
 <h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">MLVSBM</span><span class="op">$</span><span class="fu">merge_split_membership</span><span class="op">(</span>
-  fitted <span class="op">=</span> <span class="va">private</span><span class="op">$</span><span class="va">fitted</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">private</span><span class="op">$</span><span class="va">fitted</span><span class="op">)</span><span class="op">]</span><span class="op">]</span>
-<span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">MLVSBM</span><span class="op">$</span><span class="fu">merge_split_membership</span><span class="op">(</span></span>
+<span>  fitted <span class="op">=</span> <span class="va">private</span><span class="op">$</span><span class="va">fitted</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">private</span><span class="op">$</span><span class="va">fitted</span><span class="op">)</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 
-</div><p></p><hr><a id="method-mc_ms_estimate"></a><div class="section">
+</div><p></p><hr><a id="method-MLVSBM-mc_ms_estimate"></a><div class="section">
 <h3 id="method-mc-ms-estimate-">Method <code>mc_ms_estimate()</code><a class="anchor" aria-label="anchor" href="#method-mc-ms-estimate-"></a></h3>
 
 <div class="section">
 <h4 id="usage-8">Usage<a class="anchor" aria-label="anchor" href="#usage-8"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">MLVSBM</span><span class="op">$</span><span class="fu">mc_ms_estimate</span><span class="op">(</span>Z <span class="op">=</span> <span class="cn">NA</span>, independent <span class="op">=</span> <span class="cn">FALSE</span>, nb_cores <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">MLVSBM</span><span class="op">$</span><span class="fu">mc_ms_estimate</span><span class="op">(</span>Z <span class="op">=</span> <span class="cn">NA</span>, independent <span class="op">=</span> <span class="cn">FALSE</span>, nb_cores <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 
-</div><p></p><hr><a id="method-estimate_one"></a><div class="section">
+</div><p></p><hr><a id="method-MLVSBM-estimate_one"></a><div class="section">
 <h3 id="method-estimate-one-">Method <code>estimate_one()</code><a class="anchor" aria-label="anchor" href="#method-estimate-one-"></a></h3>
 
 <div class="section">
 <h4 id="usage-9">Usage<a class="anchor" aria-label="anchor" href="#usage-9"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">MLVSBM</span><span class="op">$</span><span class="fu">estimate_one</span><span class="op">(</span>
-  <span class="va">Q</span>,
-  Z <span class="op">=</span> <span class="cn">NULL</span>,
-  independent <span class="op">=</span> <span class="cn">FALSE</span>,
-  init <span class="op">=</span> <span class="st">"hierarchical"</span>,
-  nb_cores <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">MLVSBM</span><span class="op">$</span><span class="fu">estimate_one</span><span class="op">(</span></span>
+<span>  <span class="va">Q</span>,</span>
+<span>  Z <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  independent <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  init <span class="op">=</span> <span class="st">"hierarchical"</span>,</span>
+<span>  nb_cores <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 
-</div><p></p><hr><a id="method-estimate_all_bm"></a><div class="section">
+</div><p></p><hr><a id="method-MLVSBM-estimate_all_bm"></a><div class="section">
 <h3 id="method-estimate-all-bm-">Method <code>estimate_all_bm()</code><a class="anchor" aria-label="anchor" href="#method-estimate-all-bm-"></a></h3>
 
 <div class="section">
 <h4 id="usage-10">Usage<a class="anchor" aria-label="anchor" href="#usage-10"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">MLVSBM</span><span class="op">$</span><span class="fu">estimate_all_bm</span><span class="op">(</span>
-  Q <span class="op">=</span> <span class="cn">NULL</span>,
-  Z <span class="op">=</span> <span class="cn">NULL</span>,
-  independent <span class="op">=</span> <span class="cn">FALSE</span>,
-  clear <span class="op">=</span> <span class="cn">TRUE</span>,
-  nb_cores <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">MLVSBM</span><span class="op">$</span><span class="fu">estimate_all_bm</span><span class="op">(</span></span>
+<span>  Q <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  Z <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  independent <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  clear <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  nb_cores <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 
-</div><p></p><hr><a id="method-new"></a><div class="section">
+</div><p></p><hr><a id="method-MLVSBM-new"></a><div class="section">
 <h3 id="method-new-">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new-"></a></h3>
 <p>Constructor for R6 class MLVSBM</p><div class="section">
 <h4 id="usage-11">Usage<a class="anchor" aria-label="anchor" href="#usage-11"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va"><a href="../reference/MLVSBM.html">MLVSBM</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>
-  n <span class="op">=</span> <span class="cn">NULL</span>,
-  X <span class="op">=</span> <span class="cn">NULL</span>,
-  A <span class="op">=</span> <span class="cn">NULL</span>,
-  Z <span class="op">=</span> <span class="cn">NULL</span>,
-  directed <span class="op">=</span> <span class="cn">NULL</span>,
-  sim_param <span class="op">=</span> <span class="cn">NULL</span>,
-  distribution <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"bernoulli"</span>, <span class="st">"bernoulli"</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va"><a href="../reference/MLVSBM.html">MLVSBM</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>  n <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  X <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  A <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  Z <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  directed <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  sim_param <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  distribution <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"bernoulli"</span>, <span class="st">"bernoulli"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -356,11 +356,11 @@ Methods for global inference and model selection are included.</p>
 <p>A MLVSBM object</p>
 </div>
 
-</div><p></p><hr><a id="method-findmodel"></a><div class="section">
+</div><p></p><hr><a id="method-MLVSBM-findmodel"></a><div class="section">
 <h3 id="method-findmodel-">Method <code>findmodel()</code><a class="anchor" aria-label="anchor" href="#method-findmodel-"></a></h3>
 <p>Find a fitted model of a given size</p><div class="section">
 <h4 id="usage-12">Usage<a class="anchor" aria-label="anchor" href="#usage-12"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">MLVSBM</span><span class="op">$</span><span class="fu">findmodel</span><span class="op">(</span>nb_clusters <span class="op">=</span> <span class="cn">NA</span>, fit <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">MLVSBM</span><span class="op">$</span><span class="fu">findmodel</span><span class="op">(</span>nb_clusters <span class="op">=</span> <span class="cn">NA</span>, fit <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -380,19 +380,19 @@ Methods for global inference and model selection are included.</p>
 <p>A FitMLVSBM object</p>
 </div>
 
-</div><p></p><hr><a id="method-clearmodels"></a><div class="section">
+</div><p></p><hr><a id="method-MLVSBM-clearmodels"></a><div class="section">
 <h3 id="method-clearmodels-">Method <code>clearmodels()</code><a class="anchor" aria-label="anchor" href="#method-clearmodels-"></a></h3>
 <p>delete all fitted models</p><div class="section">
 <h4 id="usage-13">Usage<a class="anchor" aria-label="anchor" href="#usage-13"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">MLVSBM</span><span class="op">$</span><span class="fu">clearmodels</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">MLVSBM</span><span class="op">$</span><span class="fu">clearmodels</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 
-</div><p></p><hr><a id="method-addmodel"></a><div class="section">
+</div><p></p><hr><a id="method-MLVSBM-addmodel"></a><div class="section">
 <h3 id="method-addmodel-">Method <code>addmodel()</code><a class="anchor" aria-label="anchor" href="#method-addmodel-"></a></h3>
 <p>Added a FitMLVSBM object to the list of fitted model</p><div class="section">
 <h4 id="usage-14">Usage<a class="anchor" aria-label="anchor" href="#usage-14"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">MLVSBM</span><span class="op">$</span><span class="fu">addmodel</span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">MLVSBM</span><span class="op">$</span><span class="fu">addmodel</span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -404,20 +404,20 @@ Methods for global inference and model selection are included.</p>
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-simulate"></a><div class="section">
+</div><p></p><hr><a id="method-MLVSBM-simulate"></a><div class="section">
 <h3 id="method-simulate-">Method <code><a href="https://rdrr.io/r/stats/simulate.html" class="external-link">simulate()</a></code><a class="anchor" aria-label="anchor" href="#method-simulate-"></a></h3>
 
 <div class="section">
 <h4 id="usage-15">Usage<a class="anchor" aria-label="anchor" href="#usage-15"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">MLVSBM</span><span class="op">$</span><span class="fu">simulate</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">MLVSBM</span><span class="op">$</span><span class="fu">simulate</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 
-</div><p></p><hr><a id="method-clone"></a><div class="section">
+</div><p></p><hr><a id="method-MLVSBM-clone"></a><div class="section">
 <h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
 <h4 id="usage-16">Usage<a class="anchor" aria-label="anchor" href="#usage-16"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">MLVSBM</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">MLVSBM</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -445,8 +445,7 @@ Methods for global inference and model selection are included.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>
