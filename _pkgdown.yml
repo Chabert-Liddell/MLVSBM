@@ -18,6 +18,8 @@ navbar:
          href: articles/vignette.html
       -  text: Hard Inference
          href: articles/articles/hard_to_infer.html
+      -  text: Generalized multilevel networks
+         hfef: articles/generalized-multilevel-networks.html
     - text: "Changelog"
       href: "news/index.html"
   right:

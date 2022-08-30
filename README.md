@@ -18,10 +18,11 @@ This is an R package implementation of a Stochastic Block Model for
 Multilevel Network (MLVSBM) as described in Chabert-Liddell, Barbillon,
 Donnet and Lazega (2021) <https://doi.org/10.1016/j.csda.2021.107179>.
 
+## New
+
 Details about generalized multilevel networks which are supported by the
 latest dev version on github can be found at
-[“http://www.theses.fr/en/2022UPASM005”](http://www.theses.fr/en/2022UPASM005)
-(Chapter 2.E).
+<http://www.theses.fr/en/2022UPASM005> (Chapter 2.E).
 
 ## Installation
 
