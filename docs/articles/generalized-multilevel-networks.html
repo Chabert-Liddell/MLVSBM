@@ -64,7 +64,9 @@
     <li>
       <a href="../articles/articles/hard_to_infer.html">Hard Inference</a>
     </li>
-    <li class="dropdown-header">Generalized multilevel networks</li>
+    <li>
+      <a href="../articles/generalized-multilevel-networks.html">Generalized multilevel networks</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -164,7 +166,7 @@ together on the next level.</p>
 <span><span class="va">pi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.2</span>, <span class="fl">.3</span>, <span class="fl">.5</span><span class="op">)</span>, <span class="cn">NULL</span>, <span class="cn">NULL</span>, <span class="cn">NULL</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">directed</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">FALSE</span>, <span class="cn">FALSE</span>, <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p>Network can then be simulated.</p>
+<p>The network can then be simulated.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span></span>
 <span><span class="va">gmlv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mlvsbm_simulate_generalized_network.html">mlvsbm_simulate_generalized_network</a></span><span class="op">(</span></span>
@@ -175,7 +177,7 @@ together on the next level.</p>
 <span>                                    alpha <span class="op">=</span> <span class="va">alpha</span>, <span class="co"># Connectivity paramters</span></span>
 <span>                                    directed <span class="op">=</span> <span class="va">directed</span>,</span>
 <span>                                    distribution <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"bernoulli"</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>By doing this we simulated a generalized multilevel networks with
+<p>By doing this we simulated a generalized multilevel network with
 <span class="math inline">\(4\)</span> adjacency matrices and <span class="math inline">\(3\)</span> affiliation matrices.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">gmlv</span><span class="op">$</span><span class="va">adjacency_matrix</span><span class="op">)</span></span>
@@ -193,19 +195,22 @@ together on the next level.</p>
 <div class="section level2">
 <h2 id="fitting-the-data">Fitting the data<a class="anchor" aria-label="anchor" href="#fitting-the-data"></a>
 </h2>
-<p>We create a generalized network from the simulated data,</p>
+<p>We create a generalized multilevel network from the simulated
+data,</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_gmlv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mlvsbm_create_generalized_network.html">mlvsbm_create_generalized_network</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">gmlv</span><span class="op">$</span><span class="va">adjacency_matrix</span>,</span>
 <span>                                             A <span class="op">=</span> <span class="va">gmlv</span><span class="op">$</span><span class="va">affiliation_matrix</span>,</span>
 <span>                                             directed <span class="op">=</span> <span class="va">directed</span>,</span>
 <span>                                             distribution <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"bernoulli"</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>then fit the model without any initialization.</p>
+<p>then we can fit the model wit and initialization of just one block
+for each level:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_from_scratch</span> <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/mlvsbm_estimate_generalized_network.html">mlvsbm_estimate_generalized_network</a></span><span class="op">(</span><span class="va">gmlv</span>,</span>
 <span>                                    init_clustering <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">4</span><span class="op">)</span>,</span>
 <span>                                                             <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="va">n</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>                                    init_method <span class="op">=</span> <span class="st">"merge_split"</span>,</span>
-<span>                                    fit_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ve <span class="op">=</span> <span class="st">"joint"</span><span class="op">)</span><span class="op">)</span></span>
+<span>                                    fit_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ve <span class="op">=</span> <span class="st">"joint"</span><span class="op">)</span> <span class="co">#</span></span>
+<span>                                    <span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "======= # Blocks : 1, 1, 1, 1,  ICL : -12220.6529663515========"</span></span>
 <span><span class="co">#&gt; [1] "======= # Blocks : 2, 1, 1, 1,  ICL : -12127.4888258263========"</span></span>
 <span><span class="co">#&gt; [1] "======= # Blocks : 2, 2, 1, 1,  ICL : -12068.6650821436========"</span></span>
@@ -216,17 +221,90 @@ together on the next level.</p>
 <span><span class="co">#&gt; [1] "======= # Blocks : 3, 3, 3, 2,  ICL : -11403.4416146134========"</span></span>
 <span><span class="co">#&gt; [1] "======= # Blocks : 3, 3, 3, 3,  ICL : -11058.126446938========"</span></span>
 <span><span class="co">#&gt; [1] "ICL for interdependent levels : -11058.126446938"</span></span></code></pre></div>
+<p>Or by first fitting an independent SBM on each level, and precising
+that we need 3 blocks on each level:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/mlvsbm_estimate_generalized_network.html">mlvsbm_estimate_generalized_network</a></span><span class="op">(</span><span class="va">gmlv</span>,</span>
+<span>                                            nb_clusters <span class="op">=</span>  <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">4</span><span class="op">)</span>,</span>
+<span>                                            fit_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ve <span class="op">=</span> <span class="st">"sequential"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; 0/1: </span></span>
+<span><span class="co">#&gt; 0/1: </span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span><span class="co">#&gt; 0/2: </span></span>
+<span><span class="co">#&gt; 0/2: </span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span><span class="co">#&gt; 0/3: </span></span>
+<span><span class="co">#&gt; 0/3: </span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span><span class="co">#&gt; 0/4: </span></span>
+<span><span class="co">#&gt; 0/4: </span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span><span class="co">#&gt; [1] "====== Searching neighbours...========"</span></span>
+<span><span class="co">#&gt; [1] "====== Back to desired model size...======="</span></span>
+<span><span class="co">#&gt; [1] "======= # Blocks : 3, 3, 3, 3,  ICL : -11058.1265367866========"</span></span>
+<span><span class="co">#&gt; [1] "ICL for interdependent levels : -11058.1265367866"</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="results-and-analysis">Results and analysis<a class="anchor" aria-label="anchor" href="#results-and-analysis"></a>
 </h2>
 <p>We can then plot the fitted structure:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit_from_scratch</span><span class="op">)</span></span></code></pre></div>
-<p><img src="generalized-multilevel-networks_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
-<p>Or compared the inferred clustering with the simulated one with ARI
-(1 for perfect recovery, 0 for clustering by chance):</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit_from_scratch</span><span class="op">)</span></span></code></pre></div>
+<p><img src="generalized-multilevel-networks_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
+<p>Or compared for each level, the inferred clustering with the
+simulated one with ARI (1 for perfect recovery, 0 for clustering by
+chance):</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span></span>
 <span>  <span class="st">"ARI for level"</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="va">L</span><span class="op">)</span>, <span class="st">":"</span>, </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="va">L</span><span class="op">)</span>,</span>
@@ -234,6 +312,17 @@ together on the next level.</p>
 <span>                       y <span class="op">=</span> <span class="va">fit_from_scratch</span><span class="op">$</span><span class="va">Z</span><span class="op">[[</span><span class="va">l</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "ARI for level 1 : 1"    "ARI for level 2 : 1"    "ARI for level 3 : 0.96"</span></span>
+<span><span class="co">#&gt; [4] "ARI for level 4 : 1"</span></span></code></pre></div>
+<p>Or compare the inferred clustering from our two methods of inference
+with ARI:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span></span>
+<span>  <span class="st">"ARI for level"</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="va">L</span><span class="op">)</span>, <span class="st">":"</span>, </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="va">L</span><span class="op">)</span>,</span>
+<span>       <span class="kw">function</span><span class="op">(</span><span class="va">l</span><span class="op">)</span> <span class="fu"><a href="../reference/ARI.html">ARI</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">fit</span><span class="op">$</span><span class="va">Z</span><span class="op">[[</span><span class="va">l</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>                       y <span class="op">=</span> <span class="va">fit_from_scratch</span><span class="op">$</span><span class="va">Z</span><span class="op">[[</span><span class="va">l</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "ARI for level 1 : 1" "ARI for level 2 : 1" "ARI for level 3 : 1"</span></span>
 <span><span class="co">#&gt; [4] "ARI for level 4 : 1"</span></span></code></pre></div>
 </div>
   </div>

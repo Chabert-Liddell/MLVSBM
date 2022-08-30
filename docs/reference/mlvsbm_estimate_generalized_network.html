@@ -56,7 +56,9 @@ to a given value."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/aja
     <li>
       <a href="../articles/articles/hard_to_infer.html">Hard Inference</a>
     </li>
-    <li class="dropdown-header">Generalized multilevel networks</li>
+    <li>
+      <a href="../articles/generalized-multilevel-networks.html">Generalized multilevel networks</a>
+    </li>
   </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -177,17 +179,16 @@ of levels is large.</p>
 <span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">MLVSBM</span><span class="fu">::</span><span class="fu">mlvsbm_estimate_generalized_network</span><span class="op">(</span></span></span>
 <span class="r-in"><span>gmlv <span class="op">=</span> <span class="va">my_genmlvsbm</span>, nb_cores <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 0/1: </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0/1: </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0/1: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 0/2: </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0/2: </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0/2: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Infering level 1:"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "# blocks: 1, ICL = -110.012995043615 !"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "# blocks: 2, ICL = -95.8665176037591 !"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Infering level 2:"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "# blocks: 2, ICL = -82.8102208991852 !"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "======= # Blocks : 1, 2,  ICL : -192.8232159428========"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "======= # Blocks : 2, 2,  ICL : -191.656586062388========"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "ICL for independent levels : -192.8232159428"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "ICL for interdependent levels : -191.656586062388"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "# blocks: 2, ICL = -82.8923080740211 !"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "======= # Blocks : 2, 2,  ICL : -173.150312448671========"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "ICL for independent levels : -178.75882567778"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "ICL for interdependent levels : -173.150312448671"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "=====Interdependence is detected between levels!====="</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># A more complex example. A 4 levels network with different structures and</span></span></span>

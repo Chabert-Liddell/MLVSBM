@@ -74,7 +74,7 @@ pi <- list(c(.2, .3, .5), NULL, NULL, NULL)
 directed = c(FALSE, FALSE, FALSE, TRUE)
 ```
 
-Network can then be simulated.
+The network can then be simulated.
 
 ```{r}
 set.seed(1234)
@@ -88,7 +88,7 @@ gmlv <- mlvsbm_simulate_generalized_network(
                                     distribution = rep("bernoulli", 4))
 ```
 
-By doing this we simulated a generalized multilevel networks with $4$ adjacency matrices and $3$ affiliation matrices.
+By doing this we simulated a generalized multilevel network with $4$ adjacency matrices and $3$ affiliation matrices.
 
 ```{r}
 str(gmlv$adjacency_matrix)
@@ -97,7 +97,7 @@ str(gmlv$affiliation_matrix)
 
 ## Fitting the data
 
-We create a generalized network from the simulated data,
+We create a generalized multilevel network from the simulated data,
 
 ```{r}
 my_gmlv <- mlvsbm_create_generalized_network(X = gmlv$adjacency_matrix,
@@ -106,15 +106,25 @@ my_gmlv <- mlvsbm_create_generalized_network(X = gmlv$adjacency_matrix,
                                              distribution = rep("bernoulli", 4))
 ```
 
-then fit the model without any initialization.
+then we can fit the model wit and initialization of just one block for each level:
 
 ```{r}
 fit_from_scratch <-  mlvsbm_estimate_generalized_network(gmlv,
                                     init_clustering = lapply(seq(4),
                                                              function(x)rep(1, n)),
                                     init_method = "merge_split",
-                                    fit_options = list(ve = "joint"))
+                                    fit_options = list(ve = "joint") #
+                                    )
 ```
+
+Or by first fitting an independent SBM on each level, and precising that we need 3 blocks on each level:
+
+```{r}
+fit <-  mlvsbm_estimate_generalized_network(gmlv,
+                                            nb_clusters =  rep(3, 4),
+                                            fit_options = list(ve = "sequential"))
+```
+
 
 ## Results and analysis
 
@@ -124,7 +134,7 @@ We can then plot the fitted structure:
 plot(fit_from_scratch)
 ```
 
-Or compared the inferred clustering with the simulated one with ARI (1 for perfect recovery, 0 for clustering by chance):
+Or compared for each level, the inferred clustering with the simulated one with ARI (1 for perfect recovery, 0 for clustering by chance):
 ```{r}
 paste(
   "ARI for level", seq(L), ":", 
@@ -132,6 +142,15 @@ paste(
        function(l) ARI(x = gmlv$memberships[[l]],
                        y = fit_from_scratch$Z[[l]])), 2)
 )
-
 ```
 
+Or compare the inferred clustering from our two methods of inference with ARI:
+
+```{r}
+paste(
+  "ARI for level", seq(L), ":", 
+  round(sapply(seq(L),
+       function(l) ARI(x = fit$Z[[l]],
+                       y = fit_from_scratch$Z[[l]])), 2)
+)
+```
