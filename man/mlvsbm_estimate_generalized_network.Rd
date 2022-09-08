@@ -11,7 +11,7 @@ mlvsbm_estimate_generalized_network(
   init_clustering = NULL,
   nb_cores = NULL,
   init_method = "hierarchical",
-  fit_options = list(ve = "joint")
+  fit_options = list(ve = "joint", init_points = "all", Qmax = NA)
 )
 }
 \arguments{
@@ -52,12 +52,17 @@ to a given value.
 }
 \details{
 ## fit_options
-### ve : Using the default \code{ve = "joint"} will update all the block
+### ve: Using the default \code{ve = "joint"} will update all the block
 memberships of all levels at each VE step before performing a M step.
 Using \code{ve = "sequential"} will update the block memberships of one level
 at a time before performing a M step only on the concerned parameters. Use
 this option if the running time of the algorithm is too long and the number
 of levels is large.
+### init_points: Only used when giving no initial clustering and no number of clusters.
+If "all" will use an initial clustering obtained from doing a spectral
+clustering with fit_options$Qmax clusters for each level (default to
+\code{Q = Qmax = celing(log(n))}) in addition to the initial clustering
+obtained from fitting independent sbm on each level.
 }
 \examples{
 my_genmlvsbm <- MLVSBM::mlvsbm_simulate_generalized_network(
@@ -89,7 +94,7 @@ alpha <- list(
   matrix(c(.8, .2, .1, # Undirected core-periphery
            .4, .4, .1,
            .2, .1, .1), 3, 3),
-  matrix(c(.3, .5, .5, # Directed mixt structure
+  matrix(c(.3, .5, .5, # Directed mixte structure
            .1, .4, .5,
            .1, .3, .1), 3, 3)
 )

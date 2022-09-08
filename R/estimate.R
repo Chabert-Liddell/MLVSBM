@@ -275,7 +275,7 @@ MLVSBM$set(
         new_fits <- c(new_fits, fit_tmp)
       }
       if (Q == fit$nb_clusters + 1) {
-        Z <- split_clust(X = fit$adjency, Z = fit$Z, Q = Q)
+        Z <- split_clust(X = fit$adjacency, Z = fit$Z, Q = Q)
         fit_tmp <- parallel::mclapply(
           X = seq(length(Z)),
           FUN = function(i) {
