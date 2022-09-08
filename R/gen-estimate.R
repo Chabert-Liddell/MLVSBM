@@ -187,17 +187,17 @@ GenMLVSBM$set(
     if (Q < Q_max) {
       Z <- split_clust(X = fit$adjacency,
                        Z = fit$Z,
-                       Q = Q + 1)
+                       Q = Q)
       fits <- parallel::mclapply(
         X = seq(length(Z)),
         FUN = function(i) {
           self$estimate_sbm(level = level,
-                            Q = fit$nb_clusters + 1,
+                            Q = Q + 1,
                             Z = Z[[i]],
                             init = "merge_split")
         }, mc.cores = nb_cores)
       fits  <- c(fits, self$estimate_sbm(level = level,
-                                         Q = fit$nb_clusters+1,
+                                         Q = Q+1,
                                          init = "spectral"))
       fits <-
         fits[which(sapply( fits, function(x) ! is.null(x)))]
@@ -253,7 +253,7 @@ GenMLVSBM$set(
         new_fits <- c(new_fits, fit_tmp)
       }
       if (Q == fit$nb_clusters + 1) {
-        Z <- split_clust(X = fit$adjacency_matrix, Z = fit$Z, Q = Q)
+        Z <- split_clust(X = fit$adjacency_matrix, Z = fit$Z, Q = Q - 1)
         fit_tmp <- parallel::mclapply(
           X = seq(length(Z)),
           FUN = function(i) {
@@ -419,6 +419,7 @@ GenMLVSBM$set(
         nb_cores <-  1
       }
     }
+   # browser()
     if (is.null(Z)) {
       fit_tmp <- self$mcestimate(Q = Q,
                                  independent = independent)
@@ -448,7 +449,7 @@ GenMLVSBM$set(
     }
     if (any(best_model$Q != Q)) {
       for (m in seq(private$L-1, 1)) {
-        if(best_model$Q[m] != Q[m]) {
+        if(best_model$Q[m] == Q[m]) {
           models <- self$estimate_neighbours(
             level = m,
             fit = best_model,
@@ -476,8 +477,8 @@ GenMLVSBM$set(
           parallel::mclapply(
             Z_merge,
             function(z) {
-              Z <- fit$Z
-              Z[[level]] <- z
+              Z <- best_model$Z
+              Z[[m]] <- z
               self$mcestimate(
                 Q = Q_minus,
                 Z = Z,
@@ -491,14 +492,14 @@ GenMLVSBM$set(
       if (best_model$nb_clusters[m] == Q[m] - 1) {
         Z_split <- split_clust(best_model$adjacency_matrix[[m]],
                                best_model$Z[[m]],
-                               Q[m])
+                               Q[m] - 1)
         Q_plus <- best_model$nb_clusters
         Q_plus[m] <- Q_plus[m] +1
         models  <-
           parallel::mclapply(
             Z_split,
             function(z) {
-              Z <- fit$Z
+              Z <- best_model$Z
               Z[[m]] <- z
               self$mcestimate(
                 Q = Q_plus,

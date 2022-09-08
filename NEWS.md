@@ -1,5 +1,11 @@
 # MLVSBM (development version)
 
+* Changes to `mlvsbm_estimate_generalized_network()`:
+  + Fixed bug when setting the number of clusters.
+  + Added init_points and Qmax to the fit_options argument.
+  + The default algorithm is now slower but handles better underfitting 
+(fit_option$init_points == "all"). Users may fix it to any other value to revert to the old behavior.
+
 # MLVSBM 0.3.0
 * Added support for generalized multilevel networks:
 * This includes three new user functions: `mlvsbm_simulate_generalized_network()`,

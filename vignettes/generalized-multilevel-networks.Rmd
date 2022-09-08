@@ -106,14 +106,15 @@ my_gmlv <- mlvsbm_create_generalized_network(X = gmlv$adjacency_matrix,
                                              distribution = rep("bernoulli", 4))
 ```
 
-then we can fit the model wit and initialization of just one block for each level:
+then we can fit the model with an initialization of just one block for each level:
 
 ```{r}
 fit_from_scratch <-  mlvsbm_estimate_generalized_network(gmlv,
                                     init_clustering = lapply(seq(4),
                                                              function(x)rep(1, n)),
-                                    init_method = "merge_split",
-                                    fit_options = list(ve = "joint") #
+                                    init_method = "merge_split", 
+                                    nb_cores = 1L,
+                                    fit_options = list(ve = "joint") 
                                     )
 ```
 
@@ -122,6 +123,7 @@ Or by first fitting an independent SBM on each level, and precising that we need
 ```{r}
 fit <-  mlvsbm_estimate_generalized_network(gmlv,
                                             nb_clusters =  rep(3, 4),
+                                            nb_cores = 1L,
                                             fit_options = list(ve = "sequential"))
 ```
 

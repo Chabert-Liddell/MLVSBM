@@ -48,7 +48,7 @@ mlvsbm_create_generalized_network <-
            distribution = NULL) {
     for (l in seq_along(A)) {
       if ( any(! rowSums(A[[l]]) %in% c(0,1))) {
-#        warning(paste0("All rows of A must have exactly one 1!!!"))
+        #        warning(paste0("All rows of A must have exactly one 1!!!"))
         message(paste0("Affiliation has been normalized so that any rows sum to zero or one!"))
         A[[l]][rowSums(A[[l]]) != 0,] <- A[[l]][rowSums(A[[l]]) != 0,]/
           rowSums(A[[l]][rowSums(A[[l]]) != 0,])
@@ -86,7 +86,7 @@ mlvsbm_create_generalized_network <-
       )
     new_genmlvsbm$min_clusters <- rep(1, length(X))
     new_genmlvsbm$max_clusters <- vapply(X, function(x) floor(sqrt(nrow(x))),
-                                      FUN.VALUE = 1)
+                                         FUN.VALUE = 1)
     return (new_genmlvsbm)
   }
 
@@ -146,7 +146,7 @@ mlvsbm_simulate_generalized_network <-
             distribution,
             no_empty_org = FALSE,
             no_isolated_node = FALSE) {
-   # browser()
+    # browser()
     if (any(n <= 0)) {
       stop(paste0("n must be positive integers!!!"))
     }
@@ -179,9 +179,9 @@ mlvsbm_simulate_generalized_network <-
                if (any(alpha[[l]] > 1) | any(alpha[[l]] < 0)) {
                  stop(paste0("Any coefficient of alpha[[l]] must be
                              between 0 and 1!!!"))
-        }
-      }
-    })
+               }
+             }
+           })
     # if (! directed[[1]] & !isSymmetric(alpha[[1]])) {
     #   stop(paste0("alpha[[1]] is not symmetric but level is undirected!!!"))
     # }
@@ -238,12 +238,17 @@ mlvsbm_simulate_generalized_network <-
 #'
 #' @details
 #' ## fit_options
-#' ### ve : Using the default \code{ve = "joint"} will update all the block
+#' ### ve: Using the default \code{ve = "joint"} will update all the block
 #' memberships of all levels at each VE step before performing a M step.
 #' Using \code{ve = "sequential"} will update the block memberships of one level
 #' at a time before performing a M step only on the concerned parameters. Use
 #' this option if the running time of the algorithm is too long and the number
 #' of levels is large.
+#' ### init_points: Only used when giving no initial clustering and no number of clusters.
+#' If "all" will use an initial clustering obtained from doing a spectral
+#' clustering with fit_options$Qmax clusters for each level (default to
+#' \code{Q = Qmax = celing(log(n))}) in addition to the initial clustering
+#' obtained from fitting independent sbm on each level.
 #' @importFrom blockmodels BM_bernoulli
 #' @export
 
@@ -277,7 +282,7 @@ mlvsbm_simulate_generalized_network <-
 #'   matrix(c(.8, .2, .1, # Undirected core-periphery
 #'            .4, .4, .1,
 #'            .2, .1, .1), 3, 3),
-#'   matrix(c(.3, .5, .5, # Directed mixt structure
+#'   matrix(c(.3, .5, .5, # Directed mixte structure
 #'            .1, .4, .5,
 #'            .1, .3, .1), 3, 3)
 #' )
@@ -314,7 +319,7 @@ mlvsbm_simulate_generalized_network <-
 mlvsbm_estimate_generalized_network <-
   function(gmlv, nb_clusters = NULL, init_clustering = NULL, nb_cores = NULL,
            init_method = "hierarchical",
-           fit_options = list(ve = "joint")) {
+           fit_options = list(ve = "joint", init_points = "all", Qmax = NA)) {
     if (! "GenMLVSBM" %in% class(gmlv)) {
       stop("Object gmlv must be of class GenMLVSBM,
             please use the function mlvsbm_create_network to create one")
@@ -329,6 +334,8 @@ mlvsbm_estimate_generalized_network <-
         nb_cores <-  1
       }
     }
+    fitopts <- list(ve = "joint", init_points = "all", Qmax = NA)
+    fit_options <- utils::modifyList(fitopts, fit_options)
     gmlv$fit_options <- fit_options
     #browser()
     if (is.null(nb_clusters)) {
@@ -366,11 +373,24 @@ mlvsbm_estimate_generalized_network <-
         fit <- gmlv$estimate_all_bm(Q = nb_clusters,
                                     Z = init_clustering,
                                     nb_cores = nb_cores)
+        if (gmlv$fit_options$init_points == "all") {
+          if (is.na(gmlv$fit_options$Qmax))
+            gmlv$fit_options$Qmax <-
+              pmax(ceiling(log(gmlv$nb_nodes)), fit$nb_clusters + 2)
+          Zmax <- lapply(seq_along(gmlv$adjacency_matrix),
+                         function(l) spcClust(gmlv$adjacency_matrix[[l]],
+                                              gmlv$fit_options$Qmax[l]))
+          fit2 <-  gmlv$estimate_all_bm(Q = gmlv$fit_options$Qmax,
+                                        Z = Zmax,
+                                        nb_cores = nb_cores)
+          if (fit$ICL < fit2$ICL) fit <- fit2
+        }
         ICL_sbm <- sum(vapply(sbm_fit,
                               function(bm) max(bm$ICL), FUN.VALUE = .1))
         print(paste0("ICL for independent levels : ", ICL_sbm))
         print(paste0("ICL for interdependent levels : ",
                      fit$ICL))
+
         if (ICL_sbm <= fit$ICL) {
           print("=====Interdependence is detected between levels!=====")
         } else {
@@ -403,8 +423,8 @@ mlvsbm_estimate_generalized_network <-
         init_clustering <- lapply(fit_sbm, function(fit) fit$memberships)
       }
       fit <- gmlv$estimate_one(Q = nb_clusters,
-                              Z = init_clustering,
-                              nb_cores = nb_cores)
+                               Z = init_clustering,
+                               nb_cores = nb_cores)
       print(paste0("ICL for interdependent levels : ",
                    fit$ICL))
       return(fit)
