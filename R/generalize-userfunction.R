@@ -427,6 +427,7 @@ mlvsbm_estimate_generalized_network <-
                                nb_cores = nb_cores)
       print(paste0("ICL for interdependent levels : ",
                    fit$ICL))
+      fit$reorder(order = "affiliation")
       return(fit)
     }
   }

@@ -430,48 +430,48 @@ GenMLVSBM$set(
                                  independent = independent)
     }
     best_model <- fit_tmp
+    print(paste0("======= # Blocks: (", toString(best_model$nb_clusters),
+                 "),  ICL : ", round(best_model$ICL), "========"))
     print(paste0("====== Searching neighbours...========"))
+    new_best_model <- best_model
+    Q_plus <- Q
+    print(paste0("     Larger models      "))
     for (m in seq(private$L)) {
-      models <- self$estimate_neighbours(
-        level = m,
-        fit = best_model,
-        Q = best_model$nb_clusters,
-        nb_cores = nb_cores
-      )
+      Z_split <- split_clust(new_best_model$adjacency_matrix[[m]],
+                             new_best_model$Z[[m]],
+                             Q[m])
+      Q_plus[m] <- Q_plus[m] +1
+      models  <-
+        parallel::mclapply(
+          Z_split,
+          function(z) {
+            Z <- best_model$Z
+            Z[[m]] <- z
+            self$mcestimate(
+              Q = Q_plus,
+              Z = Z,
+              init    ="merge_split",
+              independent = independent)
+          }, mc.cores = nb_cores)
       new_best_ICL <-  which.max(
         sapply(seq_along(models), function(x) models[[x]]$ICL))
       new_best_model <- models[[new_best_ICL]]
-      if (new_best_model$ICL > best_model$ICL) {
-        best_model  <-  new_best_model
-        print(paste0("======= # Blocks : ", toString(best_model$nb_clusters),
-                     ",  ICL : ", best_model$ICL, "========"))
-      }
+      # if (new_best_model$ICL > best_model$ICL) {
+      #   best_model  <-  new_best_model
+      # }
+      print(paste0("======= # Blocks: (", toString(new_best_model$nb_clusters),
+      "),  ICL : ", round(new_best_model$ICL), "========"))
     }
-    if (any(best_model$Q != Q)) {
-      for (m in seq(private$L-1, 1)) {
-        if(best_model$Q[m] == Q[m]) {
-          models <- self$estimate_neighbours(
-            level = m,
-            fit = best_model,
-            Q = best_model$nb_clusters,
-            nb_cores = nb_cores
-          )
-          new_best_ICL <-  which.max(
-            sapply(seq_along(models), function(x) models[[x]]$ICL))
-          new_best_model <- models[[new_best_ICL]]
-          if (new_best_model$ICL > best_model$ICL) {
-            best_model  <-  new_best_model
-            print(paste0("======= # Blocks : ", toString(best_model),
-                         ",  ICL : ", best_model$ICL, "========"))
-          }
-        }
-      }
-    }
-    print(paste0("====== Back to desired model size...======="))
+
+    # print(paste0("======= # Blocks: (", toString(new_best_model$nb_clusters),
+    #              "),  ICL : ", round(new_best_model$ICL), "========"))
+    best_model_plus <- new_best_model
+    Q_minus <- Q
+    best_model_minus <- best_model
+    print(paste0("     Smaller models      "))
     for (m in seq(private$L)) {
-      if (best_model$nb_clusters[m] == Q[m] + 1) {
-        Q_minus <- best_model$nb_clusters
-        Z_merge <- merge_clust(best_model$Z[[m]], Q[m] + 1)
+      if (Q[m] >= 2) {
+        Z_merge <- merge_clust(best_model$Z[[m]], Q[m])
         Q_minus[m] <- Q_minus[m] - 1
         models  <-
           parallel::mclapply(
@@ -487,19 +487,65 @@ GenMLVSBM$set(
             }, mc.cores = nb_cores)
         new_best_ICL <-  which.max(
           sapply(seq_along(models), function(x) models[[x]]$ICL))
-        best_model <- models[[new_best_ICL]]
+        best_model_minus <- models[[new_best_ICL]]
       }
-      if (best_model$nb_clusters[m] == Q[m] - 1) {
+      print(paste0("======= # Blocks: (", toString(best_model_minus$nb_clusters),
+                   "),  ICL : ", round(best_model_minus$ICL), "========"))
+    }
+
+    # if (any(best_model$Q != Q)) {
+    #   for (m in seq(private$L-1, 1)) {
+    #     if(best_model$Q[m] == Q[m]) {
+    #       models <- self$estimate_neighbours(
+    #         level = m,
+    #         fit = best_model,
+    #         Q = best_model$nb_clusters,
+    #         nb_cores = nb_cores
+    #       )
+    #       new_best_ICL <-  which.max(
+    #         sapply(seq_along(models), function(x) models[[x]]$ICL))
+    #       new_best_model <- models[[new_best_ICL]]
+    #       if (new_best_model$ICL > best_model$ICL) {
+    #         best_model  <-  new_best_model
+    #         print(paste0("======= # Blocks : ", toString(best_model),
+    #                      ",  ICL : ", best_model$ICL, "========"))
+    #       }
+    #     }
+    #   }
+    # }
+    print(paste0("====== Back to desired model size...======="))
+    for (m in seq(private$L)) {
+      if (best_model_plus$nb_clusters[m] == Q[m] + 1) {
+        Q_minus <- best_model_plus$nb_clusters
+        Z_merge <- merge_clust(best_model_plus$Z[[m]], Q[m] + 1)
+        Q_minus[m] <- Q_minus[m] - 1
+        models  <-
+          parallel::mclapply(
+            Z_merge,
+            function(z) {
+              Z <- best_model_plus$Z
+              Z[[m]] <- z
+              self$mcestimate(
+                Q = Q_minus,
+                Z = Z,
+                init    ="merge_split",
+                independent = independent)
+            }, mc.cores = nb_cores)
+        new_best_ICL <-  which.max(
+          sapply(seq_along(models), function(x) models[[x]]$ICL))
+        best_model_plus <- models[[new_best_ICL]]
+      }
+      if (best_model_minus$nb_clusters[m] == Q[m] - 1) {
         Z_split <- split_clust(best_model$adjacency_matrix[[m]],
                                best_model$Z[[m]],
                                Q[m] - 1)
-        Q_plus <- best_model$nb_clusters
+        Q_plus <- best_model_minus$nb_clusters
         Q_plus[m] <- Q_plus[m] +1
         models  <-
           parallel::mclapply(
             Z_split,
             function(z) {
-              Z <- best_model$Z
+              Z <- best_model_minus$Z
               Z[[m]] <- z
               self$mcestimate(
                 Q = Q_plus,
@@ -509,17 +555,19 @@ GenMLVSBM$set(
             }, mc.cores = nb_cores)
         new_best_ICL <-  which.max(
           sapply(seq_along(models), function(x) models[[x]]$ICL))
-        best_model <- models[[new_best_ICL]]
+        best_model_minus <- models[[new_best_ICL]]
       }
     }
-    models <- list(fit_tmp, best_model)
+    print(paste0("ICL coming from larger models: ", round(best_model_plus$ICL)))
+    print(paste0("ICL coming from smaller models: ", round(best_model_minus$ICL)))
+    models <- list(best_model_minus, best_model_plus, best_model)
     models <- models[which(sapply( models, function(x) ! is.null(x)))]
     models <- models[which(sapply( models, function(x) ! is.null(x$bound)))]
     best_ICL <- which.max(
       sapply(seq_along(models), function(x) {models[[x]]$bound}))
     best_model <- models[[best_ICL]]
-    print(paste0("======= # Blocks : ", toString(best_model$nb_clusters),
-                 ",  ICL : ", best_model$ICL, "========"))
+    print(paste0("======= # Blocks: (", toString(best_model$nb_clusters),
+                 "),  ICL : ", round(best_model$ICL), "========"))
     self$addmodel(best_model)
     return(best_model)
   }
@@ -557,8 +605,8 @@ GenMLVSBM$set(
     }
     if (clear) self$clearmodels()
     best_model  <-  self$mcestimate(Q = Q, Z = Z, independent = independent)
-    print(paste0("======= # Blocks : ", toString(best_model$nb_clusters),
-                 ",  ICL : ", best_model$ICL, "========"))
+    print(paste0("======= # Blocks: (", toString(best_model$nb_clusters),
+                 "),  ICL : ", round(best_model$ICL), "========"))
     self$addmodel(best_model)
     condition <- TRUE
     while (condition) {
@@ -576,8 +624,8 @@ GenMLVSBM$set(
         if (new_best_model$ICL > best_model$ICL) {
           best_model  <-  new_best_model
           self$addmodel(new_best_model)
-          print(paste0("======= # Blocks : ", toString(best_model$nb_clusters),
-                       ",  ICL : ", best_model$ICL, "========"))
+          print(paste0("======= # Blocks: (", toString(best_model$nb_clusters),
+                       "),  ICL : ", round(best_model$ICL), "========"))
           improved <- TRUE
         }
       }

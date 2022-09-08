@@ -9,7 +9,7 @@
 status](https://travis-ci.org/Chabert-Liddell/MLVSBM.svg?branch=master)](https://travis-ci.org/Chabert-Liddell/MLVSBM)
 [![Codecov test
 coverage](https://codecov.io/gh/Chabert-Liddell/MLVSBM/branch/master/graph/badge.svg)](https://app.codecov.io/gh/Chabert-Liddell/MLVSBM?branch=master)
-[![](https://img.shields.io/badge/devel%20version-0.3.0.9000-blue.svg)](https://github.com/Chabert-Liddell/MLVSBM)
+[![](https://img.shields.io/badge/devel%20version-0.3.0.9001-blue.svg)](https://github.com/Chabert-Liddell/MLVSBM)
 [![](https://www.r-pkg.org/badges/version/MLVSBM?color=green)](https://cran.r-project.org/package=MLVSBM)
 [![](https://img.shields.io/badge/doi-10.1016/j.csda.2021.107179-yellow.svg)](https://doi.org/10.1016/j.csda.2021.107179)
 <!-- badges: end -->

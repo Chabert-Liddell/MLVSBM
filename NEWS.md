@@ -4,7 +4,12 @@
   + Fixed bug when setting the number of clusters.
   + Added init_points and Qmax to the fit_options argument.
   + The default algorithm is now slower but handles better underfitting 
-(fit_option$init_points == "all"). Users may fix it to any other value to revert to the old behavior.
+(fit_option$init_points == "all"). Users may fix it to any other value to revert 
+to the old behavior.
+  + When fixing the number of clusters, the algorithm will better explore 
+  neighbors models.
+  + Returned blocks are reordered so that the affiliation parameters (gamma) is 
+  as "diagonal" as possible.
 
 # MLVSBM 0.3.0
 * Added support for generalized multilevel networks:

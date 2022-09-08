@@ -78,6 +78,8 @@
 <ul><li>Fixed bug when setting the number of clusters.</li>
 <li>Added init_points and Qmax to the fit_options argument.</li>
 <li>The default algorithm is now slower but handles better underfitting (fit_option$init_points == “all”). Users may fix it to any other value to revert to the old behavior.</li>
+<li>When fixing the number of clusters, the algorithm will better explore neighbors models.</li>
+<li>Returned blocks are reordered so that the affiliation parameters (gamma) is as “diagonal” as possible.</li>
 </ul></li>
 </ul></div>
     <div class="section level2">
