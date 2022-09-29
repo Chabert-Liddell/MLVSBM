@@ -396,6 +396,7 @@ mlvsbm_estimate_generalized_network <-
         } else {
           print("=====The levels of this network are independent!=====")
         }
+        fit$reorder(order = "affiliation")
         return(fit)
       } else {
         nb_clusters <- vapply(init_clustering, max, FUN.VALUE = 1)
@@ -404,6 +405,7 @@ mlvsbm_estimate_generalized_network <-
                                     nb_cores = nb_cores)
         print(paste0("ICL for interdependent levels : ",
                      fit$ICL))
+        fit$reorder(order = "affiliation")
         return(fit)
       }
     } else {

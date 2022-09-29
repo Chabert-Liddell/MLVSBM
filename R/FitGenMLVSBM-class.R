@@ -573,6 +573,7 @@ FitGenMLVSBM <-
             }
          # }
         }
+        lapply(seq(private$L), function(l) self$update_mqr(l))
         return(ord)
       },
       #' @description Plot of FitMLVSBM objects
