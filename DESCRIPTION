@@ -1,7 +1,7 @@
 Package: MLVSBM
 Type: Package
 Title: A Stochastic Block Model for Multilevel Networks
-Version: 0.3.1.9000
+Version: 0.3.2
 Authors@R: 
     person(given = "Saint-Clair",
            family = "Chabert-Liddell",

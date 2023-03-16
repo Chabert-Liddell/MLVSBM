@@ -1,8 +1,10 @@
-# MLVSBM (development version)
+# MLVSBM 0.3.2
 
 * Fixed a bug for the computation of the likelihood and ICL after reordering the 
 clusters (for plotting purpose or before returning results 
 of `mlvsbm_estimate_generalized_network()`. 
+* Fixed a bug when computing the penalty when there are nodes with no 
+affiliation in `mlvsbm_estimate_generalized_network()`.
 
 # MLVSBM 0.3.1
 

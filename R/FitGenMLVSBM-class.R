@@ -125,7 +125,7 @@ FitGenMLVSBM <-
               if (private$Q[m] == 1) {
                 private$param$pi[[m]] <- 1
               } else {
-                pi <- colMeans(private$tau[[m]][rowMeans(private$A[[m-1]]) == 0,])
+                pi <- colMeans(private$tau[[m]][rowSums(private$A[[m-1]]) == 0,, drop = FALSE])
                 pi[pi < safeguard] <- safeguard
                 private$param$pi[[m]] <- pi/sum(pi)
               }
@@ -277,7 +277,7 @@ FitGenMLVSBM <-
                 matrix(log(private$param$pi[[m]]),
                        private$n[m],
                        private$Q[m],
-                       byrow = TRUE)
+                       byrow = TRUE) * (rowSums(private$A[[m-1]]) == 0)
             }
             if (m > 1) {
               tau <- tau + private$A[[m-1]] %*%
@@ -367,7 +367,7 @@ FitGenMLVSBM <-
                 matrix(log(private$param$pi[[m]]),
                        private$n[m],
                        private$Q[m],
-                       byrow = TRUE)
+                       byrow = TRUE)* (rowMeans(private$A[[m-1]]) == 0)
             }
             if (m > 1) {
               tau[[m]] <- tau[[m]] + private$A[[m-1]] %*%
@@ -745,8 +745,8 @@ FitGenMLVSBM <-
               pen <-
                 if (private$no_aff[m]) {
                   nb_noaff <- sum(rowSums(private$A[[m-1]]) == 0)
-                  pen <- pen + .5 * self$df_mixture[m] * log(nb_noaff)
-                  + .5 * private$Q[m-1] * self$df_mixture[m] *
+                  pen <- pen + .5 * self$df_mixture[m] * log(nb_noaff) +
+                    .5 * private$Q[m-1] * self$df_mixture[m] *
                     log(private$n[m] - nb_noaff)
                 } else {
                   pen <- pen + .5 * private$Q[m-1] * self$df_mixture[m] *
@@ -771,7 +771,10 @@ FitGenMLVSBM <-
                 } else {
                   ll <-  ll + self$za_loglikelihood(m-1)
                   if (private$no_aff[m]) {
-                    ll <- ll + sum(private$tau[[m]]%*%log(private$param$pi[[m]]))
+                    ll <- ll +
+                      sum(private$tau[[m]][
+                        rowSums(private$A[[m-1]]) == 0,, drop = FALSE] %*%
+                            log(private$param$pi[[m]]))
                   }
                 }
                 return(ll)

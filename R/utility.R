@@ -376,8 +376,8 @@ plot_generalized_multilevel_graphon <- function(fit, order = "affiliation") {
   # browser()
   xmin <- xmax <- ymin <- ymax <- value <- NULL
   color <- RColorBrewer::brewer.pal(min(9, max(3, fit$nb_levels)), name = "Set1")
-  if (length(fit$nb_levels) > length(color)) {
-    color <- rep(fit$nb_levels, "blue")
+  if (fit$nb_levels > length(color)) {
+    color <- rep("blue", fit$nb_levels)
   }
   fit$reorder(order = order)
   p <- list()
@@ -471,8 +471,12 @@ plot_generalized_multilevel_graphon <- function(fit, order = "affiliation") {
   }
   pl <- vector("list", 2*fit$nb_levels)
   if (fit$nb_levels%%2 == 0) {
-    idl <- sort(c(seq(1, 2*fit$nb_levels-1-2, by = 4),
-                  seq(4, 2*fit$nb_levels-1-2, by = 4)))
+    if (fit$nb_levels == 2) {
+      idl <- 1
+    } else {
+      idl <- sort(c(seq(1, 2*fit$nb_levels-1-2, by = 4),
+                    seq(4, 2*fit$nb_levels-1-2, by = 4)))
+    }
   } else {
     idl <- sort(c(seq(1, 2*fit$nb_levels-1-1, by = 4),
                   seq(4, 2*fit$nb_levels-1-1, by = 4)))
